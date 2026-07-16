@@ -1,0 +1,343 @@
+/* ---------- Reset & base ---------- */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body {
+  height: 100%;
+  overflow: hidden;
+}
+
+body {
+  position: relative;
+  min-height: 100vh;
+  overflow: hidden;
+  background: #6fb1e6;
+  font-family: 'Poppins', -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+  color: #16324f;
+}
+
+/* ---------- HOME PAGE ---------- */
+
+/* ---------- Moving gradient layers ---------- */
+/* Both layers are painted oversized (200% width) and slid back and forth
+   along background-position, so the gradient itself appears to drift. */
+
+.gradient-layer {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  background-repeat: no-repeat;
+  background-size: 200% 200%;
+  will-change: background-position;
+}
+
+/* Layer one: deep sky blue -> soft horizon blue, drifts left -> right */
+.gradient-layer--one {
+  background-image: linear-gradient(
+    120deg,
+    #0f5aa8 0%,
+    #1f7fd6 20%,
+    #6fc3f7 40%,
+    #1a6fc4 60%,
+    #0d4a8f 80%,
+    #2a86dd 100%
+  );
+  mix-blend-mode: normal;
+  animation: driftRight 42s linear infinite;
+}
+
+/* Layer two: warm golden haze against cool blue, drifts right -> left */
+.gradient-layer--two {
+  background-image: linear-gradient(
+    240deg,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(255, 214, 130, 0.55) 22%,
+    rgba(120, 190, 255, 0.5) 45%,
+    rgba(255, 255, 255, 0) 65%,
+    rgba(255, 200, 110, 0.5) 85%,
+    rgba(80, 170, 255, 0.4) 100%
+  );
+  mix-blend-mode: screen;
+  animation: driftLeft 58s linear infinite;
+}
+
+@keyframes driftRight {
+  0%   { background-position: 0% 50%; }
+  50%  { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+@keyframes driftLeft {
+  0%   { background-position: 100% 50%; }
+  50%  { background-position: 0% 50%; }
+  100% { background-position: 100% 50%; }
+}
+
+/* ---------- Gradient cloud ---------- */
+/* A cloud silhouette built from several overlapping rounded "puffs".
+   Each puff shows a slice of the SAME oversized gradient, pinned to the
+   viewport with background-attachment: fixed, so the white / tan / pale
+   grey light appears to flow continuously through the whole cloud
+   rather than looking like separate blobs. */
+
+.cloud {
+  position: relative;
+  width: clamp(300px, 38vw, 560px);
+  height: clamp(150px, 19vw, 290px);
+  flex-shrink: 0;
+  z-index: 1;
+  filter: drop-shadow(0 20px 60px rgba(20, 50, 90, 0.25));
+}
+
+.puff {
+  position: absolute;
+  display: block;
+  border-radius: 50%;
+  overflow: hidden;
+  background-image:
+    radial-gradient(ellipse 55% 40% at 25% 20%, rgba(255, 255, 255, 0.95) 0%, transparent 65%),
+    radial-gradient(ellipse 60% 45% at 75% 55%, rgba(244, 227, 195, 0.85) 0%, transparent 60%),
+    radial-gradient(ellipse 50% 40% at 40% 85%, rgba(220, 222, 226, 0.85) 0%, transparent 60%),
+    radial-gradient(ellipse 55% 45% at 80% 15%, rgba(255, 255, 255, 0.9) 0%, transparent 60%),
+    linear-gradient(180deg, #ffffff 0%, #f4e6c8 33%, #e2e2e2 66%, #ffffff 100%);
+  background-size: 100% 340%;
+  background-attachment: fixed;
+  filter: blur(0.5px);
+  animation: driftCloud 26s ease-in-out infinite;
+}
+
+.puff--body {
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  height: 62%;
+  border-radius: 50% 50% 45% 45% / 100% 100% 60% 60%;
+}
+
+.puff--left {
+  left: 2%;
+  top: 22%;
+  width: 38%;
+  height: 68%;
+}
+
+.puff--mid {
+  left: 30%;
+  top: -18%;
+  width: 52%;
+  height: 100%;
+}
+
+.puff--right {
+  right: 4%;
+  top: 14%;
+  width: 42%;
+  height: 72%;
+}
+
+@keyframes driftCloud {
+  0%   { background-position: 50% 0%; }
+  50%  { background-position: 50% 100%; }
+  100% { background-position: 50% 0%; }
+}
+
+.cloud-logo {
+  position: absolute;
+  top: 48%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 62%;
+  height: auto;
+  z-index: 2;
+  filter: drop-shadow(0 4px 14px rgba(20, 50, 90, 0.2));
+  pointer-events: none;
+}
+
+/* ---------- Hero panel (groups nav, cloud, and story menu together) ---------- */
+/* Everything the user interacts with lives inside one flex container that is
+   anchored to the top-left corner. Because the elements are laid out with
+   flexbox rather than each being independently positioned, they scale and
+   reflow together as a unit when the window is resized — the cloud always
+   stays directly under the nav buttons, and the story menu always stays
+   right beside the cloud. */
+
+.hero-panel {
+  position: fixed;
+  top: 1.5rem;
+  left: 1.5rem;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: clamp(1rem, 2.5vw, 2rem);
+  width: min(92vw, 1100px);
+}
+
+.nav-bar {
+  display: flex;
+  flex-direction: row;
+  gap: clamp(0.5rem, 1vw, 1rem);
+}
+
+.nav-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: clamp(44px, 4vw, 56px);
+  height: clamp(44px, 4vw, 56px);
+  border: none;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.55);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 4px 16px rgba(20, 50, 90, 0.18);
+  color: #16324f;
+  cursor: pointer;
+  transition: background 0.2s ease, transform 0.15s ease;
+  flex-shrink: 0;
+}
+
+.nav-btn:hover {
+  background: rgba(255, 255, 255, 0.8);
+  transform: translateY(-2px);
+}
+
+.nav-btn:active {
+  transform: translateY(0);
+}
+
+.nav-btn .icon {
+  width: clamp(18px, 1.7vw, 24px);
+  height: clamp(18px, 1.7vw, 24px);
+}
+
+/* theme toggle: show sun in light mode, moon in dark mode */
+.icon-moon { display: none; }
+body.theme-dark .icon-sun { display: none; }
+body.theme-dark .icon-moon { display: block; }
+
+/* sound toggle: show speaker in unmuted state, muted icon when toggled */
+.icon-sound-off { display: none; }
+#sound-toggle.is-muted .icon-sound-on { display: none; }
+#sound-toggle.is-muted .icon-sound-off { display: block; }
+
+.hero-row {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-end;
+  gap: clamp(1rem, 2.5vw, 2rem);
+  width: 100%;
+}
+
+/* ---------- Story menu (top-right, standalone) ---------- */
+.story-menu {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: clamp(0.5rem, 1vw, 0.9rem);
+  width: clamp(200px, 20vw, 280px);
+  flex-shrink: 0;
+  padding: clamp(1rem, 2vw, 1.75rem);
+  border-radius: 24px;
+  background: rgba(255, 255, 255, 0.55);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 4px 20px rgba(20, 50, 90, 0.18);
+}
+
+.story-menu__title {
+  font-size: clamp(1rem, 1.4vw, 1.35rem);
+  font-weight: 600;
+  color: #16324f;
+  margin-bottom: 0.4rem;
+  text-align: center;
+}
+
+.story-btn {
+  padding: clamp(0.6rem, 1.1vw, 1rem) clamp(0.8rem, 1.3vw, 1.25rem);
+  border: none;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.6);
+  color: #16324f;
+  font-family: inherit;
+  font-size: clamp(0.9rem, 1.2vw, 1.15rem);
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.2s ease, transform 0.15s ease;
+}
+
+.story-btn:hover {
+  background: rgba(255, 255, 255, 0.9);
+  transform: translateY(-1px);
+}
+
+.story-btn.is-active {
+  background: #16324f;
+  color: #ffffff;
+}
+
+/* ---------- Dark theme ---------- */
+body.theme-dark {
+  background: #101a2b;
+}
+
+body.theme-dark .nav-btn {
+  background: rgba(20, 30, 50, 0.55);
+  color: #f4f4f8;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.35);
+}
+
+body.theme-dark .nav-btn:hover {
+  background: rgba(20, 30, 50, 0.8);
+}
+
+body.theme-dark .story-menu {
+  background: rgba(20, 30, 50, 0.55);
+}
+
+body.theme-dark .story-menu__title {
+  color: #f4f4f8;
+}
+
+body.theme-dark .story-btn {
+  background: rgba(255, 255, 255, 0.12);
+  color: #f4f4f8;
+}
+
+body.theme-dark .story-btn:hover {
+  background: rgba(255, 255, 255, 0.22);
+}
+
+body.theme-dark .story-btn.is-active {
+  background: #f4f4f8;
+  color: #16324f;
+}
+
+@media (max-width: 640px) {
+  .hero-panel {
+    top: 1rem;
+    left: 1rem;
+    width: calc(100% - 2rem);
+    gap: 1rem;
+  }
+
+  .hero-row {
+    flex-direction: column;
+  }
+
+  .story-menu {
+    width: 100%;
+  }
+}
+
+/* ---------- Reduced motion ---------- */
+@media (prefers-reduced-motion: reduce) {
+  .gradient-layer,
+  .puff {
+    animation: none;
+  }
+}

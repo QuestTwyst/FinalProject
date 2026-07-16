@@ -1,0 +1,92 @@
+Pitch Version 1:
+Hey everybody, just to let you know, here's the pitch I wrote.  I did fill out all the details just to make a suggestion. If anybody wants to add anything, please feel free go right ahead so I can paste it in. TY.:
+
+Ever finished hearing a story and wonder — what if I'd m made a different choice back on page ten? QuestTwysts built entirely around that question. QuestTwyst is an interactive fiction platform. Every story starts at one crossroads. At every turn, the reader picks Choice A or B, and that choice loads a brand-new scene which branches again. Seven choices in, and one story has become 128 different endings. No two readers are guaranteed to land in the same place." (I tweaked that sentence to make it not sound to aggressive / overwhelming for the audience on what they will invision -Johanna)
+
+Let's follow Sam. Sam opens a story, reads the opening scene, and picks A. [Click through wireframe/prototype here.] The next scene loads instantly — no reload — and the app remembers exactly which path Sam's on. Six more choices later, Sam hits an ending unique to those decisions, and can see exactly which of the 128 paths they walked.
+
+Two features set QuestTwyst apart. First, a Story Creator: most branching-fiction tools are read-only, but ours lets any user write their own story using that same A/B structure — write a scene, define two choices, and the branch structure builds itself. No spreadsheets, no broken links. (this technically exist as a basis for the “Episodes App” -johanna)
+Second, a Path Visualizer: since a story can branch 128 ways, we built a map view showing which branches exist, which endings are rare, and exactly which path a reader took.
+
+It's a full-stack app: React front end for the branching reader experience, a Node/Express API, and a database storing stories, branches, and progress — deployed on Render.
+
+QuestTwyst turns 'choose your own adventure' into something readers help build, not just read. Here's where we'd love your eyes: is the Story Creator flow — writing a scene and wiring up A/B branches in one step — intuitive, or does it need a rethink? Quick show of hands if you've used a branching-story app before — curious what you compare this to. (edited) 
+
+—------------------------------------
+Name: QuestTwyst (Quest-twist) 
+Description: 
+    Team members: 
+        Elizabeth Kilroy
+        Johanna Devilme 
+        Gaby Yanes
+        Mymuna Murshed 
+        Jerry Rogers Jr
+
+he purpose of the app: 
+	The purpose of the app is to provide a fun interactive game for users to engage and expand their imagination through story telling a free will. Not just experiencing the beauty of literature but also becoming a key character to the author’s vision of endless practically endless possibilities. Users are able to create continuing stories through levels to compete with others on how far they are on their path. As well as having the opportunity to be a character in someone else’s story submission. 
+
+What inspired you to create the app:
+	After our first meeting we jolted down a few things that we’re interested in not just our career industry goals, but also our hobbies and things that we were able to learn from each other. We voted and believed that this was the best one that would represent each of us based on our interest, hobbies, and engineering interest. 
+
+Who your app is designed for and why?:
+	The app is designed for users that would like to go on an adventure but also would like the have the moment to read and relax. Based on the multiple genre users will be able to experience mystery, thriller, horror, romance, comedy in multiple twists and turns on the thought out multiple endings besides one, if they can make it to the ending. 
+
+Research into the size of the audience for your app: 
+	Our potential audience would be users who enjoy telling, reading, and writing stories. Users that enjoys playing brain games and interactive story base games This would be towards all ages for who enjoys reading. As well as aspiring writers that are interested in trying new platforms. 
+
+The monthly active users to our competitors would be webtoons, kahoot, bitlife, episodes with an average amount of user combined ranging up to $259.8 million. 
+
+What apps are adjacent to yours in theme and/or purpose:
+    Apps thats are adjacent to ours would be:
+        -webtoons
+        -Kahoot
+        -Bitlife
+        -Episodes
+        -Old school magazine story board maze flow chart games,
+        -Madlibs
+        -Wattpad
+
+
+How your app is unique or stands out from the crowd:
+    This app stands out from the crowd because we’re mixing in not just old school but new school concepts on how we experience literature. 
+
+What your app looks like:
+    (discussion with Liz and Jerry)
+
+How users navigate between the different views:
+     (discussion with Liz and Jerry)
+
+How the experience is personalized for the user:
+	The experience is personalized for the user based on practically their own free will by choosing the choice they wish they could have chosen during a story. Based on our competitors some has this option (Bitlife) but others does not but does have an engaging presentation (webtoons and episodes). The point is to not just have the option to go along the story but to see how far you can go through the story.
+What tech stack you will use to develop the app
+    Our frontend technology stack includes HTML, CSS, JavaScript, React, React Router, Pico.css, and Vite. Pico.css will help us create a consistent and responsive user interface. Our backend will also use JavaScript through Node.js and Express.js to create a RESTful API. We will use PostgreSQL to store application data, Render to deploy the application, and GitHub for version control and team collaboration. 
+Any external APIs or resources you intend to use
+    At this time, QuestTwyst does not require an external API. We will create our own RESTful API using Node.js and Express.js to retrieve and manage data from our PostgreSQL database. We intend to use external development resources such as Pico.css for interface styling, React Router for navigation, GitHub for version control and collaboration, and Render for deployment. We may also use royalty-free images or icons for story covers and interface elements. 
+A description of the minimum viable product (MVP) for the app
+    The minimum viable product for QuestTwyst will allow users to create an account, log in, browse available stories, select a story, and read it one passage at a time. At the end of each passage, the user will choose between different options, and the application will display the next passage based on that choice. The app will also save the user’s reading progress so they can continue a story later. Administrators or authorized team members will be able to add, update, and remove story information through the application’s RESTful API. 
+
+Directions for where feedback is most needed
+    Whether the MVP is realistic to complete on time
+    Whether the branching passage and choice system is designed correctly
+    Whether saving reading progress should be included in the MVP
+    Whether your database relationships support multiple story paths
+    Whether the user journey is clear and easy to navigate
+
+
+Revised and edited pitch version 2:
+Raise your hand if you read a book and absolutely hated the ending. Or your favorite character died. And the best of all the  relationship could have lasted so much longer if they just listened?  Well here is your time to shine! 
+Group 8, created by Elizabeth Kilroy, Johanna Devilme, Gaby Yanes , Mymuna Murshed  and , Jerry Rogers Jr .are in the works on creating the online game called QuestTwyst! Basically having the opportunity to experience different endings, twists and turns but there’s a catch…will you be able to succeed to the end? Some stories will be long some stories will be short, who knows. Seven choices in and one story has curated to having 128 different endings. No two readers are guaranteed to land in the same place… if you survive.
+Lets give you a sneak peak: This is Sam, say hi Sam [sam says hi]. Sam wants to go on an adventure today. Within his first few seconds of experience with Questtwyst he will have a multitude of genres to choose from to seek what's ahead. Once the game begins he may be greeted, he may be yelled at, or maybe spooked…but will he let that continue?
+What sets QuestTwyst apart is that it's not just an interactive reading platform but it would be boosted and presented as an alternative custom literature gaming platform. You can make the story, play the story, and rank amongst other users on how far you have succeeded through each level. Once the user has won the game they will be able to see the map (greyed out) on how many choices, paths and turns they could have done with their final stats rubric.
+This project is a full-stack application, meaning both the part users interact with and the systems working behind the scenes are being developed by our team. The front end will be built with React, JavaScript, HTML, CSS, React Router, Pico.css, and Vite to create the story screens, choices, profiles, and navigation. The back end will use Node.js and Express.js to process user actions and connect the application to a PostgreSQL database, which will store account information, stories, passages, choices, and reading progress. We will also create our own RESTful API and deploy the completed application using Render.
+QuestTwyst doesn't only turn 'choose your own adventure' into something readers help build, write, or even browse through, it gives the opportunity to “expect the unexpected” and “free will” within the options of our own imagination. 
+ 
+ (discussion with Liz on concept and verification modifications and for team to review as well for final product).
+
+ 
+
+
+
+
+	
+	
