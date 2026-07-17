@@ -5,4 +5,4 @@ createReadingProgress,
 updateReadingProgress,
 deletedReadingProgress,
 } from "../controllers/progress.js";
-}
+
