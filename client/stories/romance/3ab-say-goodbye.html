@@ -8,7 +8,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Great+Vibes&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="/style.css">
 </head>
 <body class="theme-romance">
 
@@ -69,7 +69,7 @@
       </svg>
     </button>
 
-    <button class="nav-btn" id="return-btn" type="button" aria-label="Return to home" title="Return to home">
+    <button class="nav-btn" id="return-btn" type="button" aria-label="Return to previous scene" title="Return to previous scene">
       <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
         <line x1="19" y1="12" x2="5" y2="12"></line>
         <polyline points="12 19 5 12 12 5"></polyline>
@@ -91,19 +91,14 @@
     <article class="story-card">
       <div class="story-card__scroll">
         <p class="story-card__text">
-          Mara had missed the last ferry to the mainland, or so she thought, until she saw a stranger waving frantically from the dock, holding the rope for a boat that clearly wasn't supposed to still be there. "Captain's off sick," he said, breathless, rain slicking his hair to his forehead. "I can get us across, but I need a second pair of hands." She had a flight to catch in the morning and every reason to say no. Instead she stepped over the gap between dock and deck, and the boat lurched forward into the dark water, carrying them both somewhere neither had planned to go.
+          "Go," Mara said. "Don't keep her waiting for you twice in one lifetime." Dane looked at her a moment too long before he nodded, like he was memorizing something. He didn't run up the dock right away. Instead he tore a corner off the ferry schedule still crumpled in his jacket pocket, scrawled a number across it in pen that barely worked, and pressed it into her hand. "In case the story's not over," he said, and then he was gone, jogging up toward the lights and the music already drifting down from the house on the hill. Mara stood on the dock a long while after, turning the damp scrap of paper over in her fingers, before she finally tucked it into her coat and went to go find out if she'd missed her flight after all.
         </p>
       </div>
 
       <div class="choice-row">
-        <button class="choice-btn" type="button" id="choice-a">
-          <span class="choice-btn__label">A</span>
-          <span class="choice-btn__text">Ask him why he really needs help crossing tonight.</span>
-        </button>
-        <button class="choice-btn" type="button" id="choice-b">
-          <span class="choice-btn__label">B</span>
-          <span class="choice-btn__text">Grab the second rope and start rowing without asking questions.</span>
-        </button>
+        <a class="choice-btn choice-btn--end" href="/index.html">
+          <span class="choice-btn__text">Return to the beginning</span>
+        </a>
       </div>
     </article>
   </section>
@@ -123,25 +118,16 @@
       soundToggle.classList.toggle('is-muted');
     });
 
-    // Return button — goes back to the home page
+    // Return button — goes back to the previous scene
     const returnBtn = document.getElementById('return-btn');
     returnBtn.addEventListener('click', () => {
-      window.location.href = 'index.html';
+      window.location.href = '2a-ask-why.html';
     });
 
     // About button — placeholder action
     const aboutBtn = document.getElementById('about-btn');
     aboutBtn.addEventListener('click', () => {
       console.log('About clicked');
-    });
-
-    // Choice buttons — placeholders for now; wire these to branch the
-    // story further once the next scenes are written.
-    document.getElementById('choice-a').addEventListener('click', () => {
-      console.log('Choice A selected');
-    });
-    document.getElementById('choice-b').addEventListener('click', () => {
-      console.log('Choice B selected');
     });
   </script>
 

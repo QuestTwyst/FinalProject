@@ -138,10 +138,12 @@
       }
     });
 
-    // Story selection buttons — each genre has its own page (e.g. romance.html).
+    // Story selection buttons — each genre lives in its own subfolder
+    // under stories/, with descriptively-named flat files (see
+    // stories/README.md for the naming convention).
     // Only Romance is built so far; the rest log a placeholder for now.
     const storyPages = {
-      romance: 'romance.html'
+      romance: 'stories/romance/1-start.html'
     };
 
     const storyButtons = document.querySelectorAll('.story-btn');
