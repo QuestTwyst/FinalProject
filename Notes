@@ -1,1 +1,5 @@
-testing if this is working on my end. 
+# Start the backend
+npm run dev
+
+# Reset/rebuild the database
+npm run reset

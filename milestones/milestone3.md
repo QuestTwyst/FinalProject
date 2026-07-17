@@ -10,14 +10,14 @@ You will need to reference the GitHub Project Management guide in the course por
 
 - [X] In your repo, create a project board.
   - *Please be sure to share your project board with the grading team's GitHub **codepathreview**. This is separate from your repository's sharing settings.*
-- [ ] In your repo, create at least 5 issues from the features on your feature list.
+- [X] In your repo, create at least 5 issues from the features on your feature list.
   - List the title of each issue you created:
-    1.
-    2.
-    3.
-    4.
-    5.
-- [ ] In your repo, update the status of issues in your project board.
+    1.BUild User Profile and Reading Progress Page
+    2.Create User Authentication Pages
+    3.Add Genre Filtering UI
+    4.Create Story Reader Interface
+    5.Build Story Library Interface
+- [X] In your repo, update the status of issues in your project board.
 - [X] In your repo, create a GitHub Milestone for each final project unit, corresponding to each of the 5 milestones in your `milestones/` directory.
   - List the name of each milestone you created:
     1. Milestone 3
