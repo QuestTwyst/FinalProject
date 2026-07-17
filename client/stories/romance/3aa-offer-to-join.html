@@ -91,14 +91,19 @@
     <article class="story-card">
       <div class="story-card__scroll">
         <p class="story-card__text">
-          "Come with me," Dane said, before Mara had even finished offering. "I mean it. Show up soaked and uninvited with me, that'll give my sister something to talk about besides the fact that I almost didn't come at all." So she did. The wedding was small, seaside, string lights strung between porch posts that hadn't dried from the storm. His sister cried when she saw him, then laughed when she saw Mara standing beside him in someone's borrowed cardigan, and didn't ask a single question about who she was — just pulled her into the receiving line like she'd always been meant to be there. Mara missed her flight the next morning. She didn't mind. Some nights, she'd think, you don't plan the story — you just say yes to the boat.
+          "Come with me," Dane said, before Mara had even finished offering. "I mean it. Show up soaked and uninvited with me, that'll give my sister something to talk about besides the fact that I almost didn't come at all." So she did. The wedding was small, seaside, string lights strung between porch posts that hadn't dried from the storm. His sister cried when she saw him, then laughed when she saw Mara standing beside him in someone's borrowed cardigan, and didn't ask a single question about who she was — just pulled her into the receiving line like she'd always been meant to be there.
         </p>
       </div>
 
       <div class="choice-row">
-        <a class="choice-btn choice-btn--end" href="/index.html">
-          <span class="choice-btn__text">Return to the beginning</span>
-        </a>
+        <button class="choice-btn" type="button" id="choice-a">
+          <span class="choice-btn__label">A</span>
+          <span class="choice-btn__text">Stay through the whole reception and dance until the lights come down.</span>
+        </button>
+        <button class="choice-btn" type="button" id="choice-b">
+          <span class="choice-btn__label">B</span>
+          <span class="choice-btn__text">Slip away quietly before the night gets too real.</span>
+        </button>
       </div>
     </article>
   </section>
@@ -128,6 +133,14 @@
     const aboutBtn = document.getElementById('about-btn');
     aboutBtn.addEventListener('click', () => {
       console.log('About clicked');
+    });
+
+    // Choice buttons
+    document.getElementById('choice-a').addEventListener('click', () => {
+      window.location.href = '4aaa-dance-the-night.html';
+    });
+    document.getElementById('choice-b').addEventListener('click', () => {
+      window.location.href = '4aab-slip-away-early.html';
     });
   </script>
 

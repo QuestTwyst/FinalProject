@@ -91,19 +91,14 @@
     <article class="story-card">
       <div class="story-card__scroll">
         <p class="story-card__text">
-          "Let it stay a mystery, then," Mara said, and something in his shoulders eased, like she'd given him permission to keep one thing for himself a little longer. They hauled the boat up onto the sand together, still not speaking, and when it was done he just looked at her — really looked, the way no one looks at a stranger. "Same time next week?" he asked, half joking, mostly not. "There won't be a missed ferry next week," she pointed out. "There's always a missed ferry," he said, "if you're willing to miss it."
+          They never quite called it dating, and they never quite called it anything else either — just a standing Friday tradition, dock and boat and conversation, exactly as much as either of them wanted and not one thing more. It worked, for years, better than either of them expected something so undefined to work. Some love stories don't need a label to be one.
         </p>
       </div>
 
       <div class="choice-row">
-        <button class="choice-btn" type="button" id="choice-a">
-          <span class="choice-btn__label">A</span>
-          <span class="choice-btn__text">Show up next week, ferry schedule be damned.</span>
-        </button>
-        <button class="choice-btn" type="button" id="choice-b">
-          <span class="choice-btn__label">B</span>
-          <span class="choice-btn__text">Let life happen and see if fate brings them back together.</span>
-        </button>
+        <a class="choice-btn choice-btn--end" href="/index.html">
+          <span class="choice-btn__text">Return to the beginning</span>
+        </a>
       </div>
     </article>
   </section>
@@ -126,21 +121,13 @@
     // Return button — goes back to the previous scene
     const returnBtn = document.getElementById('return-btn');
     returnBtn.addEventListener('click', () => {
-      window.location.href = '2b-row-along.html';
+      window.location.href = '5bbaa-he-is-waiting.html';
     });
 
     // About button — placeholder action
     const aboutBtn = document.getElementById('about-btn');
     aboutBtn.addEventListener('click', () => {
       console.log('About clicked');
-    });
-
-    // Choice buttons
-    document.getElementById('choice-a').addEventListener('click', () => {
-      window.location.href = '4bba-return-next-week.html';
-    });
-    document.getElementById('choice-b').addEventListener('click', () => {
-      window.location.href = '4bbb-life-gets-in-the-way.html';
     });
   </script>
 

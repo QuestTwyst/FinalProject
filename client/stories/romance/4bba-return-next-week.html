@@ -91,18 +91,18 @@
     <article class="story-card">
       <div class="story-card__scroll">
         <p class="story-card__text">
-          "Let it stay a mystery, then," Mara said, and something in his shoulders eased, like she'd given him permission to keep one thing for himself a little longer. They hauled the boat up onto the sand together, still not speaking, and when it was done he just looked at her — really looked, the way no one looks at a stranger. "Same time next week?" he asked, half joking, mostly not. "There won't be a missed ferry next week," she pointed out. "There's always a missed ferry," he said, "if you're willing to miss it."
+          She showed up the following week, umbrella in hand, half-expecting the dock to be empty and the whole thing to have been a fever dream brought on by bad weather and worse judgment.
         </p>
       </div>
 
       <div class="choice-row">
         <button class="choice-btn" type="button" id="choice-a">
           <span class="choice-btn__label">A</span>
-          <span class="choice-btn__text">Show up next week, ferry schedule be damned.</span>
+          <span class="choice-btn__text">Find him already there, waiting.</span>
         </button>
         <button class="choice-btn" type="button" id="choice-b">
           <span class="choice-btn__label">B</span>
-          <span class="choice-btn__text">Let life happen and see if fate brings them back together.</span>
+          <span class="choice-btn__text">Find him arriving late, out of breath, like he almost didn't come either.</span>
         </button>
       </div>
     </article>
@@ -126,7 +126,7 @@
     // Return button — goes back to the previous scene
     const returnBtn = document.getElementById('return-btn');
     returnBtn.addEventListener('click', () => {
-      window.location.href = '2b-row-along.html';
+      window.location.href = '3bb-mystery-stays.html';
     });
 
     // About button — placeholder action
@@ -137,10 +137,10 @@
 
     // Choice buttons
     document.getElementById('choice-a').addEventListener('click', () => {
-      window.location.href = '4bba-return-next-week.html';
+      window.location.href = '5bbaa-he-is-waiting.html';
     });
     document.getElementById('choice-b').addEventListener('click', () => {
-      window.location.href = '4bbb-life-gets-in-the-way.html';
+      window.location.href = '5bbab-he-almost-gave-up.html';
     });
   </script>
 

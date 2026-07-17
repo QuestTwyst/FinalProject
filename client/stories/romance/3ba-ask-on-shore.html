@@ -91,14 +91,19 @@
     <article class="story-card">
       <div class="story-card__scroll">
         <p class="story-card__text">
-          They pulled the boat up onto the sand, and Mara didn't wait this time. "Okay," she said, still catching her breath. "Ask me again — why tonight?" He sat down heavily on the overturned hull, rain finally letting up around them. "My father's selling the boathouse tomorrow," he said. "Thirty years in the family, gone to some developer who wants to put condos where the dock is. I couldn't let it go without seeing it float one more time. Couldn't do it alone, either, if I'm honest." Mara looked back at the water, at the boat that had somehow, impossibly, carried them both somewhere neither of them expected. "Well," she said, sitting down beside him, "it floated. That's not nothing." They stayed there until the sun came up over the boathouse, saying very little, needing to say even less.
+          They pulled the boat up onto the sand, and Mara didn't wait this time. "Okay," she said, still catching her breath. "Ask me again — why tonight?" He sat down heavily on the overturned hull, rain finally letting up around them. "My father's selling the boathouse tomorrow," he said. "Thirty years in the family, gone to some developer who wants to put condos where the dock is. I couldn't let it go without seeing it float one more time. Couldn't do it alone, either, if I'm honest." Mara looked back at the water, at the boat that had somehow, impossibly, carried them both somewhere neither of them expected.
         </p>
       </div>
 
       <div class="choice-row">
-        <a class="choice-btn choice-btn--end" href="/index.html">
-          <span class="choice-btn__text">Return to the beginning</span>
-        </a>
+        <button class="choice-btn" type="button" id="choice-a">
+          <span class="choice-btn__label">A</span>
+          <span class="choice-btn__text">Offer to help him find a way to save it.</span>
+        </button>
+        <button class="choice-btn" type="button" id="choice-b">
+          <span class="choice-btn__label">B</span>
+          <span class="choice-btn__text">Let him have this moment to grieve it, quietly, without fixing it.</span>
+        </button>
       </div>
     </article>
   </section>
@@ -128,6 +133,14 @@
     const aboutBtn = document.getElementById('about-btn');
     aboutBtn.addEventListener('click', () => {
       console.log('About clicked');
+    });
+
+    // Choice buttons
+    document.getElementById('choice-a').addEventListener('click', () => {
+      window.location.href = '4baa-fight-for-it.html';
+    });
+    document.getElementById('choice-b').addEventListener('click', () => {
+      window.location.href = '4bab-give-him-space.html';
     });
   </script>
 

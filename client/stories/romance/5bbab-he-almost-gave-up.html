@@ -91,18 +91,18 @@
     <article class="story-card">
       <div class="story-card__scroll">
         <p class="story-card__text">
-          "Let it stay a mystery, then," Mara said, and something in his shoulders eased, like she'd given him permission to keep one thing for himself a little longer. They hauled the boat up onto the sand together, still not speaking, and when it was done he just looked at her — really looked, the way no one looks at a stranger. "Same time next week?" he asked, half joking, mostly not. "There won't be a missed ferry next week," she pointed out. "There's always a missed ferry," he said, "if you're willing to miss it."
+          He arrived ten minutes late, soaked through, having nearly talked himself out of coming twice on the walk over. "I almost didn't," he admitted. "Me too," Mara said, "for what it's worth. Glad we're both bad at listening to ourselves."
         </p>
       </div>
 
       <div class="choice-row">
         <button class="choice-btn" type="button" id="choice-a">
           <span class="choice-btn__label">A</span>
-          <span class="choice-btn__text">Show up next week, ferry schedule be damned.</span>
+          <span class="choice-btn__text">The near-miss makes them finally talk honestly about what this is.</span>
         </button>
         <button class="choice-btn" type="button" id="choice-b">
           <span class="choice-btn__label">B</span>
-          <span class="choice-btn__text">Let life happen and see if fate brings them back together.</span>
+          <span class="choice-btn__text">He's late enough that she'd already left — but this time, she leaves a note.</span>
         </button>
       </div>
     </article>
@@ -126,7 +126,7 @@
     // Return button — goes back to the previous scene
     const returnBtn = document.getElementById('return-btn');
     returnBtn.addEventListener('click', () => {
-      window.location.href = '2b-row-along.html';
+      window.location.href = '4bba-return-next-week.html';
     });
 
     // About button — placeholder action
@@ -137,10 +137,10 @@
 
     // Choice buttons
     document.getElementById('choice-a').addEventListener('click', () => {
-      window.location.href = '4bba-return-next-week.html';
+      window.location.href = '6bbaba-finally-talk-it-out.html';
     });
     document.getElementById('choice-b').addEventListener('click', () => {
-      window.location.href = '4bbb-life-gets-in-the-way.html';
+      window.location.href = '6bbabb-leaves-a-note.html';
     });
   </script>
 

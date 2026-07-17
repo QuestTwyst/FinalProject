@@ -91,19 +91,14 @@
     <article class="story-card">
       <div class="story-card__scroll">
         <p class="story-card__text">
-          "Let it stay a mystery, then," Mara said, and something in his shoulders eased, like she'd given him permission to keep one thing for himself a little longer. They hauled the boat up onto the sand together, still not speaking, and when it was done he just looked at her — really looked, the way no one looks at a stranger. "Same time next week?" he asked, half joking, mostly not. "There won't be a missed ferry next week," she pointed out. "There's always a missed ferry," he said, "if you're willing to miss it."
+          "I wondered if I'd hear from you," he said, kind but careful, and something in his tone told her three weeks had been longer for him than it had felt for her. He was seeing someone now, he admitted, gently. Mara felt the loss of it more than she expected to — but she also felt something like relief, that she'd finally called, that the wondering was over, even if the answer wasn't the one she'd hoped for.
         </p>
       </div>
 
       <div class="choice-row">
-        <button class="choice-btn" type="button" id="choice-a">
-          <span class="choice-btn__label">A</span>
-          <span class="choice-btn__text">Show up next week, ferry schedule be damned.</span>
-        </button>
-        <button class="choice-btn" type="button" id="choice-b">
-          <span class="choice-btn__label">B</span>
-          <span class="choice-btn__text">Let life happen and see if fate brings them back together.</span>
-        </button>
+        <a class="choice-btn choice-btn--end" href="/index.html">
+          <span class="choice-btn__text">Return to the beginning</span>
+        </a>
       </div>
     </article>
   </section>
@@ -126,21 +121,13 @@
     // Return button — goes back to the previous scene
     const returnBtn = document.getElementById('return-btn');
     returnBtn.addEventListener('click', () => {
-      window.location.href = '2b-row-along.html';
+      window.location.href = '5abba-finally-dials.html';
     });
 
     // About button — placeholder action
     const aboutBtn = document.getElementById('about-btn');
     aboutBtn.addEventListener('click', () => {
       console.log('About clicked');
-    });
-
-    // Choice buttons
-    document.getElementById('choice-a').addEventListener('click', () => {
-      window.location.href = '4bba-return-next-week.html';
-    });
-    document.getElementById('choice-b').addEventListener('click', () => {
-      window.location.href = '4bbb-life-gets-in-the-way.html';
     });
   </script>
 

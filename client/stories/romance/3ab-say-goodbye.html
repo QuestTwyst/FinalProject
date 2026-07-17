@@ -91,14 +91,19 @@
     <article class="story-card">
       <div class="story-card__scroll">
         <p class="story-card__text">
-          "Go," Mara said. "Don't keep her waiting for you twice in one lifetime." Dane looked at her a moment too long before he nodded, like he was memorizing something. He didn't run up the dock right away. Instead he tore a corner off the ferry schedule still crumpled in his jacket pocket, scrawled a number across it in pen that barely worked, and pressed it into her hand. "In case the story's not over," he said, and then he was gone, jogging up toward the lights and the music already drifting down from the house on the hill. Mara stood on the dock a long while after, turning the damp scrap of paper over in her fingers, before she finally tucked it into her coat and went to go find out if she'd missed her flight after all.
+          "Go," Mara said. "Don't keep her waiting for you twice in one lifetime." Dane looked at her a moment too long before he nodded, like he was memorizing something. He didn't run up the dock right away. Instead he tore a corner off the ferry schedule still crumpled in his jacket pocket, scrawled a number across it in pen that barely worked, and pressed it into her hand. "In case the story's not over," he said, and then he was gone, jogging up toward the lights and the music already drifting down from the house on the hill. Mara stood on the dock a long while after, turning the damp scrap of paper over in her fingers.
         </p>
       </div>
 
       <div class="choice-row">
-        <a class="choice-btn choice-btn--end" href="/index.html">
-          <span class="choice-btn__text">Return to the beginning</span>
-        </a>
+        <button class="choice-btn" type="button" id="choice-a">
+          <span class="choice-btn__label">A</span>
+          <span class="choice-btn__text">Call the number the very next chance she gets.</span>
+        </button>
+        <button class="choice-btn" type="button" id="choice-b">
+          <span class="choice-btn__label">B</span>
+          <span class="choice-btn__text">Tuck the number away and wait, unsure if she's ready.</span>
+        </button>
       </div>
     </article>
   </section>
@@ -128,6 +133,14 @@
     const aboutBtn = document.getElementById('about-btn');
     aboutBtn.addEventListener('click', () => {
       console.log('About clicked');
+    });
+
+    // Choice buttons
+    document.getElementById('choice-a').addEventListener('click', () => {
+      window.location.href = '4aba-call-right-away.html';
+    });
+    document.getElementById('choice-b').addEventListener('click', () => {
+      window.location.href = '4abb-wait-and-wonder.html';
     });
   </script>
 
