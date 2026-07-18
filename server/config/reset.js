@@ -12,7 +12,7 @@ const resetStoriesTable = async () => {
       DROP TABLE IF EXISTS stories;
     `);
 
-    // Create table
+    // Create table for stories
     await pool.query(`
       CREATE TABLE stories (
         id SERIAL PRIMARY KEY,
@@ -35,8 +35,32 @@ const resetStoriesTable = async () => {
     `);
 
     console.log("✔️ Sample stories inserted.");
+
+    // Create table for passages
+    await pool.query(`
+     CREATE TABLE IF NOT EXISTS passages (
+      id SERIAL PRIMARY KEY,
+      story_id INTEGER REFERENCES stories(id) ON DELETE CASCADE,
+      content TEXT NOT NULL,
+      is_ending BOOLEAN DEFAULT FALSE
+    );
+  `);
+
+    console.log("✔️ Passages table created.");
+
+    // Seed sample passages
+    await pool.query(`
+     INSERT INTO passages (story_id, content, is_ending)
+      VALUES
+      (1, 'You wake up in a dark forest. Two paths lie ahead.', false),
+      (1, 'You follow the left path and find a quiet river.', false),
+      (1, 'You follow the right path and encounter a strange creature.', false),
+      (1, 'You reach the end of your journey.', true);
+`);
+
+    console.log("✔️ Sample passages inserted.");
   } catch (error) {
-    console.error("❌ Error resetting stories table:", error);
+    console.error("❌ Error resetting database:", error);
   } finally {
     pool.end();
     console.log("Database connection closed.");
