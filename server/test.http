@@ -1,0 +1,10 @@
+DELETE http://localhost:3001/stories/4
+
+//POST http://localhost:3001/stories
+//Content-Type: application/json
+
+//{
+//  "title": "Ocean Depths",
+//  "description": "A mysterious adventure beneath the waves.",
+//  "creator_id": null
+//}
