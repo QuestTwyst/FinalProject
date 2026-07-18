@@ -12,13 +12,14 @@
 </head>
 <body>
 
+<main class="stage">
 
 <!-- Home page section  -->
 
-  <div class="gradient-layer gradient-layer--one"></div>
-  <div class="gradient-layer gradient-layer--two"></div>
+  <div class="gradient-layer gradient-layer--one" aria-hidden="true"></div>
+  <div class="gradient-layer gradient-layer--two" aria-hidden="true"></div>
+  <div class="gradient-layer gradient-layer--ground" aria-hidden="true"></div>
 
-  <div class="hero-panel">
     <nav class="nav-bar">
       <button class="nav-btn" id="theme-toggle" type="button" aria-label="Toggle dark and light mode" title="Dark / light mode">
         <svg class="icon icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -75,25 +76,26 @@
       </button>
     </nav>
 
-    <div class="hero-row">
-      <div class="cloud">
+    <section class="content-row">
+      <figure class="cloud">
         <span class="puff puff--body"></span>
         <span class="puff puff--left"></span>
         <span class="puff puff--mid"></span>
         <span class="puff puff--right"></span>
-        <img class="cloud-logo" src="qt-logo.png" alt="QT logo">
-      </div>
+        <img class="cloud-logo" src="/qt-logo.png" alt="QT logo">
+      </figure>
 
-      <div class="story-menu">
+      <aside class="story-menu">
         <h2 class="story-menu__title">Choose a story to tell</h2>
         <button class="story-btn" data-story="comedy" type="button">Comedy</button>
         <button class="story-btn" data-story="horror" type="button">Horror</button>
         <button class="story-btn" data-story="romance" type="button">Romance</button>
         <button class="story-btn" data-story="scifi" type="button">Sci-Fi</button>
         <button class="story-btn" data-story="western" type="button">Western</button>
-      </div>
-    </div>
-  </div>
+      </aside>
+    </section>
+
+</main>
 
   <script>
     // Dark / light mode toggle
@@ -120,6 +122,12 @@
       }
     });
 
+    // About button — placeholder action
+    const aboutBtn = document.getElementById('about-btn');
+    aboutBtn.addEventListener('click', () => {
+      console.log('About clicked');
+    });
+
     // Return button — goes back in history, falls back to reload
     const returnBtn = document.getElementById('return-btn');
     returnBtn.addEventListener('click', () => {
@@ -130,19 +138,23 @@
       }
     });
 
-    // About button — placeholder action
-    const aboutBtn = document.getElementById('about-btn');
-    aboutBtn.addEventListener('click', () => {
-      console.log('About clicked');
-    });
+    // Story selection buttons — each genre lives in its own subfolder
+    // under stories/, with descriptively-named flat files (see
+    // stories/README.md for the naming convention).
+    // Only Romance is built so far; the rest log a placeholder for now.
+    const storyPages = {
+      romance: 'stories/romance/1-start.html'
+    };
 
-    // Story selection buttons
     const storyButtons = document.querySelectorAll('.story-btn');
     storyButtons.forEach((btn) => {
       btn.addEventListener('click', () => {
-        storyButtons.forEach((b) => b.classList.remove('is-active'));
-        btn.classList.add('is-active');
-        console.log('Story selected:', btn.dataset.story);
+        const key = btn.dataset.story;
+        if (storyPages[key]) {
+          window.location.href = storyPages[key];
+        } else {
+          console.log('No page built yet for:', key);
+        }
       });
     });
   </script>

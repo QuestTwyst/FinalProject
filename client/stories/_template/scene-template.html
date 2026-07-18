@@ -1,0 +1,218 @@
+<!--
+  ============================================================
+  QUESTWYST — STORY SCENE TEMPLATE
+  ============================================================
+  How to use this file:
+
+  1. Copy this file into your genre's folder (e.g. stories/western/)
+     and rename it following the naming pattern below. Every filename
+     is unique and describes itself — no two files are ever named
+     the same thing, so there's nothing to mix up in a file list or
+     a row of browser tabs.
+
+  NAMING PATTERN:  <depth><choice-path>-<short-description>.html
+
+     depth          = how many choices deep this scene is (1, 2, 3...)
+     choice-path    = the sequence of a/b choices taken to get here
+                       (skipped for the root scene, depth 1)
+     short-desc     = 2-4 words, kebab-case, summarizing the scene
+
+  EXAMPLES (from Romance):
+     1-start.html                <- root scene
+     2a-ask-why.html             <- after choosing A
+     2b-row-along.html           <- after choosing B
+     3aa-offer-to-join.html      <- chose A, then A
+     3ab-say-goodbye.html        <- chose A, then B
+     3ba-ask-on-shore.html       <- chose B, then A
+     3bb-mystery-stays.html      <- chose B, then B
+
+  All of a genre's scenes live FLAT in one folder — no subfolders.
+  This keeps every link inside a genre dead simple (see below).
+
+  2. Find every block marked [BRACKETS] and replace it.
+
+  3. Only THREE link patterns exist in this whole file:
+
+       a) Stylesheet:  always  /style.css        (absolute, works
+                        no matter what — never changes)
+       b) Any link to another scene in THIS genre (a choice button,
+          or a Return button): just the plain filename, e.g.
+          '2a-ask-why.html' — no folders, no "../", nothing extra,
+          because every scene in a genre is a sibling in the same
+          folder.
+       c) The Return button on the ROOT scene only, and the
+          "Return to the beginning" link on any ENDING scene:
+          always  /index.html  (absolute — goes to the real home page)
+
+  4. If this is an ENDING scene (no further choices), delete the
+     .choice-row block and its two <button> handlers, and use the
+     single link shown commented-out below instead.
+
+  5. Give the <body> a theme class for this genre, e.g.
+     class="theme-western", and add matching CSS rules in style.css
+     following the pattern already used for body.theme-romance (search
+     style.css for "theme-romance" to see a full worked example).
+
+  6. Delete this comment block once the page is filled in.
+  ============================================================
+-->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Questwyst — [GENRE NAME]</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<!-- Add any genre-specific Google Font here alongside Poppins,
+     the way Romance added Great Vibes for its title -->
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/style.css">
+</head>
+<!-- Give body the genre's theme class, e.g. class="theme-western" -->
+<body class="theme-[GENRE_SLUG]">
+
+<main class="stage">
+
+  <div class="gradient-layer gradient-layer--one" aria-hidden="true"></div>
+  <div class="gradient-layer gradient-layer--two" aria-hidden="true"></div>
+  <div class="gradient-layer gradient-layer--ground" aria-hidden="true"></div>
+
+  <!-- Optional decorative field, like Romance's hearts-field / ripple-field.
+       Delete this if the genre doesn't need floating decorations, or
+       replace with genre-appropriate ones (e.g. embers for Horror,
+       stars for Sci-Fi, dust motes for Western). -->
+  <!--
+  <div class="[genre]-decor-field" aria-hidden="true">
+    <span class="[genre-decor] [genre-decor]--1"></span>
+    ...
+  </div>
+  -->
+
+  <nav class="nav-bar">
+    <button class="nav-btn" id="theme-toggle" type="button" aria-label="Toggle dark and light mode" title="Dark / light mode">
+      <svg class="icon icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="12" r="4"></circle>
+        <line x1="12" y1="2" x2="12" y2="4"></line>
+        <line x1="12" y1="20" x2="12" y2="22"></line>
+        <line x1="4.93" y1="4.93" x2="6.34" y2="6.34"></line>
+        <line x1="17.66" y1="17.66" x2="19.07" y2="19.07"></line>
+        <line x1="2" y1="12" x2="4" y2="12"></line>
+        <line x1="20" y1="12" x2="22" y2="12"></line>
+        <line x1="4.93" y1="19.07" x2="6.34" y2="17.66"></line>
+        <line x1="17.66" y1="6.34" x2="19.07" y2="4.93"></line>
+      </svg>
+      <svg class="icon icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+      </svg>
+    </button>
+
+    <button class="nav-btn" id="sound-toggle" type="button" aria-label="Toggle music and sound" title="Music / sound">
+      <svg class="icon icon-sound-on" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+        <path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+        <path d="M19.07 4.93a10 10 0 0 1 0 14.14"></path>
+      </svg>
+      <svg class="icon icon-sound-off" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+        <line x1="23" y1="9" x2="17" y2="15"></line>
+        <line x1="17" y1="9" x2="23" y2="15"></line>
+      </svg>
+    </button>
+
+    <button class="nav-btn" id="return-btn" type="button" aria-label="Return to previous scene" title="Return to previous scene">
+      <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <line x1="19" y1="12" x2="5" y2="12"></line>
+        <polyline points="12 19 5 12 12 5"></polyline>
+      </svg>
+    </button>
+
+    <button class="nav-btn" id="about-btn" type="button" aria-label="About" title="About">
+      <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="12" r="10"></circle>
+        <line x1="12" y1="16" x2="12" y2="12"></line>
+        <line x1="12" y1="8" x2="12.01" y2="8"></line>
+      </svg>
+    </button>
+  </nav>
+
+  <section class="story-page">
+    <!-- Genre display name, e.g. "Western" -->
+    <h1 class="story-page__title">[GENRE NAME]</h1>
+
+    <article class="story-card">
+      <div class="story-card__scroll">
+        <p class="story-card__text">
+          [SCENE TEXT GOES HERE. Keep paragraphs tight — this box scrolls
+          internally if it runs long, so it doesn't need to be short, but
+          punchy is better for pacing.]
+        </p>
+      </div>
+
+      <!-- BRANCHING SCENE: two choices leading to two more scene files -->
+      <div class="choice-row">
+        <button class="choice-btn" type="button" id="choice-a">
+          <span class="choice-btn__label">A</span>
+          <span class="choice-btn__text">[CHOICE A TEXT]</span>
+        </button>
+        <button class="choice-btn" type="button" id="choice-b">
+          <span class="choice-btn__label">B</span>
+          <span class="choice-btn__text">[CHOICE B TEXT]</span>
+        </button>
+      </div>
+
+      <!-- ENDING SCENE instead: delete the choice-row above and use this
+           single link instead, then delete the choice-a/choice-b script
+           handlers near the bottom of this file too.
+      <div class="choice-row">
+        <a class="choice-btn choice-btn--end" href="/index.html">
+          <span class="choice-btn__text">Return to the beginning</span>
+        </a>
+      </div>
+      -->
+    </article>
+  </section>
+
+</main>
+
+  <script>
+    // Dark / light mode toggle
+    const themeToggle = document.getElementById('theme-toggle');
+    themeToggle.addEventListener('click', () => {
+      document.body.classList.toggle('theme-dark');
+    });
+
+    // Music / sound toggle (visual state only)
+    const soundToggle = document.getElementById('sound-toggle');
+    soundToggle.addEventListener('click', () => {
+      soundToggle.classList.toggle('is-muted');
+    });
+
+    // Return button — plain filename of the scene that led here, e.g.
+    // '2a-ask-why.html'. ONLY the root scene (depth 1, e.g.
+    // '1-start.html') uses '/index.html' instead, since it has no
+    // earlier scene to go back to.
+    const returnBtn = document.getElementById('return-btn');
+    returnBtn.addEventListener('click', () => {
+      window.location.href = '[PREVIOUS_SCENE_FILENAME]';
+    });
+
+    // About button — placeholder action
+    const aboutBtn = document.getElementById('about-btn');
+    aboutBtn.addEventListener('click', () => {
+      console.log('About clicked');
+    });
+
+    // Choice buttons — plain filenames of the next two scenes. Delete
+    // these two blocks entirely if this is an ending scene.
+    document.getElementById('choice-a').addEventListener('click', () => {
+      window.location.href = '[CHOICE_A_NEXT_FILENAME]';
+    });
+    document.getElementById('choice-b').addEventListener('click', () => {
+      window.location.href = '[CHOICE_B_NEXT_FILENAME]';
+    });
+  </script>
+
+</body>
+</html>
