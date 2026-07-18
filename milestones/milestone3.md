@@ -12,7 +12,7 @@ You will need to reference the GitHub Project Management guide in the course por
   - *Please be sure to share your project board with the grading team's GitHub **codepathreview**. This is separate from your repository's sharing settings.*
 - [X] In your repo, create at least 5 issues from the features on your feature list.
   - List the title of each issue you created:
-    1. BUild User Profile and Reading Progress Page
+    1. Build User Profile and Reading Progress Page
     2. Create User Authentication Pages
     3. Add Genre Filtering UI
     4. Create Story Reader Interface
