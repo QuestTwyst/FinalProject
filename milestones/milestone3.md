@@ -32,20 +32,21 @@ You will need to reference the GitHub Project Management guide in the course por
 
 ### 1. What went well during this unit?
 
-[👉🏾👉🏾👉🏾 your answer here]
+We really like the project board and splitting tasks. It helps a lot and we do love seeing not just the progress but also being able to communicate through each one. 
 
 ### 2. What were some challenges your group faced in this unit?
 
-[👉🏾👉🏾👉🏾 your answer here]
+RIght now we are having uploading issues from one of our teammates. We were getting to know the organization feature in git much more thourghly. 
 
 ### Did you finish all of your tasks in your sprint plan for this week? If you did not finish all of the planned tasks, how would you prioritize the remaining tasks on your list?
 
-[👉🏾👉🏾👉🏾 your answer here]
+We plan to discuss more about the tasks that we have to assist with efficiency on how we are splitting them due to some tasks may cross with each other. 
 
 ### Which features and user stories would you consider “at risk”? How will you change your plan if those items remain “at risk”?
 
-[👉🏾👉🏾👉🏾 your answer here]
+We have a few changes going on in our system based on how the file are being uploaded and team coding configuaration. At this time we are discussing the best route and using additional tools to transfer broken files to each other to upload and work on towards supporting the database and evolving towards breaking down into components. 
 
 ### 5. What additional support will you need in upcoming units as you continue to work on your final project?
 
-[👉🏾👉🏾👉🏾 your answer here]
+We will need additional support with GitHub branch management and merge conflicts. One of our teammates is using a Mac, and differences in her VS Code and file system setup created unexpected Git metadata files and branch errors. We would benefit from assistance reviewing the pending branch, resolving any remaining conflicts, and confirming the correct process for safely merging it into the main branch without losing project changes. We are currently looking for additional resources and will be reaching out soon to codepath study hall/ TF.
+
