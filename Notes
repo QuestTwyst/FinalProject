@@ -1,0 +1,11 @@
+# Start the backend
+npm run dev
+
+# Reset/rebuild the database
+npm run reset
+
+
+
+pull issue resolved on johanna end:
+I was having issues had to create branch and it has been fixed and deleted.
+    "Deleted branch johanna-changes (was 42b24a6)."

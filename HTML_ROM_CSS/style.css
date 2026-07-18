@@ -1,0 +1,713 @@
+/* ---------- Reset & base ---------- */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body {
+  height: 100%;
+  overflow: hidden;
+}
+
+body {
+  position: relative;
+  min-height: 100vh;
+  overflow: hidden;
+  background: #0a1220;
+  font-family: 'Poppins', -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+  color: #16324f;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ---------- Fixed-size stage ---------- */
+/* Everything the app renders lives inside this box instead of stretching
+   to fill the browser window. The stage has a set size and is simply
+   centered on the page; on very large screens you'll see the backdrop
+   color around it instead of the layout scaling forever. */
+
+.stage {
+  position: relative;
+  width: 1280px;
+  height: 800px;
+  max-width: 100vw;
+  max-height: 100vh;
+  overflow: hidden;
+  background: #6fb1e6;
+  border-radius: 12px;
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.45);
+}
+
+/* ---------- HOME PAGE ---------- */
+
+/* ---------- Moving gradient layers ---------- */
+.gradient-layer {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  background-repeat: no-repeat;
+  background-size: 200% 200%;
+  will-change: background-position;
+}
+
+.gradient-layer--one {
+  background-image: linear-gradient(
+    120deg,
+    #0f5aa8 0%,
+    #1f7fd6 20%,
+    #6fc3f7 40%,
+    #1a6fc4 60%,
+    #0d4a8f 80%,
+    #2a86dd 100%
+  );
+  mix-blend-mode: normal;
+  animation: driftRight 42s linear infinite;
+}
+
+.gradient-layer--two {
+  background-image: linear-gradient(
+    240deg,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(255, 214, 130, 0.55) 22%,
+    rgba(120, 190, 255, 0.5) 45%,
+    rgba(255, 255, 255, 0) 65%,
+    rgba(255, 200, 110, 0.5) 85%,
+    rgba(80, 170, 255, 0.4) 100%
+  );
+  mix-blend-mode: screen;
+  animation: driftLeft 58s linear infinite;
+}
+
+@keyframes driftRight {
+  0%   { background-position: 0% 50%; }
+  50%  { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+@keyframes driftLeft {
+  0%   { background-position: 100% 50%; }
+  50%  { background-position: 0% 50%; }
+  100% { background-position: 100% 50%; }
+}
+
+/* ---------- Gradient cloud ---------- */
+.cloud {
+  position: relative;
+  margin: 0;
+  width: clamp(360px, 46vw, 680px);
+  height: clamp(190px, 24vw, 360px);
+  flex-shrink: 0;
+  z-index: 1;
+  filter: drop-shadow(0 20px 60px rgba(20, 50, 90, 0.25));
+}
+
+.puff {
+  position: absolute;
+  display: block;
+  border-radius: 50%;
+  overflow: hidden;
+  background-image:
+    radial-gradient(ellipse 55% 40% at 25% 20%, rgba(255, 255, 255, 0.95) 0%, transparent 65%),
+    radial-gradient(ellipse 60% 45% at 75% 55%, rgba(244, 227, 195, 0.85) 0%, transparent 60%),
+    radial-gradient(ellipse 50% 40% at 40% 85%, rgba(220, 222, 226, 0.85) 0%, transparent 60%),
+    radial-gradient(ellipse 55% 45% at 80% 15%, rgba(255, 255, 255, 0.9) 0%, transparent 60%),
+    linear-gradient(180deg, #ffffff 0%, #f4e6c8 33%, #e2e2e2 66%, #ffffff 100%);
+  background-size: 100% 340%;
+  background-attachment: local;
+  filter: blur(0.5px);
+  animation: driftCloud 26s ease-in-out infinite;
+}
+
+.puff--body {
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  height: 62%;
+  border-radius: 50% 50% 45% 45% / 100% 100% 60% 60%;
+}
+
+.puff--left {
+  left: 2%;
+  top: 22%;
+  width: 38%;
+  height: 68%;
+}
+
+.puff--mid {
+  left: 30%;
+  top: -18%;
+  width: 52%;
+  height: 100%;
+}
+
+.puff--right {
+  right: 4%;
+  top: 14%;
+  width: 42%;
+  height: 72%;
+}
+
+@keyframes driftCloud {
+  0%   { background-position: 50% 0%; }
+  50%  { background-position: 50% 100%; }
+  100% { background-position: 50% 0%; }
+}
+
+.cloud-logo {
+  position: absolute;
+  top: 48%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 62%;
+  height: auto;
+  z-index: 2;
+  filter: drop-shadow(0 4px 14px rgba(20, 50, 90, 0.2));
+  pointer-events: none;
+}
+
+/* ---------- Nav bar (pinned top-left, independent of content below) ---------- */
+.nav-bar {
+  position: absolute;
+  top: 1.5rem;
+  left: 1.5rem;
+  z-index: 10;
+  display: flex;
+  flex-direction: row;
+  gap: clamp(0.5rem, 1vw, 1rem);
+}
+
+.nav-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: clamp(48px, 4vw, 60px);
+  height: clamp(48px, 4vw, 60px);
+  border: none;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.55);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 4px 16px rgba(20, 50, 90, 0.18);
+  color: #16324f;
+  cursor: pointer;
+  transition: background 0.2s ease, transform 0.15s ease;
+  flex-shrink: 0;
+}
+
+.nav-btn:hover {
+  background: rgba(255, 255, 255, 0.8);
+  transform: translateY(-2px);
+}
+
+.nav-btn:active {
+  transform: translateY(0);
+}
+
+.nav-btn .icon {
+  width: clamp(24px, 2.2vw, 30px);
+  height: clamp(24px, 2.2vw, 30px);
+}
+
+.icon-moon { display: none; }
+body.theme-dark .icon-sun { display: none; }
+body.theme-dark .icon-moon { display: block; }
+
+.icon-sound-off { display: none; }
+#sound-toggle.is-muted .icon-sound-on { display: none; }
+#sound-toggle.is-muted .icon-sound-off { display: block; }
+
+.content-row {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-evenly;
+  gap: clamp(2rem, 5vw, 5rem);
+  padding: 0 clamp(2rem, 6vw, 6rem);
+  margin: 0;
+}
+
+/* ---------- Story menu ---------- */
+.story-menu {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: clamp(0.75rem, 1.4vw, 1.15rem);
+  width: clamp(280px, 27vw, 380px);
+  flex-shrink: 0;
+  margin: 0;
+  padding: clamp(1.5rem, 2.8vw, 2.5rem);
+  border-radius: 28px;
+  background: rgba(255, 255, 255, 0.55);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 4px 20px rgba(20, 50, 90, 0.18);
+}
+
+.story-menu__title {
+  font-size: clamp(1.2rem, 1.8vw, 1.65rem);
+  font-weight: 600;
+  color: #16324f;
+  margin-bottom: 0.5rem;
+  text-align: center;
+}
+
+.story-btn {
+  padding: clamp(0.85rem, 1.5vw, 1.25rem) clamp(1rem, 1.6vw, 1.5rem);
+  border: none;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.6);
+  color: #16324f;
+  font-family: inherit;
+  font-size: clamp(1.05rem, 1.5vw, 1.35rem);
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.2s ease, transform 0.15s ease;
+}
+
+.story-btn:hover {
+  background: rgba(255, 255, 255, 0.9);
+  transform: translateY(-1px);
+}
+
+.story-btn.is-active {
+  background: #16324f;
+  color: #ffffff;
+}
+
+/* ---------- Story page (romance.html, etc.) ---------- */
+.story-page {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(1.5rem, 3vw, 2.5rem);
+  padding: clamp(2rem, 5vw, 4rem);
+}
+
+.story-page__title {
+  font-size: clamp(2.2rem, 4.5vw, 3.4rem);
+  font-weight: 700;
+  color: #16324f;
+  text-align: center;
+}
+
+.story-card {
+  width: min(680px, 100%);
+  max-height: 100%;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: clamp(1rem, 2vw, 1.5rem);
+  padding: clamp(2rem, 3.5vw, 3rem);
+  border-radius: 28px;
+  background: rgba(255, 255, 255, 0.55);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 4px 20px rgba(20, 50, 90, 0.18);
+}
+
+.story-card__text {
+  font-size: clamp(1rem, 1.3vw, 1.15rem);
+  line-height: 1.65;
+  color: #16324f;
+}
+
+.choice-row {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(0.75rem, 1.2vw, 1rem);
+  margin-top: 0.5rem;
+}
+
+.choice-btn {
+  display: flex;
+  align-items: center;
+  gap: clamp(0.85rem, 1.3vw, 1.15rem);
+  text-align: left;
+  padding: clamp(0.9rem, 1.5vw, 1.25rem) clamp(1.1rem, 1.6vw, 1.5rem);
+  border: none;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.6);
+  color: #16324f;
+  font-family: inherit;
+  cursor: pointer;
+  transition: background 0.2s ease, transform 0.15s ease;
+}
+
+.choice-btn:hover {
+  background: rgba(255, 255, 255, 0.9);
+  transform: translateY(-1px);
+}
+
+.choice-btn__label {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: clamp(30px, 2.4vw, 36px);
+  height: clamp(30px, 2.4vw, 36px);
+  border-radius: 50%;
+  background: #16324f;
+  color: #ffffff;
+  font-weight: 600;
+  font-size: clamp(0.95rem, 1.2vw, 1.1rem);
+}
+
+.choice-btn__text {
+  font-size: clamp(0.95rem, 1.2vw, 1.15rem);
+  font-weight: 500;
+  line-height: 1.4;
+}
+
+/* ---------- Romance page theme (Valentine's Day: pink / white / red) ---------- */
+body.theme-romance {
+  background: #3a0d1f;
+}
+
+body.theme-romance .stage {
+  background: #ffd9e3;
+}
+
+body.theme-romance .gradient-layer--one {
+  background-image: radial-gradient(
+    circle at 50% 40%,
+    #ffe4ec 0%,
+    #ffc2d1 35%,
+    #ff8fa3 70%,
+    #e8385e 100%
+  );
+  background-size: 130% 130%;
+  animation: softDrift 26s ease-in-out infinite alternate;
+}
+
+body.theme-romance .gradient-layer--two {
+  background-image: radial-gradient(
+    circle at 65% 60%,
+    rgba(255, 255, 255, 0.35) 0%,
+    rgba(255, 255, 255, 0) 30%,
+    rgba(255, 90, 120, 0.15) 55%,
+    rgba(255, 255, 255, 0) 80%
+  );
+  background-size: 140% 140%;
+  animation: softDrift 34s ease-in-out infinite alternate-reverse;
+}
+
+@keyframes softDrift {
+  0%   { background-position: 50% 50%; }
+  100% { background-position: 46% 54%; }
+}
+
+body.theme-romance.theme-dark .gradient-layer--one {
+  background-image: radial-gradient(
+    circle at 50% 40%,
+    #6b1230 0%,
+    #4a0e24 35%,
+    #3a0d1f 70%,
+    #2b0a1a 100%
+  );
+}
+
+body.theme-romance.theme-dark .gradient-layer--two {
+  background-image: radial-gradient(
+    circle at 65% 60%,
+    rgba(255, 130, 150, 0.15) 0%,
+    rgba(255, 255, 255, 0) 30%,
+    rgba(180, 30, 70, 0.2) 55%,
+    rgba(255, 255, 255, 0) 80%
+  );
+}
+
+body.theme-romance.theme-dark .gradient-layer--ground {
+  background-image: linear-gradient(
+    to top,
+    #1a0510 0%,
+    rgba(30, 6, 18, 0.85) 15%,
+    rgba(45, 10, 28, 0.5) 32%,
+    rgba(45, 10, 28, 0) 55%
+  );
+}
+
+body.theme-romance.theme-dark .stage {
+  background: #2b0a1a;
+}
+
+body.theme-romance .story-page__title {
+  color: #b3123f;
+  text-shadow: 0 2px 12px rgba(255, 255, 255, 0.5);
+}
+
+body.theme-romance.theme-dark .story-page__title {
+  color: #ffd9e3;
+}
+
+body.theme-romance .story-card {
+  background: rgba(255, 255, 255, 0.65);
+  box-shadow: 0 4px 20px rgba(179, 18, 63, 0.25);
+}
+
+body.theme-romance.theme-dark .story-card {
+  background: rgba(58, 13, 31, 0.65);
+}
+
+body.theme-romance .choice-btn__label {
+  background: #e8385e;
+}
+
+body.theme-romance .choice-btn:hover {
+  background: rgba(255, 214, 224, 0.9);
+}
+
+.ripple-field {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+/* ---------- Sporadic ripple rings (subtle, like raindrops on a lake) ---------- */
+.ripple {
+  position: absolute;
+  border-radius: 50%;
+  border: 1.5px solid rgba(255, 255, 255, 0.35);
+  opacity: 0;
+  animation: rippleExpand ease-out infinite;
+}
+
+@keyframes rippleExpand {
+  0%   { transform: scale(0.2); opacity: 0.35; }
+  70%  { opacity: 0.12; }
+  100% { transform: scale(1.6); opacity: 0; }
+}
+
+.ripple--1 { left: 12%; top: 22%; width: 60px;  height: 60px;  border-color: rgba(255, 255, 255, 0.4);  animation-duration: 5s;   animation-delay: 0s; }
+.ripple--2 { left: 78%; top: 15%; width: 90px;  height: 90px;  border-color: rgba(255, 140, 160, 0.35); animation-duration: 6.5s; animation-delay: 1.4s; }
+.ripple--3 { left: 30%; top: 65%; width: 50px;  height: 50px;  border-color: rgba(255, 255, 255, 0.35); animation-duration: 4.5s; animation-delay: 2.6s; }
+.ripple--4 { left: 60%; top: 75%; width: 75px;  height: 75px;  border-color: rgba(232, 56, 94, 0.3);    animation-duration: 7s;   animation-delay: 0.8s; }
+.ripple--5 { left: 88%; top: 55%; width: 55px;  height: 55px;  border-color: rgba(255, 255, 255, 0.4);  animation-duration: 5.5s; animation-delay: 3.6s; }
+.ripple--6 { left: 6%;  top: 78%; width: 70px;  height: 70px;  border-color: rgba(255, 140, 160, 0.3);  animation-duration: 6s;   animation-delay: 4.4s; }
+.ripple--7 { left: 45%; top: 10%; width: 45px;  height: 45px;  border-color: rgba(255, 255, 255, 0.35); animation-duration: 4.2s; animation-delay: 2s; }
+
+@media (prefers-reduced-motion: reduce) {
+  .ripple {
+    animation: none;
+    opacity: 0;
+  }
+}
+
+/* ---------- Floating hearts ---------- */
+.hearts-field {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.heart {
+  position: absolute;
+  width: 44px;
+  height: 44px;
+  transform: rotate(-45deg);
+  background: rgba(255, 255, 255, 0.55);
+  opacity: 0;
+  animation: floatHeart 12s ease-in infinite;
+}
+
+.heart::before,
+.heart::after {
+  content: "";
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background: inherit;
+}
+
+.heart::before {
+  top: -50%;
+  left: 0;
+}
+
+.heart::after {
+  left: 50%;
+  top: 0;
+}
+
+.heart--1 { left: 8%;  bottom: -60px; width: 38px; height: 38px; background: rgba(255, 255, 255, 0.6); animation-delay: 0s; }
+.heart--2 { left: 20%; bottom: -60px; width: 58px; height: 58px; background: rgba(255, 107, 129, 0.5); animation-delay: 2.4s; }
+.heart--3 { left: 38%; bottom: -60px; width: 32px; height: 32px; background: rgba(255, 255, 255, 0.55); animation-delay: 5s; }
+.heart--4 { left: 55%; bottom: -60px; width: 48px; height: 48px; background: rgba(232, 56, 94, 0.45); animation-delay: 1.2s; }
+.heart--5 { left: 68%; bottom: -60px; width: 34px; height: 34px; background: rgba(255, 255, 255, 0.5); animation-delay: 7s; }
+.heart--6 { left: 82%; bottom: -60px; width: 54px; height: 54px; background: rgba(255, 107, 129, 0.4); animation-delay: 3.6s; }
+.heart--7 { left: 93%; bottom: -60px; width: 34px; height: 34px; background: rgba(255, 255, 255, 0.55); animation-delay: 8.5s; }
+
+@keyframes floatHeart {
+  0% {
+    transform: translateY(0) rotate(-45deg);
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+  }
+  90% {
+    opacity: 0.8;
+  }
+  100% {
+    transform: translateY(-820px) rotate(-45deg);
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .heart {
+    animation: none;
+    opacity: 0.6;
+  }
+}
+
+/* ---------- Dark theme ---------- */
+body.theme-dark {
+  background: #05070c;
+}
+
+body.theme-dark .gradient-layer--one {
+  background-image: linear-gradient(
+    120deg,
+    #1a0f3d 0%,
+    #4a1d6b 20%,
+    #9b3d6e 40%,
+    #d9622f 60%,
+    #7a2a5c 80%,
+    #2b1250 100%
+  );
+}
+
+body.theme-dark .gradient-layer--two {
+  background-image: linear-gradient(
+    240deg,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(255, 150, 90, 0.5) 22%,
+    rgba(190, 70, 130, 0.45) 45%,
+    rgba(255, 255, 255, 0) 65%,
+    rgba(255, 190, 100, 0.4) 85%,
+    rgba(90, 40, 130, 0.45) 100%
+  );
+}
+
+/* Ground/horizon darkening — only visible in dark mode. Stays fixed
+   (doesn't drift like the other two layers) and simply deepens the
+   bottom of the scene while fading to nothing toward the top, so the
+   "ground" reads darker than the sky above it. */
+.gradient-layer--ground {
+  background-image: none;
+}
+
+body.theme-dark .gradient-layer--ground {
+  background-image: linear-gradient(
+    to top,
+    #05030d 0%,
+    rgba(10, 6, 25, 0.85) 15%,
+    rgba(20, 10, 40, 0.5) 32%,
+    rgba(20, 10, 40, 0) 55%
+  );
+  background-size: 100% 100%;
+}
+
+body.theme-dark .stage {
+  background: #1a1030;
+}
+
+body.theme-dark .nav-btn {
+  background: rgba(20, 30, 50, 0.55);
+  color: #f4f4f8;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.35);
+}
+
+body.theme-dark .nav-btn:hover {
+  background: rgba(20, 30, 50, 0.8);
+}
+
+body.theme-dark .story-menu {
+  background: rgba(20, 30, 50, 0.55);
+}
+
+body.theme-dark .story-menu__title {
+  color: #f4f4f8;
+}
+
+body.theme-dark .story-btn {
+  background: rgba(255, 255, 255, 0.12);
+  color: #f4f4f8;
+}
+
+body.theme-dark .story-btn:hover {
+  background: rgba(255, 255, 255, 0.22);
+}
+
+body.theme-dark .story-btn.is-active {
+  background: #f4f4f8;
+  color: #16324f;
+}
+
+body.theme-dark .story-card {
+  background: rgba(20, 30, 50, 0.55);
+}
+
+body.theme-dark .story-page__title,
+body.theme-dark .story-card__text {
+  color: #f4f4f8;
+}
+
+body.theme-dark .choice-btn {
+  background: rgba(255, 255, 255, 0.12);
+  color: #f4f4f8;
+}
+
+body.theme-dark .choice-btn:hover {
+  background: rgba(255, 255, 255, 0.22);
+}
+
+body.theme-dark .choice-btn__label {
+  background: #f4f4f8;
+  color: #16324f;
+}
+
+@media (max-width: 640px) {
+  .nav-bar {
+    top: 1rem;
+    left: 1rem;
+  }
+
+  .content-row {
+    flex-direction: column;
+    justify-content: center;
+    gap: 1.5rem;
+    padding: 5rem 1.5rem 1.5rem;
+  }
+
+  .story-menu {
+    width: 100%;
+  }
+
+  .story-page {
+    padding: 5rem 1.5rem 1.5rem;
+  }
+}
+
+/* ---------- Reduced motion ---------- */
+@media (prefers-reduced-motion: reduce) {
+  .gradient-layer,
+  .puff {
+    animation: none;
+  }
+}
