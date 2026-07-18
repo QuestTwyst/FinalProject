@@ -4,7 +4,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Questwyst — Romance</title>
+<title>Questwyst — Choose a Romance</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Great+Vibes&display=swap" rel="stylesheet">
@@ -69,7 +69,7 @@
       </svg>
     </button>
 
-    <button class="nav-btn" id="return-btn" type="button" aria-label="Return to story selection" title="Return to story selection">
+    <button class="nav-btn" id="return-btn" type="button" aria-label="Return to home" title="Return to home">
       <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
         <line x1="19" y1="12" x2="5" y2="12"></line>
         <polyline points="12 19 5 12 12 5"></polyline>
@@ -88,24 +88,11 @@
   <section class="story-page">
     <h1 class="story-page__title">Romance</h1>
 
-    <article class="story-card">
-      <div class="story-card__scroll">
-        <p class="story-card__text">
-          Mara had missed the last ferry to the mainland, or so she thought, until she saw a stranger waving frantically from the dock, holding the rope for a boat that clearly wasn't supposed to still be there. "Captain's off sick," he said, breathless, rain slicking his hair to his forehead. "I can get us across, but I need a second pair of hands." She had a flight to catch in the morning and every reason to say no. Instead she stepped over the gap between dock and deck, and the boat lurched forward into the dark water, carrying them both somewhere neither had planned to go.
-        </p>
-      </div>
-
-      <div class="choice-row">
-        <button class="choice-btn" type="button" id="choice-a">
-          <span class="choice-btn__label">A</span>
-          <span class="choice-btn__text">Ask him why he really needs help crossing tonight.</span>
-        </button>
-        <button class="choice-btn" type="button" id="choice-b">
-          <span class="choice-btn__label">B</span>
-          <span class="choice-btn__text">Grab the second rope and start rowing without asking questions.</span>
-        </button>
-      </div>
-    </article>
+    <aside class="story-menu story-menu--select">
+      <h2 class="story-menu__title">Choose a story to read</h2>
+      <button class="story-btn" type="button" data-story-file="1-start.html">The Last Ferry</button>
+      <button class="story-btn" type="button" disabled>More coming soon</button>
+    </aside>
   </section>
 
 </main>
@@ -123,10 +110,10 @@
       soundToggle.classList.toggle('is-muted');
     });
 
-    // Return button — goes back to the home page
+    // Return button — goes back to the home page (genre picker)
     const returnBtn = document.getElementById('return-btn');
     returnBtn.addEventListener('click', () => {
-      window.location.href = 'select.html';
+      window.location.href = '/index.html';
     });
 
     // About button — placeholder action
@@ -135,12 +122,12 @@
       console.log('About clicked');
     });
 
-    // Choice buttons — each one branches to its own continuation page
-    document.getElementById('choice-a').addEventListener('click', () => {
-      window.location.href = '2a-ask-why.html';
-    });
-    document.getElementById('choice-b').addEventListener('click', () => {
-      window.location.href = '2b-row-along.html';
+    // Story selection buttons — each one navigates to that story's first scene
+    const storyButtons = document.querySelectorAll('.story-btn[data-story-file]');
+    storyButtons.forEach((btn) => {
+      btn.addEventListener('click', () => {
+        window.location.href = btn.dataset.storyFile;
+      });
     });
   </script>
 

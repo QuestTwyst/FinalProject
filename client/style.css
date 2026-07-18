@@ -280,6 +280,17 @@ body.theme-dark .icon-moon { display: block; }
   color: #ffffff;
 }
 
+.story-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  font-style: italic;
+}
+
+.story-btn:disabled:hover {
+  background: rgba(255, 255, 255, 0.6);
+  transform: none;
+}
+
 /* ---------- Story page (romance.html, etc.) ---------- */
 .story-page {
   position: absolute;

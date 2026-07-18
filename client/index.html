@@ -9,7 +9,6 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
-  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
 </head>
 <body>
 
@@ -140,11 +139,12 @@
     });
 
     // Story selection buttons — each genre lives in its own subfolder
-    // under stories/, with descriptively-named flat files (see
-    // stories/README.md for the naming convention).
+    // under stories/. Clicking a genre goes to that genre's story
+    // SELECTOR screen (a list of stories to choose from), not directly
+    // into a story.
     // Only Romance is built so far; the rest log a placeholder for now.
     const storyPages = {
-      romance: 'stories/romance/1-start.html'
+      romance: 'stories/romance/select.html'
     };
 
     const storyButtons = document.querySelectorAll('.story-btn');
