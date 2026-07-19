@@ -42,11 +42,11 @@ Users will be able to create an account, log in, and delete their account when t
 
 [gif goes here]
 
-### Story Library API
+### ✅ Story Library API
 
 The frontend will display all available stories as browsable cards showing a title, genre, and short description. Readers can filter the library by genre using a dropdown menu, and clicking a story card opens it directly in the Story Reader Interface.
 
-✅ For example, exploring the site as a whole, Romance genre selection and branching story
+ For example, exploring the site as a whole, Romance genre selection and branching story
 
 ![Romance feature demo](planning/gifs/QuestTwyst_websire_milestone3.gif)
 
@@ -90,10 +90,10 @@ The backend will support admin-managed story content. Admins or developers will 
 
 ### [ADDITIONAL FEATURES GO HERE - ADD ALL FEATURES HERE IN THE FORMAT ABOVE; you will check these off and add gifs as you complete them]
 
-### Story Reader Interface
+### ✅ Story Reader Interface
 The frontend will display one passage at a time along with two clickable choice buttons (Option A and Option B). Selecting a choice loads the next passage instantly without navigating to a new page, letting readers move through the story in a smooth, uninterrupted way. 
 
-✅ Story metadata header showing title, genre, author, and description at the top of the reader
+Story metadata header showing title, genre, author, and description at the top of the reader
 
 ![Story Reader Interface demo](planning/gifs/QuestTwyst_Story-Reader-Interface.gif)
 
