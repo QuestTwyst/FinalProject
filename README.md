@@ -49,9 +49,9 @@ The frontend will display all available stories as browsable cards showing a tit
 
 The backend will include Express routes that allow the app to retrieve available stories from the database. Readers will be able to view a list of stories and open a specific story by ID, but story creation will be handled through seeded/admin-managed data instead of regular user submissions.
 
-✅ For example, Romance genre selection and branching story
+✅ For example, exploring the site as a whole, Romance genre selection and branching story
 
-![Romance feature demo](screenshots/romance-demo.gif)
+![Romance feature demo](planning/gifs/QuestTwyst_websire_milestone3.gif)
 
 
 [gif goes here]
@@ -70,7 +70,7 @@ The backend will organize stories by genre, such as mystery, comedy, fantasy, ro
 
 The frontend will let signed-in readers pick up exactly where they left off in a story, showing a "Continue Reading" option on their profile or the library page instead of restarting from the beginning.
 
-[gif goes here]
+[gif goes here] (COMING SOON)
 
 The backend will track a reader’s current location within a story. This allows users to leave a story and later return to the passage where they stopped reading.
 
@@ -79,7 +79,7 @@ The backend will track a reader’s current location within a story. This allows
 ### Story Path History
 
 After a reader finishes a story, the frontend will display a visual recap of the choices they made along the way, letting them see the full path they took and easily restart to try a different route.
-[gif goes here]
+[gif goes here] (COMING SOON)
 
 The backend will save the choices a reader makes while moving through a story. This allows the app to show the path the reader took and makes it possible for users to replay the same story using different choices.
 
@@ -99,7 +99,7 @@ The frontend will display one passage at a time along with two clickable choice 
 
 ### Story Creator Interface
 The frontend will provide a form-based editor where users can write a story title, add passages, and fill in the two choices that branch off each passage. Validation will prevent saving a passage until the title and both choices are filled in, and users can mark any passage as an ending.
-[gif goes here]
+[gif goes here] (COMING SOON)
 
 
 ## Installation Instructions
