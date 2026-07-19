@@ -96,7 +96,7 @@ The frontend will display one passage at a time along with two clickable choice 
 
 ✅ Story metadata header showing title, genre, author, and description at the top of the reader
 
-![Story Reader Interface demo](planning/gifs/QuestTwyst_Story%20Reader%20Interface.gif)
+![Story Reader Interface demo](planning/gifs/QuestTwyst_Story Reader Interface.gif)
 
 ### Story Creator Interface
 The frontend will provide a form-based editor where users can write a story title, add passages, and fill in the two choices that branch off each passage. Validation will prevent saving a passage until the title and both choices are filled in, and users can mark any passage as an ending.
