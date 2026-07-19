@@ -46,4 +46,35 @@
  // "next_passage_id": 3
 //}
 
-GET http://localhost:3001/passages/1/choices
+//GET http://localhost:3001/passages/1/choices
+
+
+//Get all users
+//GET http://localhost:3001/users
+
+//Get user by ID
+//GET http://localhost:3001/users/1
+
+//Create a user
+
+//POST http://localhost:3001/users
+//Content-Type: application/json
+
+//{
+// "name": "Marisol Vega",
+//  "email": "marisol.vega@example.com",
+//  "password_hash": "hashed_pw_3"
+//}
+
+//Update user
+//PATCH http://localhost:3001/users/3
+//Content-Type: application/json
+
+//{
+//  "name": "Ethan R.",
+//  "email": "ethan.r@example.com",
+//  "password_hash": "hashed_pw_3_updated"
+//}
+
+//Delete user
+//DELETE http://localhost:3001/users/3
