@@ -44,6 +44,29 @@ const createPassagesTable = async () => {
   console.log("✔️ Passages table ready.");
 };
 
+const createChoicesTable = async () => {
+  await pool.query(`
+    CREATE TABLE IF NOT EXISTS choices (
+      id SERIAL PRIMARY KEY,
+      passage_id INTEGER NOT NULL,
+      choice_text TEXT NOT NULL,
+      next_passage_id INTEGER,
+
+      CONSTRAINT fk_choices_passage
+        FOREIGN KEY (passage_id)
+        REFERENCES passages(id)
+        ON DELETE CASCADE,
+
+      CONSTRAINT fk_choices_next_passage
+        FOREIGN KEY (next_passage_id)
+        REFERENCES passages(id)
+        ON DELETE SET NULL
+    );
+  `);
+
+  console.log("✔️ Choices table created.");
+};
+
 const createGenresTable = async () => {
   await pool.query(`
     CREATE TABLE genres (
@@ -408,6 +431,7 @@ const resetAssignedTables = async () => {
 
     await createStoriesTable();
     await createPassagesTable();
+    await createChoicesTable();
 
     await dropAssignedTables();
 

@@ -1,4 +1,5 @@
 import { useState, useRef } from 'react';
+import { useNavigate } from 'react-router-dom';
 import styles from './StoryIntro.module.css';
 
 function StoryIntro() {
@@ -6,6 +7,8 @@ function StoryIntro() {
   const [isMuted, setIsMuted] = useState(false);
   const [selectedStory, setSelectedStory] = useState(null);
   const fileInputRef = useRef(null);
+
+  const navigate = useNavigate();
 
   const handleThemeToggle = () => {
     setIsDark((prev) => !prev);
@@ -137,6 +140,34 @@ function StoryIntro() {
               <line x1="12" y1="8" x2="12.01" y2="8"></line>
             </svg>
           </button>
+          
+          <button
+            className={styles.navBtn}
+            type="button"
+            aria-label="Log In"
+            title="Log In"
+            onClick={() => navigate('/login')}
+          >
+            <svg className={styles.icon} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"></path>
+              <polyline points="10 17 15 12 10 7"></polyline>
+              <line x1="15" y1="12" x2="3" y2="12"></line>
+            </svg>
+          </button>
+          <button
+            className={styles.navBtn}
+            type="button"
+            aria-label="Create Account"
+            title="Create Account"
+            onClick={() => navigate('/create-account')}
+          >
+            <svg className={styles.icon} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M20 21v-2a4 4 0 0 0-3-3.87"></path>
+              <polyline points="4 15 4 21 8 21"></polyline>
+              <line x1="4" y1="12" x2="4" y2="12"></line>
+              <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+            </svg>
+            </button>
         </nav>
 
         <div className={styles.heroRow}>

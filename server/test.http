@@ -1,4 +1,4 @@
-DELETE http://localhost:3001/stories/4
+//DELETE http://localhost:3001/stories/4
 
 //POST http://localhost:3001/stories
 //Content-Type: application/json
@@ -8,3 +8,42 @@ DELETE http://localhost:3001/stories/4
 //  "description": "A mysterious adventure beneath the waves.",
 //  "creator_id": null
 //}
+
+//GET http://localhost:3001/stories/1/passages
+
+//POST http://localhost:3001/stories/1/passages
+//Content-Type: application/json
+
+//{
+ // "content": "You step into a clearing filled with glowing flowers.",
+ // "is_ending": false
+//}
+
+//DELETE http://localhost:3001/stories/passages/5
+
+//PATCH http://localhost:3001/stories/2
+//Content-Type: application/json
+
+//{
+//  "title": "Ocean Depths — The Hidden Currents",
+//  "description": "Beneath the waves lies a world of shifting currents, glowing creatures, and ancient secrets waiting to be uncovered.",
+//  "creator_id": 5
+//}
+
+//PATCH http://localhost:3001/stories/passages/2
+//Content-Type: application/json
+
+//{
+//  "content": "You follow the left path and discover a hidden waterfall.",
+//  "is_ending": false
+//}
+
+//POST http://localhost:3001/passages/1/choices
+//Content-Type: application/json
+
+//{
+ // "choice_text": "Follow the glowing lights",
+ // "next_passage_id": 3
+//}
+
+GET http://localhost:3001/passages/1/choices
