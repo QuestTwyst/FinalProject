@@ -61,3 +61,22 @@ export const deletePassage = async (req, res) => {
     res.status(500).json({ error: "Failed to delete passage" });
   }
 };
+
+export const updatePassage = async (req, res) => {
+  try {
+    const { passageId } = req.params;
+    const { content, is_ending } = req.body;
+
+    const result = await pool.query(
+      `UPDATE passages
+       SET content = $1, is_ending = $2
+       WHERE id = $3
+       RETURNING *`,
+      [content, is_ending, passageId],
+    );
+
+    res.status(200).json(result.rows[0]);
+  } catch (error) {
+    res.status(409).json({ error: error.message });
+  }
+};
