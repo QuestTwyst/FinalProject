@@ -8,3 +8,13 @@ DELETE http://localhost:3001/stories/4
 //  "description": "A mysterious adventure beneath the waves.",
 //  "creator_id": null
 //}
+
+
+--Get all stories
+GET http://localhost:3001/stories
+
+--Get one story
+GET http://localhost:3001/stories/1
+
+--Get a story that does not exist
+GET http://localhost:3001/stories/1111
