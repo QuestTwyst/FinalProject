@@ -51,7 +51,7 @@ The backend will include Express routes that allow the app to retrieve available
 
 ✅ For example, Romance genre selection and branching story
 
-![Romance feature demo](planning/QuestTwyst_websire_milestone3.gif)
+![Romance feature demo](planning/gifs/QuestTwyst_websire_milestone3.gif)
 
 
 ### Branching Passage and Choice API
