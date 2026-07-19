@@ -30,10 +30,20 @@
 //  "creator_id": 5
 //}
 
-PATCH http://localhost:3001/stories/passages/2
-Content-Type: application/json
+//PATCH http://localhost:3001/stories/passages/2
+//Content-Type: application/json
 
-{
-  "content": "You follow the left path and discover a hidden waterfall.",
-  "is_ending": false
-}
+//{
+//  "content": "You follow the left path and discover a hidden waterfall.",
+//  "is_ending": false
+//}
+
+//POST http://localhost:3001/passages/1/choices
+//Content-Type: application/json
+
+//{
+ // "choice_text": "Follow the glowing lights",
+ // "next_passage_id": 3
+//}
+
+GET http://localhost:3001/passages/1/choices
