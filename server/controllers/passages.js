@@ -38,3 +38,26 @@ export const createPassage = async (req, res) => {
     res.status(500).json({ error: "Failed to create passage" });
   }
 };
+
+export const deletePassage = async (req, res) => {
+  try {
+    const { passageId } = req.params;
+
+    const result = await pool.query(
+      "DELETE FROM passages WHERE id = $1 RETURNING *;",
+      [passageId],
+    );
+
+    if (result.rows.length === 0) {
+      return res.status(404).json({ error: "Passage not found" });
+    }
+
+    res.status(200).json({
+      message: "Passage deleted",
+      passage: result.rows[0],
+    });
+  } catch (error) {
+    console.error("Error deleting passage:", error);
+    res.status(500).json({ error: "Failed to delete passage" });
+  }
+};

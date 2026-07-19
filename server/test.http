@@ -11,10 +11,11 @@
 
 //GET http://localhost:3001/stories/1/passages
 
-POST http://localhost:3001/stories/1/passages
-Content-Type: application/json
+//POST http://localhost:3001/stories/1/passages
+//Content-Type: application/json
+//{
+ // "content": "You step into a clearing filled with glowing flowers.",
+ // "is_ending": false
+//}
 
-{
-  "content": "You step into a clearing filled with glowing flowers.",
-  "is_ending": false
-}
+DELETE http://localhost:3001/stories/passages/5
