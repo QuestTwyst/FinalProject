@@ -206,6 +206,12 @@ body {
   transform: translateY(0);
 }
 
+.nav-btn:disabled {
+  opacity: 0.45;
+  cursor: default;
+  pointer-events: none;
+}
+
 .nav-btn .icon {
   width: 28px;
   height: 28px;
@@ -329,6 +335,37 @@ body.theme-dark .icon-moon { display: block; }
   overflow-y: auto;
   min-height: 0;
   padding-right: 0.96rem;
+}
+
+/* ---------- Story metadata header (title, genre, author, description) ---------- */
+.story-meta {
+  padding-bottom: 1rem;
+  margin-bottom: 0.25rem;
+  border-bottom: 1px solid rgba(22, 50, 79, 0.15);
+}
+
+.story-meta__title {
+  font-size: 1.4rem;
+  font-weight: 600;
+  color: #16324f;
+  margin-bottom: 0.35rem;
+}
+
+.story-meta__details {
+  font-size: 0.9rem;
+  color: #4a6178;
+  margin-bottom: 0.5rem;
+}
+
+.story-meta__separator {
+  margin: 0 0.4rem;
+}
+
+.story-meta__description {
+  font-size: 0.95rem;
+  font-style: italic;
+  color: #16324f;
+  opacity: 0.85;
 }
 
 .story-card__text {
@@ -731,6 +768,19 @@ body.theme-dark .story-card {
 body.theme-dark .story-page__title,
 body.theme-dark .story-card__text {
   color: #f4f4f8;
+}
+
+body.theme-dark .story-meta {
+  border-bottom-color: rgba(244, 244, 248, 0.15);
+}
+
+body.theme-dark .story-meta__title,
+body.theme-dark .story-meta__description {
+  color: #f4f4f8;
+}
+
+body.theme-dark .story-meta__details {
+  color: #b8c4d0;
 }
 
 body.theme-dark .choice-btn {

@@ -14,10 +14,9 @@ export const getStoryById = async (req, res) => {
   try {
     const { id } = req.params;
 
-    const result = await pool.query(
-      "SELECT * FROM stories WHERE id = $1;",
-      [id]
-    );
+    const result = await pool.query("SELECT * FROM stories WHERE id = $1;", [
+      id,
+    ]);
 
     if (result.rows.length === 0) {
       return res.status(404).json({ error: "Story not found" });
@@ -35,14 +34,16 @@ export const createStory = async (req, res) => {
     const { title, description, creator_id } = req.body;
 
     if (!title || !description) {
-      return res.status(400).json({ error: "Title and description are required" });
+      return res
+        .status(400)
+        .json({ error: "Title and description are required" });
     }
 
     const result = await pool.query(
       `INSERT INTO stories (title, description, creator_id)
        VALUES ($1, $2, $3)
        RETURNING *;`,
-      [title, description, creator_id || null]
+      [title, description, creator_id || null],
     );
 
     res.status(201).json(result.rows[0]);
@@ -58,7 +59,7 @@ export const deleteStory = async (req, res) => {
 
     const result = await pool.query(
       "DELETE FROM stories WHERE id = $1 RETURNING *;",
-      [id]
+      [id],
     );
 
     if (result.rows.length === 0) {
@@ -73,3 +74,21 @@ export const deleteStory = async (req, res) => {
 };
 
 
+export const updateStory = async (req, res) => {
+  try {
+    const id = parseInt(req.params.id);
+    const { title, description, creator_id } = req.body;
+
+    const result = await pool.query(
+      `UPDATE stories
+       SET title = $1, description = $2, creator_id = $3
+       WHERE id = $4
+       RETURNING *`,
+      [title, description, creator_id, id],
+    );
+
+    res.status(200).json(result.rows[0]);
+  } catch (error) {
+    res.status(409).json({ error: error.message });
+  }
+};

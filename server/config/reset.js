@@ -12,6 +12,20 @@ const dropAssignedTables = async () => {
   console.log("✔️ Assigned tables dropped.");
 };
 
+const createUsersTable = async () => {
+  await pool.query(`
+    CREATE TABLE IF NOT EXISTS users (
+      id SERIAL PRIMARY KEY,
+      name TEXT NOT NULL,
+      email TEXT NOT NULL UNIQUE,
+      password_hash TEXT NOT NULL,
+      created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+    );
+  `);
+
+  console.log("✔️ Users table created.");
+};
+
 const createStoriesTable = async () => {
   await pool.query(`
     CREATE TABLE IF NOT EXISTS stories (
@@ -23,7 +37,7 @@ const createStoriesTable = async () => {
     );
   `);
 
-  console.log("✔️ Stories table ready.");
+  console.log("✔️ Stories table created.");
 };
 
 const createPassagesTable = async () => {
@@ -41,7 +55,30 @@ const createPassagesTable = async () => {
     );
   `);
 
-  console.log("✔️ Passages table ready.");
+  console.log("✔️ Passages table created.");
+};
+
+const createChoicesTable = async () => {
+  await pool.query(`
+    CREATE TABLE IF NOT EXISTS choices (
+      id SERIAL PRIMARY KEY,
+      passage_id INTEGER NOT NULL,
+      choice_text TEXT NOT NULL,
+      next_passage_id INTEGER,
+
+      CONSTRAINT fk_choices_passage
+        FOREIGN KEY (passage_id)
+        REFERENCES passages(id)
+        ON DELETE CASCADE,
+
+      CONSTRAINT fk_choices_next_passage
+        FOREIGN KEY (next_passage_id)
+        REFERENCES passages(id)
+        ON DELETE SET NULL
+    );
+  `);
+
+  console.log("✔️ Choices table created.");
 };
 
 const createGenresTable = async () => {
@@ -145,6 +182,18 @@ const createStoryHistoryTable = async () => {
   `);
 
   console.log("✔️ Story_history table created.");
+};
+
+const seedUsers = async () => {
+  await pool.query(`
+    INSERT INTO users (name, email, password_hash)
+    VALUES
+      ('Hailey', 'hailey@example.com', 'hashed_pw_1'),
+      ('Declan', 'declan@example.com', 'hashed_pw_2')
+    ON CONFLICT (email) DO NOTHING;
+  `);
+
+  console.log("✔️ Sample users inserted.");
 };
 
 const seedStories = async () => {
@@ -406,8 +455,10 @@ const resetAssignedTables = async () => {
   try {
     console.log("Resetting QuestTwyst database tables...");
 
+    await createUsersTable();
     await createStoriesTable();
     await createPassagesTable();
+    await createChoicesTable();
 
     await dropAssignedTables();
 
@@ -416,6 +467,7 @@ const resetAssignedTables = async () => {
     await createReadingProgressTable();
     await createStoryHistoryTable();
 
+    await seedUsers();
     await seedStories();
     await seedPassages();
     await seedGenres();

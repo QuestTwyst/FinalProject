@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 function CreateAccount() {
   const [formData, setFormData] = useState({
@@ -9,6 +10,12 @@ function CreateAccount() {
     password: "",
     confirmPassword: "",
   });
+
+  const navigate = useNavigate();
+  
+  const handleCancel = () => {
+  navigate("/");
+};
 
   const handleChange = (e) => {
     setFormData({
@@ -28,16 +35,7 @@ function CreateAccount() {
     console.log(formData);
   };
 
-  const handleCancel = () => {
-    setFormData({
-      firstName: "",
-      middleName: "",
-      lastName: "",
-      username: "",
-      password: "",
-      confirmPassword: "",
-    });
-  };
+
 
   return (
     <main className="container">
@@ -60,6 +58,7 @@ function CreateAccount() {
                 name="firstName"
                 value={formData.firstName}
                 onChange={handleChange}
+                required
               />
             </div>
 
@@ -71,6 +70,7 @@ function CreateAccount() {
                 name="middleName"
                 value={formData.middleName}
                 onChange={handleChange}
+                
               />
             </div>
 
@@ -82,6 +82,7 @@ function CreateAccount() {
                 name="lastName"
                 value={formData.lastName}
                 onChange={handleChange}
+                required
               />
             </div>
           </div>
@@ -93,6 +94,7 @@ function CreateAccount() {
             name="username"
             value={formData.username}
             onChange={handleChange}
+            required
           />
 
           <label htmlFor="password">Password:</label>
@@ -102,6 +104,7 @@ function CreateAccount() {
             name="password"
             value={formData.password}
             onChange={handleChange}
+            required
           />
 
           <label htmlFor="confirmPassword">Confirm Password:</label>
@@ -111,6 +114,7 @@ function CreateAccount() {
             name="confirmPassword"
             value={formData.confirmPassword}
             onChange={handleChange}
+            required
           />
 
           <div

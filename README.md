@@ -7,6 +7,7 @@ Designed and developed by: Elizabeth Kilroy, Mymuna Murshed, Johanna Devilme, Ga
 🔗 Link to deployed app:
 
 ## About
+This web app is a full-stack application, meaning our team will develop both the user-facing interface and the systems that operate behind the scenes. The front end will use React, JavaScript, HTML, CSS, React Router, and Vite to create the story pages, choice-based navigation, user profiles, and other interactive features. The back end will use Node.js and Express.js to process user requests, manage application logic, and communicate with a PostgreSQL database. The database will store information such as user accounts, stories, passages, choices, genres, and reading progress. We will also build a RESTful API to support communication between the front end and back end and deploy the completed application using Render.
 
 ### Description and Purpose
 
@@ -41,19 +42,16 @@ Users will be able to create an account, log in, and delete their account when t
 
 [gif goes here]
 
-### Story Library API
+### ✅ Story Library API
 
 The frontend will display all available stories as browsable cards showing a title, genre, and short description. Readers can filter the library by genre using a dropdown menu, and clicking a story card opens it directly in the Story Reader Interface.
-[gif goes here]
+
+ For example, exploring the site as a whole, Romance genre selection and branching story
+
+![Romance feature demo](planning/gifs/QuestTwyst_websire_milestone3.gif)
 
 The backend will include Express routes that allow the app to retrieve available stories from the database. Readers will be able to view a list of stories and open a specific story by ID, but story creation will be handled through seeded/admin-managed data instead of regular user submissions.
 
-✅ For example, Romance genre selection and branching story
-
-![Romance feature demo](screenshots/romance-demo.gif)
-
-
-[gif goes here]
 
 ### Branching Passage and Choice API
 The backend will store each story as connected passages. Each passage will include two choices, such as Option A and Option B, and each choice will point to the next passage in the story. This allows the reader’s selection to determine which part of the story appears next.
@@ -69,7 +67,7 @@ The backend will organize stories by genre, such as mystery, comedy, fantasy, ro
 
 The frontend will let signed-in readers pick up exactly where they left off in a story, showing a "Continue Reading" option on their profile or the library page instead of restarting from the beginning.
 
-[gif goes here]
+[gif goes here] (COMING SOON)
 
 The backend will track a reader’s current location within a story. This allows users to leave a story and later return to the passage where they stopped reading.
 
@@ -78,7 +76,7 @@ The backend will track a reader’s current location within a story. This allows
 ### Story Path History
 
 After a reader finishes a story, the frontend will display a visual recap of the choices they made along the way, letting them see the full path they took and easily restart to try a different route.
-[gif goes here]
+[gif goes here] (COMING SOON)
 
 The backend will save the choices a reader makes while moving through a story. This allows the app to show the path the reader took and makes it possible for users to replay the same story using different choices.
 
@@ -92,13 +90,16 @@ The backend will support admin-managed story content. Admins or developers will 
 
 ### [ADDITIONAL FEATURES GO HERE - ADD ALL FEATURES HERE IN THE FORMAT ABOVE; you will check these off and add gifs as you complete them]
 
-### Story Reader Interface
+### ✅ Story Reader Interface
 The frontend will display one passage at a time along with two clickable choice buttons (Option A and Option B). Selecting a choice loads the next passage instantly without navigating to a new page, letting readers move through the story in a smooth, uninterrupted way. 
-[gif goes here]
+
+Story metadata header showing title, genre, author, and description at the top of the reader
+
+![Story Reader Interface demo](planning/gifs/QuestTwyst_Story-Reader-Interface.gif)
 
 ### Story Creator Interface
 The frontend will provide a form-based editor where users can write a story title, add passages, and fill in the two choices that branch off each passage. Validation will prevent saving a passage until the title and both choices are filled in, and users can mark any passage as an ending.
-[gif goes here]
+[gif goes here] (COMING SOON)
 
 
 ## Installation Instructions
