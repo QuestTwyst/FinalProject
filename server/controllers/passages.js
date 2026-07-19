@@ -1,0 +1,40 @@
+import pool from "../config/database.js";
+
+export const getPassagesByStory = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const result = await pool.query(
+      `SELECT * FROM passages WHERE story_id = $1 ORDER BY id ASC;`,
+      [id],
+    );
+
+    res.status(200).json(result.rows);
+  } catch (error) {
+    console.error("Error fetching passages:", error);
+    res.status(500).json({ error: "Failed to fetch passages" });
+  }
+};
+
+export const createPassage = async (req, res) => {
+  try {
+    const { id } = req.params; // story_id
+    const { content, is_ending } = req.body;
+
+    if (!content) {
+      return res.status(400).json({ error: "Content is required" });
+    }
+
+    const result = await pool.query(
+      `INSERT INTO passages (story_id, content, is_ending)
+       VALUES ($1, $2, $3)
+       RETURNING *;`,
+      [id, content, is_ending || false],
+    );
+
+    res.status(201).json(result.rows[0]);
+  } catch (error) {
+    console.error("Error creating passage:", error);
+    res.status(500).json({ error: "Failed to create passage" });
+  }
+};
