@@ -1,6 +1,7 @@
 import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
+import usersRoutes from "./routes/users.js";
 import storiesRoutes from "./routes/stories.js";
 import passagesRoutes from "./routes/passages.js";
 import choicesRoutes from "./routes/choices.js";
@@ -17,9 +18,10 @@ const PORT = process.env.PORT || 3001;
 app.use(cors());
 app.use(express.json());
 
-app.use("/passages", choicesRoutes);
-app.use("/stories", passagesRoutes);
+app.use("/users", usersRoutes);
 app.use("/stories", storiesRoutes);
+app.use("/stories", passagesRoutes);
+app.use("/passages", choicesRoutes);
 
 app.use("/api/genres", genresRouter);
 app.use("/api/stories", storyGenresRouter);
