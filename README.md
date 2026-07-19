@@ -45,13 +45,14 @@ Users will be able to create an account, log in, and delete their account when t
 ### Story Library API
 
 The frontend will display all available stories as browsable cards showing a title, genre, and short description. Readers can filter the library by genre using a dropdown menu, and clicking a story card opens it directly in the Story Reader Interface.
-[gif goes here]
-
-The backend will include Express routes that allow the app to retrieve available stories from the database. Readers will be able to view a list of stories and open a specific story by ID, but story creation will be handled through seeded/admin-managed data instead of regular user submissions.
 
 ✅ For example, exploring the site as a whole, Romance genre selection and branching story
 
 ![Romance feature demo](planning/gifs/QuestTwyst_websire_milestone3.gif)
+
+The backend will include Express routes that allow the app to retrieve available stories from the database. Readers will be able to view a list of stories and open a specific story by ID, but story creation will be handled through seeded/admin-managed data instead of regular user submissions.
+
+
 
 
 ### Branching Passage and Choice API
