@@ -73,6 +73,7 @@ export const deleteStory = async (req, res) => {
   }
 };
 
+
 export const updateStory = async (req, res) => {
   try {
     const id = parseInt(req.params.id);
