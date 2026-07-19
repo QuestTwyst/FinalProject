@@ -89,6 +89,16 @@
     <h1 class="story-page__title">Romance</h1>
 
     <article class="story-card">
+      <header class="story-meta">
+        <h2 class="story-meta__title">The Last Ferry</h2>
+        <p class="story-meta__details">
+          <span class="story-meta__genre">Romance</span>
+          <span class="story-meta__separator" aria-hidden="true">·</span>
+          <span class="story-meta__author">by Questwyst Team</span>
+        </p>
+        <p class="story-meta__description">A missed ferry, a stranger's boat, and a storm that changes everything.</p>
+      </header>
+
       <div class="story-card__scroll">
         <p class="story-card__text">
           Mara had missed the last ferry to the mainland, or so she thought, until she saw a stranger waving frantically from the dock, holding the rope for a boat that clearly wasn't supposed to still be there. "Captain's off sick," he said, breathless, rain slicking his hair to his forehead. "I can get us across, but I need a second pair of hands." She had a flight to catch in the morning and every reason to say no. Instead she stepped over the gap between dock and deck, and the boat lurched forward into the dark water, carrying them both somewhere neither had planned to go.
@@ -132,7 +142,7 @@
     // About button — placeholder action
     const aboutBtn = document.getElementById('about-btn');
     aboutBtn.addEventListener('click', () => {
-      console.log('About clicked');
+      window.location.href = '../../about.html';
     });
 
     // Choice buttons — each one branches to its own continuation page
