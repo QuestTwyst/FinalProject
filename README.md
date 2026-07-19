@@ -7,6 +7,7 @@ Designed and developed by: Elizabeth Kilroy, Mymuna Murshed, Johanna Devilme, Ga
 🔗 Link to deployed app:
 
 ## About
+This web app is a full-stack application, meaning our team will develop both the user-facing interface and the systems that operate behind the scenes. The front end will use React, JavaScript, HTML, CSS, React Router, and Vite to create the story pages, choice-based navigation, user profiles, and other interactive features. The back end will use Node.js and Express.js to process user requests, manage application logic, and communicate with a PostgreSQL database. The database will store information such as user accounts, stories, passages, choices, genres, and reading progress. We will also build a RESTful API to support communication between the front end and back end and deploy the completed application using Render.
 
 ### Description and Purpose
 

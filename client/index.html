@@ -16,9 +16,9 @@
 
 <!-- Home page section  -->
 
-  <div class="gradient-layer gradient-layer--one" aria-hidden="true"></div>
-  <div class="gradient-layer gradient-layer--two" aria-hidden="true"></div>
-  <div class="gradient-layer gradient-layer--ground" aria-hidden="true"></div>
+  <span class="gradient-layer gradient-layer--one" aria-hidden="true"></span>
+  <span class="gradient-layer gradient-layer--two" aria-hidden="true"></span>
+  <span class="gradient-layer gradient-layer--ground" aria-hidden="true"></span>
 
     <nav class="nav-bar">
       <button class="nav-btn" id="theme-toggle" type="button" aria-label="Toggle dark and light mode" title="Dark / light mode">
@@ -82,7 +82,7 @@
         <span class="puff puff--left"></span>
         <span class="puff puff--mid"></span>
         <span class="puff puff--right"></span>
-        <img class="cloud-logo" src="/qt-logo.png" alt="QT logo">
+        <img class="cloud-logo" src="public/qt-logo.png" alt="QT logo">
       </figure>
 
       <aside class="story-menu">
@@ -122,10 +122,13 @@
       }
     });
 
-    // About button — placeholder action
+    // ============================================
+    // ABOUT BUTTON — navigates to about.html
+    // (search "ABOUT BUTTON" to find this block again)
+    // ============================================
     const aboutBtn = document.getElementById('about-btn');
     aboutBtn.addEventListener('click', () => {
-      console.log('About clicked');
+      window.location.href = 'about.html';
     });
 
     // Return button — goes back in history, falls back to reload
