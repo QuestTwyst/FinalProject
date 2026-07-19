@@ -1,14 +1,15 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Login from "./components/Login";
+import { Routes, Route } from 'react-router-dom';
+import StoryIntro from './components/StoryIntro';
+import Login from './components/Login';
+import CreateAccount from './components/CreateAccount';
 
 function App() {
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<Login />} />
-        <Route path="/login" element={<Login />} />
-      </Routes>
-    </BrowserRouter>
+    <Routes>
+      <Route path="/" element={<StoryIntro />} />
+      <Route path="/login" element={<Login />} />
+      <Route path="/create-account" element={<CreateAccount />} />
+    </Routes>
   );
 }
 

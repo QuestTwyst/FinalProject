@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 function Login() {
     const [username, setUsername] = useState("");
@@ -10,10 +11,11 @@ function Login() {
         console.log({ username, password });
     };
 
-    const handleCancel = () => {
-        setUsername("");
-        setPassword("");
-    };
+    const navigate = useNavigate();
+
+   const handleCancel = () => {
+    navigate("/");
+};
 
     return (
         <main className="container">
@@ -31,6 +33,7 @@ function Login() {
                         placeholder="Enter your username"
                         value={username}
                         onChange={(e) => setUsername(e.target.value)}
+                        required
                     />
 
                     <label htmlFor="password">
@@ -43,6 +46,7 @@ function Login() {
                         placeholder="Enter your password"
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
+                        required
                     />
 
                     <div
