@@ -48,6 +48,10 @@ The frontend will display all available stories as browsable cards showing a tit
 
 The backend will include Express routes that allow the app to retrieve available stories from the database. Readers will be able to view a list of stories and open a specific story by ID, but story creation will be handled through seeded/admin-managed data instead of regular user submissions.
 
+✅ For example, Romance genre selection and branching story
+
+![Romance feature demo](screenshots/romance-demo.gif)
+
 
 [gif goes here]
 
