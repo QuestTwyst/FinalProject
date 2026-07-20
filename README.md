@@ -53,15 +53,15 @@ The frontend will display all available stories as browsable cards showing a tit
 The backend will include Express routes that allow the app to retrieve available stories from the database. Readers will be able to view a list of stories and open a specific story by ID, but story creation will be handled through seeded/admin-managed data instead of regular user submissions.
 
 
-### Branching Passage and Choice API
+### ✅ Branching Passage and Choice API
 The backend will store each story as connected passages. Each passage will include two choices, such as Option A and Option B, and each choice will point to the next passage in the story. This allows the reader’s selection to determine which part of the story appears next.
 
 ![Branching Passage](https://imgur.com/a/2YXI0A7)
 
-### Genre Filtering API
+### ‼️ Genre Filtering API
 The backend will organize stories by genre, such as mystery, comedy, fantasy, romance, and sci-fi. Readers will be able to request stories by genre so they can quickly find the type of adventure they want to read.  
 
-[gif goes here]
+[gif goes here]  (NOTE: This exist, having last minute issues while creating gif.)
 
 ### User Reading Progress
 
@@ -85,7 +85,7 @@ The backend will save the choices a reader makes while moving through a story. T
 ### Admin Story Management
 The backend will support admin-managed story content. Admins or developers will be able to add, update, or delete stories, passages, choices, and genres while readers focus on reading and choosing story paths.
 
-[gif goes here]
+[gif goes here] (COMING SOON)
 
 
 ### [ADDITIONAL FEATURES GO HERE - ADD ALL FEATURES HERE IN THE FORMAT ABOVE; you will check these off and add gifs as you complete them]
