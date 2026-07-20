@@ -1,143 +1,299 @@
 .readerPage {
-  width: min(1100px, 92vw);
-  margin: 0 auto;
-  padding: 32px 24px 48px;
-  font-family: 'Poppins', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-  color: #111827;
+  position: relative;
+  min-height: 100vh;
+  width: 100%;
+  padding: clamp(1.5rem, 4vw, 2.5rem);
+  font-family: 'Poppins', -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+  background: #6fb1e6;
+  box-sizing: border-box;
+  overflow-x: hidden;
 }
 
-.readerHeader {
+.readerPage.themeDark {
+  background: #101a2b;
+}
+
+/* ---------- Moving gradient layers ---------- */
+.gradientLayer {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  background-repeat: no-repeat;
+  background-size: 200% 200%;
+  will-change: background-position;
+  pointer-events: none;
+}
+
+.gradientLayerOne {
+  background-image: linear-gradient(
+    120deg,
+    #0f5aa8 0%,
+    #1f7fd6 20%,
+    #6fc3f7 40%,
+    #1a6fc4 60%,
+    #0d4a8f 80%,
+    #2a86dd 100%
+  );
+  animation: driftRight 42s linear infinite;
+}
+
+.gradientLayerTwo {
+  background-image: linear-gradient(
+    240deg,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(255, 214, 130, 0.55) 22%,
+    rgba(120, 190, 255, 0.5) 45%,
+    rgba(255, 255, 255, 0) 65%,
+    rgba(255, 200, 110, 0.5) 85%,
+    rgba(80, 170, 255, 0.4) 100%
+  );
+  mix-blend-mode: screen;
+  animation: driftLeft 58s linear infinite;
+}
+
+@keyframes driftRight {
+  0%   { background-position: 0% 50%; }
+  50%  { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+@keyframes driftLeft {
+  0%   { background-position: 100% 50%; }
+  50%  { background-position: 0% 50%; }
+  100% { background-position: 100% 50%; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .gradientLayer {
+    animation: none;
+  }
+}
+
+/* ---------- Content sits above the gradient ---------- */
+.pageContent {
+  position: relative;
+  z-index: 1;
+}
+
+/* ---------- Story page (genre banner + toolbar + card) ---------- */
+.storyPage {
   display: flex;
-  justify-content: space-between;
-  gap: 1rem;
-  align-items: flex-start;
-  margin-bottom: 28px;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+  max-width: 780px;
+  margin: 2.5rem auto 0;
 }
 
-.readerTitleGroup {
-  max-width: 720px;
-}
-
-.readerTitle {
-  margin: 0 0 12px;
-  font-size: clamp(2rem, 3.2vw, 3rem);
-  line-height: 1.05;
-}
-
-.readerSubtitle {
-  margin: 0;
-  color: #4b5563;
-  line-height: 1.75;
-}
-
-.readerActions {
+.storyPageTop {
   display: flex;
   align-items: center;
-  gap: 0.85rem;
+  justify-content: center;
+  gap: 1.25rem;
   flex-wrap: wrap;
-}
-
-.actionButton {
-  border: none;
-  padding: 0.95rem 1.35rem;
-  border-radius: 999px;
-  background: #6c5ce7;
-  color: #ffffff;
-  font-weight: 600;
-  cursor: pointer;
-  transition: transform 0.2s ease, background 0.2s ease;
-}
-
-.actionButton:hover {
-  background: #5845cc;
-  transform: translateY(-1px);
-}
-
-.passagePanel {
-  padding: 28px;
-  border-radius: 30px;
-  border: 1px solid rgba(79, 70, 229, 0.12);
-  background: linear-gradient(180deg, #ffffff 0%, #f8f5ff 100%);
-  box-shadow: 0 25px 60px rgba(23, 21, 63, 0.08);
-  margin-bottom: 24px;
-}
-
-.passageMeta {
-  margin-bottom: 18px;
-}
-
-.passageLabel {
-  display: inline-flex;
-  padding: 0.55rem 1rem;
-  border-radius: 999px;
-  background: rgba(79, 70, 229, 0.12);
-  color: #4f46e5;
-  font-size: 0.85rem;
-  font-weight: 700;
-}
-
-.passageText {
-  margin: 0;
-  font-size: 1.2rem;
-  line-height: 1.8;
-  color: #1f2937;
-}
-
-.endingNote {
-  margin-top: 22px;
-  padding: 16px 18px;
-  border-radius: 18px;
-  background: rgba(167, 139, 250, 0.16);
-  color: #4338ca;
-}
-
-.choiceRow {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(160px, 1fr));
-  gap: 18px;
-}
-
-.choiceButton {
-  display: block;
   width: 100%;
-  padding: 1rem 1.1rem;
-  border: none;
-  border-radius: 22px;
-  background: #4f46e5;
+}
+
+.storyPageTitle {
+  font-size: clamp(2rem, 4vw, 2.8rem);
+  font-weight: 700;
   color: #ffffff;
-  text-align: left;
-  font-size: 1rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: transform 0.2s ease, background 0.2s ease;
-}
-
-.choiceButton:hover {
-  background: #4338ca;
-  transform: translateY(-1px);
-}
-
-.choiceText {
-  display: block;
-  line-height: 1.6;
-}
-
-.noStory {
-  padding: 32px;
-  border-radius: 24px;
-  background: #ffffff;
-  border: 1px solid rgba(203, 213, 225, 0.75);
-  color: #334155;
+  text-shadow: 0 2px 10px rgba(13, 45, 84, 0.35);
+  margin: 0;
   text-align: center;
 }
 
-@media (max-width: 780px) {
-  .readerHeader {
-    flex-direction: column;
-    align-items: stretch;
+.restartButton {
+  padding: 0.6rem 1.3rem;
+  border: none;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.55);
+  backdrop-filter: blur(10px);
+  color: #16324f;
+  font-family: inherit;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 4px 16px rgba(20, 50, 90, 0.18);
+  transition: background 0.2s ease, transform 0.15s ease;
+}
+
+.restartButton:hover {
+  background: rgba(255, 255, 255, 0.9);
+  transform: translateY(-1px);
+}
+
+/* ---------- Story card ---------- */
+.storyCard {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  padding: clamp(1.75rem, 3.5vw, 2.75rem);
+  border-radius: 28px;
+  background: rgba(255, 255, 255, 0.55);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 4px 20px rgba(20, 50, 90, 0.18);
+  box-sizing: border-box;
+}
+
+/* ---------- Story metadata header ---------- */
+.storyMeta {
+  padding-bottom: 1rem;
+  border-bottom: 1px solid rgba(22, 50, 79, 0.15);
+}
+
+.storyMetaTitle {
+  font-size: 1.4rem;
+  font-weight: 600;
+  color: #16324f;
+  margin: 0 0 0.35rem;
+}
+
+.storyMetaDetails {
+  font-size: 0.9rem;
+  color: #4a6178;
+  margin: 0 0 0.5rem;
+}
+
+.storyMetaSeparator {
+  margin: 0 0.4rem;
+}
+
+.storyMetaDescription {
+  font-size: 0.95rem;
+  font-style: italic;
+  color: #16324f;
+  opacity: 0.85;
+  margin: 0;
+}
+
+/* ---------- Passage text ---------- */
+.storyCardScroll {
+  max-height: 45vh;
+  overflow-y: auto;
+  padding-right: 0.75rem;
+}
+
+.passageText {
+  font-size: 1.04rem;
+  line-height: 1.65;
+  color: #16324f;
+  margin: 0;
+}
+
+.endingNote {
+  margin-top: 1rem;
+  font-size: 0.95rem;
+  color: #16324f;
+  opacity: 0.85;
+}
+
+/* ---------- Choice buttons ---------- */
+.choiceRow {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.choiceButton {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  text-align: left;
+  padding: 1rem 1.25rem;
+  border: none;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.6);
+  color: #16324f;
+  font-family: inherit;
+  cursor: pointer;
+  transition: background 0.2s ease, transform 0.15s ease;
+}
+
+.choiceButton:hover {
+  background: rgba(255, 255, 255, 0.9);
+  transform: translateY(-1px);
+}
+
+.choiceButtonEnd {
+  justify-content: center;
+  font-weight: 500;
+}
+
+.choiceLabel {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: #16324f;
+  color: #ffffff;
+  font-weight: 600;
+  font-size: 1rem;
+}
+
+.choiceText {
+  font-size: 1rem;
+  font-weight: 500;
+  line-height: 1.4;
+}
+
+/* ---------- Dark theme ---------- */
+.themeDark .storyCard {
+  background: rgba(20, 30, 50, 0.55);
+}
+
+.themeDark .storyMeta {
+  border-bottom-color: rgba(244, 244, 248, 0.15);
+}
+
+.themeDark .storyMetaTitle,
+.themeDark .storyMetaDescription,
+.themeDark .passageText,
+.themeDark .endingNote {
+  color: #f4f4f8;
+}
+
+.themeDark .storyMetaDetails {
+  color: #b8c4d0;
+}
+
+.themeDark .choiceButton {
+  background: rgba(255, 255, 255, 0.12);
+  color: #f4f4f8;
+}
+
+.themeDark .choiceButton:hover {
+  background: rgba(255, 255, 255, 0.22);
+}
+
+.themeDark .choiceLabel {
+  background: #f4f4f8;
+  color: #16324f;
+}
+
+.themeDark .restartButton {
+  background: rgba(20, 30, 50, 0.55);
+  color: #f4f4f8;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.35);
+}
+
+.themeDark .restartButton:hover {
+  background: rgba(20, 30, 50, 0.8);
+}
+
+@media (max-width: 640px) {
+  .storyPage {
+    margin-top: 1.5rem;
   }
 
-  .choiceRow {
-    grid-template-columns: 1fr;
+  .storyPageTop {
+    flex-direction: column;
+    gap: 0.75rem;
   }
 }
