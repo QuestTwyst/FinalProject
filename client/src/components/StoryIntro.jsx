@@ -128,19 +128,15 @@ function StoryIntro() {
           </button>
 
           <button
-            className={styles.navBtn}
+            className={`${styles.navBtn} ${styles.navTextBtn}`}
             type="button"
-            aria-label="About"
-            title="About"
-            onClick={() => console.log('About clicked')}
+            aria-label="Open story library"
+            title="Story Library"
+            onClick={() => navigate('/library')}
           >
-            <svg className={styles.icon} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <circle cx="12" cy="12" r="10"></circle>
-              <line x1="12" y1="16" x2="12" y2="12"></line>
-              <line x1="12" y1="8" x2="12.01" y2="8"></line>
-            </svg>
+            Library
           </button>
-          
+
           <button
             className={styles.navBtn}
             type="button"
