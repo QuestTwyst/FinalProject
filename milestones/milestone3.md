@@ -25,28 +25,28 @@ You will need to reference the GitHub Project Management guide in the course por
     3. Milestone 5
   - [X] Set the completion percentage of each milestone. The GitHub Milestone for this unit (Milestone 3 - Unit 7) should be 100% completed when you submit for full points.
 - [X] In `readme.md`, check off the features you have completed in this unit by adding a ✅ emoji in front of the feature's name.
-  - [ ] Under each feature you have completed, include a GIF showing feature functionality.
+  - [X] Under each feature you have completed, include a GIF showing feature functionality.
 - [X] In this documents, complete all five questions in the **Reflection** section below.
 
 ## Reflection
 
 ### 1. What went well during this unit?
 
-We really like the project board and splitting tasks. It helps a lot and we do love seeing not just the progress but also being able to communicate through each one. 
+We really like the project board and splitting tasks. It helps a lot and we do love seeing not just the progress but also being able to communicate through each one. We experience multiple hiccups due to different enviroments and handlings and we were able to learn from each other on how to fix it. 
 
 ### 2. What were some challenges your group faced in this unit?
 
-RIght now we are having uploading issues from one of our teammates. We were getting to know the organization feature in git much more thourghly. 
+Multiple of us had issues uploading and connecting our work. Over time we were able to figure it out and inform each other on what we did to solve it through multiple calls and communication. 
 
 ### Did you finish all of your tasks in your sprint plan for this week? If you did not finish all of the planned tasks, how would you prioritize the remaining tasks on your list?
 
-We plan to discuss more about the tasks that we have to assist with efficiency on how we are splitting them due to some tasks may cross with each other. 
+We did not finish all of them due to technical difficulties but over time after solving the issues it made it easier to understand more in depth on how we can navigate throughly to finish the next issue.
 
 ### Which features and user stories would you consider “at risk”? How will you change your plan if those items remain “at risk”?
 
-We have a few changes going on in our system based on how the file are being uploaded and team coding configuaration. At this time we are discussing the best route and using additional tools to transfer broken files to each other to upload and work on towards supporting the database and evolving towards breaking down into components. 
+Right now we don't see any at risk. They are mostly seen as keep components. If not at this time it may have to be the customizing store feature. 
 
 ### 5. What additional support will you need in upcoming units as you continue to work on your final project?
 
-We will need additional support with GitHub branch management and merge conflicts. One of our teammates is using a Mac, and differences in her VS Code and file system setup created unexpected Git metadata files and branch errors. We would benefit from assistance reviewing the pending branch, resolving any remaining conflicts, and confirming the correct process for safely merging it into the main branch without losing project changes. We are currently looking for additional resources and will be reaching out soon to codepath study hall/ TF.
+We will need additional support with GitHub branch management and merge conflicts. Some of our teammates is using a Mac or Windows, and differences in our code processing can make an unexpected turn but once we figure that out we would let everyone on the team know to ensure we're all aware on what is going on in our environment which i think is great. We also learned how our operating systems works with github, this will assist us for future use as well. We were nervous before on how our files were going to be processed but we were able to get through those bumps and continue towards success. 
 

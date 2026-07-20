@@ -36,34 +36,45 @@ Backend:
 
 ## Features
 
-### Account Creation, Login, and Deletion
+### ✅ New Account Create and Login
 
-Users will be able to create an account, log in, and delete their account when they no longer want to use the app.
+The frontend provides dedicated Login and Create Account pages, letting users register a new account or sign in with existing credentials. Form validation ensures all required fields are completed before submission, and clear error messages guide users when something needs correction
 
-[gif goes here]
+<img src='https://github.com/QuestTwyst/FinalProject/blob/e5d47216b54c08de2b37c4f11c00f2739cf3c4f1/AuthCreateAccountAndLogin.gif' title='Video Walkthrough' width='' alt='Video Walkthrough' />
 
-### Story Library API
+
+### ✅ Story Library API
 
 The frontend will display all available stories as browsable cards showing a title, genre, and short description. Readers can filter the library by genre using a dropdown menu, and clicking a story card opens it directly in the Story Reader Interface.
 
+<<<<<<< HEAD
 ✅ For example, exploring the site as a whole, Romance genre selection and branching story
+=======
+ For example, exploring the site as a whole, Romance genre selection and branching story
+>>>>>>> 23a26f517eaec8432ad0281beebc679a63b531f8
 
 ![Romance feature demo](planning/gifs/QuestTwyst_websire_milestone3.gif)
 
 The backend will include Express routes that allow the app to retrieve available stories from the database. Readers will be able to view a list of stories and open a specific story by ID, but story creation will be handled through seeded/admin-managed data instead of regular user submissions.
+<<<<<<< HEAD
 
 
 
+=======
+>>>>>>> 23a26f517eaec8432ad0281beebc679a63b531f8
 
-### Branching Passage and Choice API
-The backend will store each story as connected passages. Each passage will include two choices, such as Option A and Option B, and each choice will point to the next passage in the story. This allows the reader’s selection to determine which part of the story appears next.
 
-[gif goes here]
+### ✅ Branching Passage and Choice Interface
+The frontend displays one story passage at a time along with two choice buttons. Selecting a choice instantly loads the next passage based on that decision, letting the reader's path through the story unfold in real time.
 
-### Genre Filtering API
-The backend will organize stories by genre, such as mystery, comedy, fantasy, romance, and sci-fi. Readers will be able to request stories by genre so they can quickly find the type of adventure they want to read.  
+<img src='https://github.com/QuestTwyst/FinalProject/blob/c9538aafbe76426befcc29f6b6f0f32cdb2b4632/planning/gifs/BranchingPnCapi.gif' title='Video Walkthrough' width='' alt='Video Walkthrough' />
 
-[gif goes here]
+### ✅ Genre Filtering UI
+The frontend lets readers browse genres through a scrollable list and select one to instantly filter the story library, showing only stories that match that genre.
+
+<img src='https://github.com/QuestTwyst/FinalProject/blob/45f62c340dc8d0fb26d2d27db73032c58a78401c/planning/gifs/GenreFilterOption.gif' title='Video Walkthrough' width='' alt='Video Walkthrough' />
+
+
 
 ### User Reading Progress
 
@@ -87,15 +98,15 @@ The backend will save the choices a reader makes while moving through a story. T
 ### Admin Story Management
 The backend will support admin-managed story content. Admins or developers will be able to add, update, or delete stories, passages, choices, and genres while readers focus on reading and choosing story paths.
 
-[gif goes here]
+[gif goes here] (COMING SOON)
 
 
 ### [ADDITIONAL FEATURES GO HERE - ADD ALL FEATURES HERE IN THE FORMAT ABOVE; you will check these off and add gifs as you complete them]
 
-### Story Reader Interface
+### ✅ Story Reader Interface
 The frontend will display one passage at a time along with two clickable choice buttons (Option A and Option B). Selecting a choice loads the next passage instantly without navigating to a new page, letting readers move through the story in a smooth, uninterrupted way. 
 
-✅ Story metadata header showing title, genre, author, and description at the top of the reader
+Story metadata header showing title, genre, author, and description at the top of the reader
 
 ![Story Reader Interface demo](planning/gifs/QuestTwyst_Story-Reader-Interface.gif)
 

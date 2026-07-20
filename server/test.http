@@ -9,6 +9,16 @@
 //  "creator_id": null
 //}
 
+
+###Get all stories
+GET http://localhost:3001/stories
+
+###Get one story
+GET http://localhost:3001/stories/1
+
+###Get a story that does not exist
+GET http://localhost:3001/stories/1111
+
 //GET http://localhost:3001/stories/1/passages
 
 //POST http://localhost:3001/stories/1/passages
