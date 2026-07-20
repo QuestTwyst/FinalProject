@@ -37,7 +37,9 @@ function StoryReader() {
 
   const isRomance = story?.genre === 'Romance';
   const isMystery = story?.genre === 'Mystery';
-  const pageClass = `${styles.readerPage} ${isRomance ? styles.themeRomance : ''} ${isMystery ? styles.themeMystery : ''} ${isDark ? styles.themeDark : ''}`;
+  const isAdventure = story?.genre === 'Adventure';
+  const isSciFi = story?.genre === 'Sci-Fi';
+  const pageClass = `${styles.readerPage} ${isRomance ? styles.themeRomance : ''} ${isMystery ? styles.themeMystery : ''} ${isAdventure ? styles.themeAdventure : ''} ${isSciFi ? styles.themeSciFi : ''} ${isDark ? styles.themeDark : ''}`;
 
   if (!story) {
     return (
@@ -93,6 +95,15 @@ function StoryReader() {
             <span className={`${styles.heart} ${styles.heart7}`}></span>
           </div>
         </>
+      )}
+
+      {isSciFi && (
+        <div className={styles.dataField} aria-hidden="true">
+          <img className={`${styles.dataImg} ${styles.data1}`} src="/scifi-data-1.png" alt="" />
+          <img className={`${styles.dataImg} ${styles.data2}`} src="/scifi-data-2.png" alt="" />
+          <img className={`${styles.dataImg} ${styles.data3}`} src="/scifi-data-3.png" alt="" />
+          <img className={`${styles.dataImg} ${styles.data4}`} src="/scifi-data-4.png" alt="" />
+        </div>
       )}
 
       <div className={styles.pageContent}>

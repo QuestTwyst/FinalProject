@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Great+Vibes&family=Special+Elite&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Bevan&family=Great+Vibes&family=Orbitron:wght@500;700&family=Special+Elite&display=swap');
 
 .readerPage {
   position: relative;
@@ -649,4 +649,307 @@
 
 .themeMystery .restartButton:hover {
   background: rgba(255, 250, 240, 0.95);
+}
+
+/* ============================================================
+   ADVENTURE THEME — applied automatically when story.genre is
+   "Adventure" (see StoryReader.jsx: isAdventure check)
+   ============================================================ */
+
+.themeAdventure {
+  background-image:
+    linear-gradient(135deg, rgba(0, 176, 190, 0.4), rgba(255, 140, 50, 0.35)),
+    url('/adventure-bg.jpg');
+  background-size: cover;
+  background-position: center 40%;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+}
+
+.themeAdventure.themeDark {
+  background-image:
+    linear-gradient(135deg, rgba(0, 90, 100, 0.55), rgba(200, 90, 20, 0.5)),
+    url('/adventure-bg.jpg');
+}
+
+/* Hide the drifting sky gradient — the photo carries the mood instead */
+.themeAdventure .gradientLayerOne,
+.themeAdventure .gradientLayerTwo,
+.themeAdventure .gradientLayerGround {
+  display: none;
+}
+
+/* ---------- Rugged vintage explorer title ---------- */
+.themeAdventure .storyPageTitle {
+  font-family: 'Bevan', 'Georgia', serif;
+  font-weight: 400;
+  letter-spacing: 0.01em;
+  color: #ff6b35;
+  -webkit-text-stroke: 2px #ffffff;
+  paint-order: stroke fill;
+  text-shadow: 0 4px 14px rgba(0, 0, 0, 0.25);
+}
+
+/* ---------- Bright white card, bold playful border ---------- */
+.themeAdventure .storyCard {
+  background: rgba(255, 255, 255, 0.93);
+  border: 3px solid #00b4be;
+  border-radius: 32px;
+  box-shadow: 0 10px 32px rgba(0, 90, 100, 0.3);
+}
+
+.themeAdventure .storyCard .storyMetaDetails,
+.themeAdventure .storyCard .storyMetaDescription,
+.themeAdventure .storyCard .passageText,
+.themeAdventure .storyCard .endingNote {
+  color: #1f3a3d;
+}
+
+.themeAdventure .storyMeta {
+  border-bottom-color: rgba(0, 180, 190, 0.25);
+}
+
+.themeAdventure.themeDark .storyCard {
+  background: rgba(20, 35, 37, 0.93);
+  border-color: #ffb703;
+}
+
+.themeAdventure.themeDark .storyCard .storyMetaDetails,
+.themeAdventure.themeDark .storyCard .storyMetaDescription,
+.themeAdventure.themeDark .storyCard .passageText,
+.themeAdventure.themeDark .storyCard .endingNote {
+  color: #eafafb;
+}
+
+/* ---------- Choice buttons: bold solid teal/orange pills ---------- */
+.themeAdventure .choiceButton {
+  background: #00b4be;
+  border: none;
+  color: #ffffff;
+  font-weight: 600;
+  transition: background 0.2s ease, transform 0.15s ease;
+}
+
+.themeAdventure .choiceButton:hover {
+  background: #009da6;
+  transform: translateY(-2px) scale(1.02);
+}
+
+.themeAdventure .choiceLabel {
+  background: #ff6b35;
+  color: #ffffff;
+}
+
+.themeAdventure.themeDark .choiceButton {
+  background: #ff6b35;
+  color: #ffffff;
+}
+
+.themeAdventure.themeDark .choiceButton:hover {
+  background: #e85a28;
+}
+
+.themeAdventure.themeDark .choiceLabel {
+  background: #ffb703;
+  color: #1f3a3d;
+}
+
+/* ---------- Scrollbar ---------- */
+.themeAdventure .storyCardScroll {
+  scrollbar-width: thin;
+  scrollbar-color: #00b4be transparent;
+}
+
+.themeAdventure .storyCardScroll::-webkit-scrollbar {
+  width: 8px;
+}
+
+.themeAdventure .storyCardScroll::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.themeAdventure .storyCardScroll::-webkit-scrollbar-thumb {
+  background: #00b4be;
+  border-radius: 8px;
+}
+
+/* ---------- Restart button ---------- */
+.themeAdventure .restartButton {
+  background: #ffb703;
+  color: #1f3a3d;
+  font-family: 'Bevan', 'Georgia', serif;
+  font-weight: 400;
+  letter-spacing: 0.02em;
+}
+
+.themeAdventure .restartButton:hover {
+  background: #ffa600;
+}
+
+/* ============================================================
+   SCI-FI THEME — applied automatically when story.genre is
+   "Sci-Fi" (see StoryReader.jsx: isSciFi check)
+
+   NOTE: this theme references image files that need to be added
+   to client/public/ before it will show fully:
+     - scifi-bg.jpg           (base background photo)
+     - scifi-data-1.png       (floating data/HUD image)
+     - scifi-data-2.png
+     - scifi-data-3.png
+     - scifi-data-4.png
+   Until those exist, the background/floating images just won't
+   render — everything else (fonts, colors, card styling) works
+   immediately.
+   ============================================================ */
+
+.themeSciFi {
+  background-image:
+    linear-gradient(rgba(4, 10, 18, 0.72), rgba(4, 10, 18, 0.85)),
+    url('/scifi-bg.jpg');
+  background-size: cover;
+  background-position: 25% center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+}
+
+.themeSciFi.themeDark {
+  background-image:
+    linear-gradient(rgba(2, 6, 12, 0.85), rgba(2, 6, 12, 0.94)),
+    url('/scifi-bg.jpg');
+}
+
+/* Hide the drifting sky gradient — the photo carries the mood instead */
+.themeSciFi .gradientLayerOne,
+.themeSciFi .gradientLayerTwo,
+.themeSciFi .gradientLayerGround {
+  display: none;
+}
+
+/* ---------- Floating data/HUD images ---------- */
+.themeSciFi .dataField {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.themeSciFi .dataImg {
+  position: absolute;
+  opacity: 0;
+  filter: drop-shadow(0 0 12px rgba(0, 229, 255, 0.5));
+  animation: dataDrift ease-in-out infinite;
+}
+
+@keyframes dataDrift {
+  0%   { transform: translateY(0) scale(0.95); opacity: 0; }
+  15%  { opacity: 0.55; }
+  50%  { transform: translateY(-18px) scale(1); opacity: 0.65; }
+  85%  { opacity: 0.5; }
+  100% { transform: translateY(0) scale(0.95); opacity: 0; }
+}
+
+.themeSciFi .data1 { left: 6%;  top: 15%; width: 160px; animation-duration: 9s;  animation-delay: 0s; }
+.themeSciFi .data2 { right: 5%; top: 20%; width: 140px; animation-duration: 11s; animation-delay: 2s; }
+.themeSciFi .data3 { left: 10%; bottom: 12%; width: 150px; animation-duration: 10s; animation-delay: 4s; }
+.themeSciFi .data4 { right: 8%; bottom: 18%; width: 130px; animation-duration: 12s; animation-delay: 1s; }
+
+@media (prefers-reduced-motion: reduce) {
+  .themeSciFi .dataImg {
+    animation: none;
+    opacity: 0.4;
+  }
+}
+
+/* ---------- Futuristic digital title ---------- */
+.themeSciFi .storyPageTitle {
+  font-family: 'Orbitron', 'Segoe UI', sans-serif;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #00e5ff;
+  text-shadow:
+    0 0 8px rgba(0, 229, 255, 0.85),
+    0 0 22px rgba(0, 229, 255, 0.5),
+    0 2px 10px rgba(0, 0, 0, 0.6);
+}
+
+/* ---------- HUD-panel card: high contrast for legibility ---------- */
+.themeSciFi .storyCard {
+  background: rgba(8, 16, 26, 0.88);
+  border: 1.5px solid rgba(0, 229, 255, 0.4);
+  border-radius: 18px;
+  box-shadow:
+    0 0 30px rgba(0, 229, 255, 0.15),
+    0 10px 40px rgba(0, 0, 0, 0.55);
+}
+
+.themeSciFi .storyCard .storyMetaDetails,
+.themeSciFi .storyCard .storyMetaDescription,
+.themeSciFi .storyCard .passageText,
+.themeSciFi .storyCard .endingNote {
+  color: #dff6fb;
+}
+
+.themeSciFi .storyMeta {
+  border-bottom-color: rgba(0, 229, 255, 0.25);
+}
+
+/* Dark mode uses the same near-black panel — already high contrast */
+.themeSciFi.themeDark .storyCard {
+  background: rgba(4, 10, 18, 0.92);
+  border-color: rgba(0, 229, 255, 0.3);
+}
+
+/* ---------- Choice buttons: cyan/magenta terminal accents ---------- */
+.themeSciFi .choiceButton {
+  background: rgba(0, 229, 255, 0.1);
+  border: 1.5px solid rgba(0, 229, 255, 0.45);
+  color: #dff6fb;
+  font-family: 'Orbitron', 'Segoe UI', sans-serif;
+  font-size: 0.9rem;
+}
+
+.themeSciFi .choiceButton:hover {
+  background: rgba(0, 229, 255, 0.2);
+  border-color: rgba(0, 229, 255, 0.8);
+}
+
+.themeSciFi .choiceLabel {
+  background: #ff2e9f;
+  color: #ffffff;
+  box-shadow: 0 0 10px rgba(255, 46, 159, 0.6);
+}
+
+/* ---------- Scrollbar ---------- */
+.themeSciFi .storyCardScroll {
+  scrollbar-width: thin;
+  scrollbar-color: #00e5ff transparent;
+}
+
+.themeSciFi .storyCardScroll::-webkit-scrollbar {
+  width: 8px;
+}
+
+.themeSciFi .storyCardScroll::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.themeSciFi .storyCardScroll::-webkit-scrollbar-thumb {
+  background: #00e5ff;
+  border-radius: 8px;
+}
+
+/* ---------- Restart button ---------- */
+.themeSciFi .restartButton {
+  background: rgba(0, 229, 255, 0.15);
+  border: 1px solid rgba(0, 229, 255, 0.5);
+  color: #dff6fb;
+  font-family: 'Orbitron', 'Segoe UI', sans-serif;
+  font-size: 0.85rem;
+  letter-spacing: 0.04em;
+}
+
+.themeSciFi .restartButton:hover {
+  background: rgba(0, 229, 255, 0.28);
 }
