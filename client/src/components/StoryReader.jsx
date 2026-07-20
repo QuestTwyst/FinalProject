@@ -36,7 +36,8 @@ function StoryReader() {
   };
 
   const isRomance = story?.genre === 'Romance';
-  const pageClass = `${styles.readerPage} ${isRomance ? styles.themeRomance : ''} ${isDark ? styles.themeDark : ''}`;
+  const isMystery = story?.genre === 'Mystery';
+  const pageClass = `${styles.readerPage} ${isRomance ? styles.themeRomance : ''} ${isMystery ? styles.themeMystery : ''} ${isDark ? styles.themeDark : ''}`;
 
   if (!story) {
     return (
