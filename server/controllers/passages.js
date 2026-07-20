@@ -80,3 +80,45 @@ export const updatePassage = async (req, res) => {
     res.status(409).json({ error: error.message });
   }
 };
+
+export const getPassageById = async (req, res) => {
+  try {
+    const { passageId } = req.params;
+
+    const passageResult = await pool.query(
+      `SELECT *
+       FROM passages
+       WHERE id = $1;`,
+      [passageId],
+    );
+
+    if (passageResult.rows.length === 0) {
+      return res.status(404).json({
+        error: "Passage not found",
+      });
+    }
+
+    const choicesResult = await pool.query(
+      `SELECT
+         id,
+         passage_id,
+         choice_text,
+         next_passage_id
+       FROM choices
+       WHERE passage_id = $1
+       ORDER BY id ASC;`,
+      [passageId],
+    );
+
+    res.status(200).json({
+      ...passageResult.rows[0],
+      choices: choicesResult.rows,
+    });
+  } catch (error) {
+    console.error("Error fetching passage:", error);
+
+    res.status(500).json({
+      error: "Failed to fetch passage",
+    });
+  }
+};
