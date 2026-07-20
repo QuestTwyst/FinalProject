@@ -54,8 +54,8 @@ The frontend will display all available stories as browsable cards showing a tit
 The backend will include Express routes that allow the app to retrieve available stories from the database. Readers will be able to view a list of stories and open a specific story by ID, but story creation will be handled through seeded/admin-managed data instead of regular user submissions.
 
 
-### ✅ Branching Passage and Choice API
-The backend will store each story as connected passages. Each passage will include two choices, such as Option A and Option B, and each choice will point to the next passage in the story. This allows the reader’s selection to determine which part of the story appears next.
+### ✅ Branching Passage and Choice Interface
+The frontend displays one story passage at a time along with two choice buttons. Selecting a choice instantly loads the next passage based on that decision, letting the reader's path through the story unfold in real time.
 
 <img src='https://github.com/QuestTwyst/FinalProject/blob/c9538aafbe76426befcc29f6b6f0f32cdb2b4632/planning/gifs/BranchingPnCapi.gif' title='Video Walkthrough' width='' alt='Video Walkthrough' />
 
