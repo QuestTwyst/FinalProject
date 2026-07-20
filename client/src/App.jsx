@@ -5,12 +5,12 @@ import StoryLibrary from './components/StoryLibrary';
 import StoryReader from './components/StoryReader';
 import About from './components/About';
 import Login from './pages/Login.jsx';
-import CreateAccount from './pages/CreateAccount.jsx';
+import CreateAccount from './components/CreateAccount.jsx';
 
 function App() {
   return (
     <Routes>
-      <Route path="/" element={<Home />} />
+      <Route path="/" element={<StoryIntro />} />
       <Route path="/intro" element={<StoryIntro />} />
       <Route path="/library" element={<StoryLibrary />} />
       <Route path="/stories/:storyId" element={<StoryReader />} />
