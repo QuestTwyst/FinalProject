@@ -36,9 +36,9 @@ Backend:
 
 ## Features
 
-### Account Creation, Login, and Deletion
+### New Account Create and Login
 
-Users will be able to create an account, log in, and delete their account when they no longer want to use the app.
+Users will be able to create an account, log in.
 
 [gif goes here]
 
