@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap');
+
 .readerPage {
   position: relative;
   min-height: 100vh;
@@ -69,6 +71,20 @@
   .gradientLayer {
     animation: none;
   }
+}
+
+.gradientLayerGround {
+  background-image: none;
+}
+
+.themeDark .gradientLayerGround {
+  background-image: linear-gradient(
+    to top,
+    #05030d 0%,
+    rgba(10, 6, 25, 0.85) 15%,
+    rgba(20, 10, 40, 0.5) 32%,
+    rgba(20, 10, 40, 0) 55%
+  );
 }
 
 /* ---------- Content sits above the gradient ---------- */
@@ -296,4 +312,219 @@
     flex-direction: column;
     gap: 0.75rem;
   }
+}
+
+/* ============================================================
+   ROMANCE THEME — applied automatically when story.genre is
+   "Romance" (see StoryReader.jsx: isRomance check)
+   ============================================================ */
+
+.themeRomance {
+  background: #ffd9e3;
+}
+
+.themeRomance.themeDark {
+  background: #2b0a1a;
+}
+
+.themeRomance .gradientLayerOne {
+  background-image: radial-gradient(
+    circle at 50% 40%,
+    #ffe4ec 0%,
+    #ffc2d1 35%,
+    #ff8fa3 70%,
+    #e8385e 100%
+  );
+  background-size: 130% 130%;
+  animation: softDrift 26s ease-in-out infinite alternate;
+}
+
+.themeRomance .gradientLayerTwo {
+  background-image: radial-gradient(
+    circle at 65% 60%,
+    rgba(255, 255, 255, 0.35) 0%,
+    rgba(255, 255, 255, 0) 30%,
+    rgba(255, 90, 120, 0.15) 55%,
+    rgba(255, 255, 255, 0) 80%
+  );
+  background-size: 140% 140%;
+  animation: softDrift 34s ease-in-out infinite alternate-reverse;
+}
+
+@keyframes softDrift {
+  0%   { background-position: 50% 50%; }
+  100% { background-position: 46% 54%; }
+}
+
+.themeRomance.themeDark .gradientLayerOne {
+  background-image: radial-gradient(
+    circle at 50% 40%,
+    #6b1230 0%,
+    #4a0e24 35%,
+    #3a0d1f 70%,
+    #2b0a1a 100%
+  );
+}
+
+.themeRomance.themeDark .gradientLayerTwo {
+  background-image: radial-gradient(
+    circle at 65% 60%,
+    rgba(255, 130, 150, 0.15) 0%,
+    rgba(255, 255, 255, 0) 30%,
+    rgba(180, 30, 70, 0.2) 55%,
+    rgba(255, 255, 255, 0) 80%
+  );
+}
+
+/* ---------- Sporadic ripple rings ---------- */
+.rippleField {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.ripple {
+  position: absolute;
+  border-radius: 50%;
+  border: 1.5px solid rgba(255, 255, 255, 0.35);
+  opacity: 0;
+  animation: rippleExpand ease-out infinite;
+}
+
+@keyframes rippleExpand {
+  0%   { transform: scale(0.2); opacity: 0.35; }
+  70%  { opacity: 0.12; }
+  100% { transform: scale(1.6); opacity: 0; }
+}
+
+.ripple1 { left: 12%; top: 22%; width: 60px; height: 60px; border-color: rgba(255, 255, 255, 0.4); animation-duration: 5s; animation-delay: 0s; }
+.ripple2 { left: 78%; top: 15%; width: 90px; height: 90px; border-color: rgba(255, 140, 160, 0.35); animation-duration: 6.5s; animation-delay: 1.4s; }
+.ripple3 { left: 30%; top: 65%; width: 50px; height: 50px; border-color: rgba(255, 255, 255, 0.35); animation-duration: 4.5s; animation-delay: 2.6s; }
+.ripple4 { left: 60%; top: 75%; width: 75px; height: 75px; border-color: rgba(232, 56, 94, 0.3); animation-duration: 7s; animation-delay: 0.8s; }
+.ripple5 { left: 88%; top: 55%; width: 55px; height: 55px; border-color: rgba(255, 255, 255, 0.4); animation-duration: 5.5s; animation-delay: 3.6s; }
+.ripple6 { left: 6%; top: 78%; width: 70px; height: 70px; border-color: rgba(255, 140, 160, 0.3); animation-duration: 6s; animation-delay: 4.4s; }
+.ripple7 { left: 45%; top: 10%; width: 45px; height: 45px; border-color: rgba(255, 255, 255, 0.35); animation-duration: 4.2s; animation-delay: 2s; }
+
+/* ---------- Floating hearts, drifting upward ---------- */
+.heartsField {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.heart {
+  position: absolute;
+  width: 44px;
+  height: 44px;
+  transform: rotate(-45deg);
+  background: rgba(255, 255, 255, 0.55);
+  opacity: 0;
+  animation: floatHeart 12s ease-in infinite;
+}
+
+.heart::before,
+.heart::after {
+  content: "";
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background: inherit;
+}
+
+.heart::before { top: -50%; left: 0; }
+.heart::after { left: 50%; top: 0; }
+
+.heart1 { left: 8%;  bottom: -60px; width: 38px; height: 38px; background: rgba(255, 255, 255, 0.6); animation-delay: 0s; }
+.heart2 { left: 20%; bottom: -60px; width: 58px; height: 58px; background: rgba(255, 107, 129, 0.5); animation-delay: 2.4s; }
+.heart3 { left: 38%; bottom: -60px; width: 32px; height: 32px; background: rgba(255, 255, 255, 0.55); animation-delay: 5s; }
+.heart4 { left: 55%; bottom: -60px; width: 48px; height: 48px; background: rgba(232, 56, 94, 0.45); animation-delay: 1.2s; }
+.heart5 { left: 68%; bottom: -60px; width: 34px; height: 34px; background: rgba(255, 255, 255, 0.5); animation-delay: 7s; }
+.heart6 { left: 82%; bottom: -60px; width: 54px; height: 54px; background: rgba(255, 107, 129, 0.4); animation-delay: 3.6s; }
+.heart7 { left: 93%; bottom: -60px; width: 34px; height: 34px; background: rgba(255, 255, 255, 0.55); animation-delay: 8.5s; }
+
+@keyframes floatHeart {
+  0%   { transform: translateY(0) rotate(-45deg); opacity: 0; }
+  10%  { opacity: 1; }
+  90%  { opacity: 0.8; }
+  100% { transform: translateY(-820px) rotate(-45deg); opacity: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .heart,
+  .ripple {
+    animation: none;
+    opacity: 0.5;
+  }
+}
+
+/* ---------- Romantic script title ---------- */
+.themeRomance .storyPageTitle {
+  font-family: 'Great Vibes', cursive;
+  font-weight: 400;
+  font-size: clamp(3.4rem, 7vw, 5.4rem);
+  letter-spacing: 0.02em;
+  color: #b3123f;
+  text-shadow: 0 2px 12px rgba(255, 255, 255, 0.5);
+}
+
+.themeRomance.themeDark .storyPageTitle {
+  color: #ffd9e3;
+}
+
+/* ---------- Card tint ---------- */
+.themeRomance .storyCard {
+  background: rgba(255, 255, 255, 0.65);
+  box-shadow: 0 4px 20px rgba(179, 18, 63, 0.25);
+}
+
+.themeRomance.themeDark .storyCard {
+  background: rgba(58, 13, 31, 0.65);
+}
+
+/* ---------- Choice buttons: light-mode contrast fix ---------- */
+.themeRomance .choiceButton {
+  background: rgba(255, 255, 255, 0.92);
+  border: 1.5px solid rgba(232, 56, 94, 0.4);
+  box-shadow: 0 3px 10px rgba(179, 18, 63, 0.15);
+}
+
+.themeRomance .choiceButton:hover {
+  background: #ffffff;
+  border-color: rgba(232, 56, 94, 0.7);
+}
+
+.themeRomance .choiceLabel {
+  background: #e8385e;
+}
+
+/* ---------- Scrollbar tint ---------- */
+.themeRomance .storyCardScroll {
+  scrollbar-width: thin;
+  scrollbar-color: #ff6b90 transparent;
+}
+
+.themeRomance .storyCardScroll::-webkit-scrollbar {
+  width: 8px;
+}
+
+.themeRomance .storyCardScroll::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.themeRomance .storyCardScroll::-webkit-scrollbar-thumb {
+  background: #ff6b90;
+  border-radius: 8px;
+}
+
+.themeRomance.themeDark .storyCardScroll {
+  scrollbar-color: #ffb3c8 transparent;
+}
+
+.themeRomance.themeDark .storyCardScroll::-webkit-scrollbar-thumb {
+  background: #ffb3c8;
 }

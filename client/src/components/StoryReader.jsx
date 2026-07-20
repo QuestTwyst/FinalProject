@@ -35,7 +35,8 @@ function StoryReader() {
     }
   };
 
-  const pageClass = `${styles.readerPage} ${isDark ? styles.themeDark : ''}`;
+  const isRomance = story?.genre === 'Romance';
+  const pageClass = `${styles.readerPage} ${isRomance ? styles.themeRomance : ''} ${isDark ? styles.themeDark : ''}`;
 
   if (!story) {
     return (
@@ -68,6 +69,30 @@ function StoryReader() {
     <main className={pageClass}>
       <div className={`${styles.gradientLayer} ${styles.gradientLayerOne}`} aria-hidden="true" />
       <div className={`${styles.gradientLayer} ${styles.gradientLayerTwo}`} aria-hidden="true" />
+      <div className={`${styles.gradientLayer} ${styles.gradientLayerGround}`} aria-hidden="true" />
+
+      {isRomance && (
+        <>
+          <div className={styles.rippleField} aria-hidden="true">
+            <span className={`${styles.ripple} ${styles.ripple1}`}></span>
+            <span className={`${styles.ripple} ${styles.ripple2}`}></span>
+            <span className={`${styles.ripple} ${styles.ripple3}`}></span>
+            <span className={`${styles.ripple} ${styles.ripple4}`}></span>
+            <span className={`${styles.ripple} ${styles.ripple5}`}></span>
+            <span className={`${styles.ripple} ${styles.ripple6}`}></span>
+            <span className={`${styles.ripple} ${styles.ripple7}`}></span>
+          </div>
+          <div className={styles.heartsField} aria-hidden="true">
+            <span className={`${styles.heart} ${styles.heart1}`}></span>
+            <span className={`${styles.heart} ${styles.heart2}`}></span>
+            <span className={`${styles.heart} ${styles.heart3}`}></span>
+            <span className={`${styles.heart} ${styles.heart4}`}></span>
+            <span className={`${styles.heart} ${styles.heart5}`}></span>
+            <span className={`${styles.heart} ${styles.heart6}`}></span>
+            <span className={`${styles.heart} ${styles.heart7}`}></span>
+          </div>
+        </>
+      )}
 
       <div className={styles.pageContent}>
         <NavBar
@@ -79,7 +104,7 @@ function StoryReader() {
 
         <section className={styles.storyPage}>
           <div className={styles.storyPageTop}>
-            <h1 className={styles.storyPageTitle}>{story.genre || 'Story'}</h1>
+            <h1 className={styles.storyPageTitle}>{story.title}</h1>
             <button className={styles.restartButton} type="button" onClick={handleRestart}>
               Restart story
             </button>
@@ -87,7 +112,6 @@ function StoryReader() {
 
           <article className={styles.storyCard}>
             <header className={styles.storyMeta}>
-              <h2 className={styles.storyMetaTitle}>{story.title}</h2>
               <p className={styles.storyMetaDetails}>
                 {story.genre && <span className={styles.storyMetaGenre}>{story.genre}</span>}
                 {story.genre && <span className={styles.storyMetaSeparator} aria-hidden="true">·</span>}
