@@ -9,3 +9,25 @@ npm run reset
 pull issue resolved on johanna end:
 I was having issues had to create branch and it has been fixed and deleted.
     "Deleted branch johanna-changes (was 42b24a6)."
+
+# Regarding Render Deployment and webServer, additional route testing:
+    * Deployment
+
+    The QuestTwyst backend is deployed as a Render Web Service and connected
+    to a Render PostgreSQL database.
+
+# Deployed Backend
+https://questtwyst-backend.onrender.com
+
+Example API Endpoint
+    GET /stories
+
+Example:
+https://questtwyst-backend.onrender.com/stories
+
+# Deployment Configuration
+- Runtime: Node.js
+- Hosting platform: Render
+- Database: PostgreSQL
+- Environment variable: `DATABASE_URL`
+- The backend connects to PostgreSQL using Render's internal database URL.
