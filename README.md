@@ -62,7 +62,9 @@ The backend will store each story as connected passages. Each passage will inclu
 ### ✅ Genre Filtering UI
 The frontend lets readers browse genres through a scrollable list and select one to instantly filter the story library, showing only stories that match that genre.
 
-[gif goes here]  (NOTE: This exist, having last minute issues while creating gif.)
+<img src='https://github.com/QuestTwyst/FinalProject/blob/45f62c340dc8d0fb26d2d27db73032c58a78401c/planning/gifs/GenreFilterOption.gif' title='Video Walkthrough' width='' alt='Video Walkthrough' />
+
+
 
 ### User Reading Progress
 
