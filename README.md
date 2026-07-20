@@ -59,8 +59,8 @@ The backend will store each story as connected passages. Each passage will inclu
 
 ![Branching Passage]((planning/gifs/BranchingPnCapi.gif))
 
-### ‼️ Genre Filtering API
-The backend will organize stories by genre, such as mystery, comedy, fantasy, romance, and sci-fi. Readers will be able to request stories by genre so they can quickly find the type of adventure they want to read.  
+### ✅ Genre Filtering UI
+The frontend lets readers browse genres through a scrollable list and select one to instantly filter the story library, showing only stories that match that genre.
 
 [gif goes here]  (NOTE: This exist, having last minute issues while creating gif.)
 
