@@ -1,6 +1,7 @@
 import express from "express";
 import {
   getPassagesByStory,
+  getPassageById,
   createPassage,
   deletePassage,
   updatePassage,
@@ -10,6 +11,7 @@ const router = express.Router();
 
 router.get("/:id/passages", getPassagesByStory);
 router.post("/:id/passages", createPassage);
+router.get("/passages/:passageId", getPassageById);
 router.delete("/passages/:passageId", deletePassage);
 router.patch("/passages/:passageId", updatePassage);
 
