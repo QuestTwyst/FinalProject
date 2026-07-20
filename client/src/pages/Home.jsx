@@ -7,7 +7,7 @@ function Home() {
       <p>Choose your path and create your own adventure.</p>
 
       <Link to="/login">Log In</Link>
-      <Link to="/create-account">Create Account</Link>
+      <Link to="/register">Create Account</Link>
     </main>
   );
 }

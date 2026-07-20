@@ -1,5 +1,4 @@
 import { Routes, Route } from 'react-router-dom';
-import Home from './pages/Home.jsx';
 import StoryIntro from './components/StoryIntro';
 import StoryLibrary from './components/StoryLibrary';
 import StoryReader from './components/StoryReader';
@@ -17,6 +16,7 @@ function App() {
       <Route path="/about" element={<About />} />
       <Route path="/login" element={<Login />} />
       <Route path="/create-account" element={<CreateAccount />} />
+      <Route path="/register" element={<CreateAccount />} />
     </Routes>
   );
 }
