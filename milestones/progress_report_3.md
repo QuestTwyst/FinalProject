@@ -1,8 +1,8 @@
-\# Milestone 3 Progress Report
+# Milestone 3 Progress Report
 
 
 
-\## GitHub Project Setup
+## GitHub Project Setup
 
 Project board created: yes
 
@@ -10,93 +10,93 @@ Project board shared with codepathreview: yes
 
 
 
-\## Issues Created
+## Issues Created
 
 List the title of each issue you created, one per line:
 
-\- Build frontend page layout and HTML components
+- Build frontend page layout and HTML components
 
-\- Configure Render Deployment
+- Configure Render Deployment
 
-\- Set Up PostgreSQL Database Schema
+- Set Up PostgreSQL Database Schema
 
-\- Create Database Connection Module
+- Create Database Connection Module
 
-\- Build Story Library Interface
+- Build Story Library Interface
 
-\- Create Story Reader Interface
+- Create Story Reader Interface
 
-\- Add Genre Filtering UI
+- Add Genre Filtering UI
 
-\- Create User Authentication Pages
+- Create User Authentication Pages
 
-\- Build User Profile and Reading Progress Page
+- Build User Profile and Reading Progress Page
 
-\- Build Story Library API Endpoints
+- Build Story Library API Endpoints
 
-\- Create Branching Story Passage API
+- Create Branching Story Passage API
 
-\- Implement User Reading Progress API
+- Implement User Reading Progress API
 
-\- Deploy Backend Server with Render
+- Deploy Backend Server with Render
 
 
 
-\## GitHub Milestones Created
+## GitHub Milestones Created
 
 List the name of each GitHub Milestone you created, one per line:
 
-\- Milestone 3
+- Milestone 3
 
 
 
-\## Milestone 3 Completion
+## Milestone 3 Completion
 
 Completion percentage for Milestone 3 - Unit 7: 100%
 
 List each issue you completed this unit and the main file or folder where that work lives, one per line:
 
-\- Build frontend page layout and HTML components - client/src/components
+- Build frontend page layout and HTML components - client/src/components
 
-\- Configure Render Deployment - server (Render deployment config)
+- Configure Render Deployment - server (Render deployment config)
 
-\- Set Up PostgreSQL Database Schema - server/config/reset.js
+- Set Up PostgreSQL Database Schema - server/config/reset.js
 
-\- Create Database Connection Module - server/config/database.js
+- Create Database Connection Module - server/config/database.js
 
-\- Build Story Library Interface - client/src/components/StoryLibrary.jsx, StoryCard.jsx
+- Build Story Library Interface - client/src/components/StoryLibrary.jsx, StoryCard.jsx
 
-\- Create Story Reader Interface - client/src/components
+- Create Story Reader Interface - client/src/components
 
-\- Add Genre Filtering UI - client/src/components
+- Add Genre Filtering UI - client/src/components
 
-\- Create User Authentication Pages - client/src/components/Login.jsx, CreateAccount.jsx
+- Create User Authentication Pages - client/src/components/Login.jsx, CreateAccount.jsx
 
-\- Build User Profile and Reading Progress Page - client/src/components, server/controllers/readingProgress.js
+- Build User Profile and Reading Progress Page - client/src/components, server/controllers/readingProgress.js
 
-\- Build Story Library API Endpoints - server/controllers/stories.js
+- Build Story Library API Endpoints - server/controllers/stories.js
 
-\- Create Branching Story Passage API - server/controllers/passages.js, server/controllers/choices.js
+- Create Branching Story Passage API - server/controllers/passages.js, server/controllers/choices.js
 
-\- Implement User Reading Progress API - server/controllers/readingProgress.js
+- Implement User Reading Progress API - server/controllers/readingProgress.js
 
-\- Deploy Backend Server with Render - server/server.js
+- Deploy Backend Server with Render - server/server.js
 
 
 
-\## Features Completed This Unit
+## Features Completed This Unit
 
 List each feature you completed and checked off in readme.md this unit, one per line:
 
-\- Story Library API
+- Story Library API
 
-\- Branching Passage and Choice Interface
+- Branching Passage and Choice Interface
 
-\- Genre Filtering UI
+- Genre Filtering UI
 
-\- Story Reader Interface
+- Story Reader Interface
 
-\- Account Creation and Login
+- Account Creation and Login
 
 
 
