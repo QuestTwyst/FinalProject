@@ -38,7 +38,9 @@ Backend:
 
 ### New Account Create and Login
 
-Users will be able to create an account, log in.
+Users will be able to create an account, log in and Authentication added
+
+https://github.com/QuestTwyst/FinalProject/blob/e5d47216b54c08de2b37c4f11c00f2739cf3c4f1/AuthCreateAccountAndLogin.gif
 
 [gif goes here]
 
