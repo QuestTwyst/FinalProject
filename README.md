@@ -56,7 +56,7 @@ The backend will include Express routes that allow the app to retrieve available
 ### Branching Passage and Choice API
 The backend will store each story as connected passages. Each passage will include two choices, such as Option A and Option B, and each choice will point to the next passage in the story. This allows the reader’s selection to determine which part of the story appears next.
 
-[gif goes here]
+![Branching Passage](https://imgur.com/a/2YXI0A7)
 
 ### Genre Filtering API
 The backend will organize stories by genre, such as mystery, comedy, fantasy, romance, and sci-fi. Readers will be able to request stories by genre so they can quickly find the type of adventure they want to read.  
