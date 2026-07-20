@@ -36,11 +36,12 @@ Backend:
 
 ## Features
 
-### New Account Create and Login
+### ✅ New Account Create and Login
 
-Users will be able to create an account, log in.
+The frontend provides dedicated Login and Create Account pages, letting users register a new account or sign in with existing credentials. Form validation ensures all required fields are completed before submission, and clear error messages guide users when something needs correction
 
-[gif goes here]
+<img src='https://github.com/QuestTwyst/FinalProject/blob/e5d47216b54c08de2b37c4f11c00f2739cf3c4f1/AuthCreateAccountAndLogin.gif' title='Video Walkthrough' width='' alt='Video Walkthrough' />
+
 
 ### ✅ Story Library API
 
@@ -58,8 +59,8 @@ The backend will store each story as connected passages. Each passage will inclu
 
 ![Branching Passage]((planning/gifs/BranchingPnCapi.gif))
 
-### ‼️ Genre Filtering API
-The backend will organize stories by genre, such as mystery, comedy, fantasy, romance, and sci-fi. Readers will be able to request stories by genre so they can quickly find the type of adventure they want to read.  
+### ✅ Genre Filtering UI
+The frontend lets readers browse genres through a scrollable list and select one to instantly filter the story library, showing only stories that match that genre.
 
 [gif goes here]  (NOTE: This exist, having last minute issues while creating gif.)
 
