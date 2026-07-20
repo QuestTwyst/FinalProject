@@ -57,7 +57,7 @@ The backend will include Express routes that allow the app to retrieve available
 ### ✅ Branching Passage and Choice API
 The backend will store each story as connected passages. Each passage will include two choices, such as Option A and Option B, and each choice will point to the next passage in the story. This allows the reader’s selection to determine which part of the story appears next.
 
-![Branching Passage]((planning/gifs/BranchingPnCapi.gif))
+<img src='https://github.com/QuestTwyst/FinalProject/blob/c9538aafbe76426befcc29f6b6f0f32cdb2b4632/planning/gifs/BranchingPnCapi.gif' title='Video Walkthrough' width='' alt='Video Walkthrough' />
 
 ### ✅ Genre Filtering UI
 The frontend lets readers browse genres through a scrollable list and select one to instantly filter the story library, showing only stories that match that genre.
