@@ -121,6 +121,27 @@
   text-align: center;
 }
 
+.toolbarButtons {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.importMessage {
+  width: 100%;
+  max-width: 780px;
+  margin: -0.5rem auto 0;
+  padding: 0.6rem 1rem;
+  border-radius: 12px;
+  background: rgba(220, 53, 69, 0.15);
+  border: 1px solid rgba(220, 53, 69, 0.4);
+  color: #ffffff;
+  font-size: 0.85rem;
+  text-align: center;
+}
+
 .restartButton {
   padding: 0.6rem 1.3rem;
   border: none;
@@ -952,4 +973,199 @@
 
 .themeSciFi .restartButton:hover {
   background: rgba(0, 229, 255, 0.28);
+}
+
+/* ============================================================
+   WESTERN THEME — applied automatically when story.genre is
+   "Western" (see StoryReader.jsx: isWestern check)
+   Built entirely from CSS + inline SVG, no photo assets needed.
+   ============================================================ */
+
+.themeWestern {
+  background: linear-gradient(
+    to bottom,
+    #f2a35c 0%,
+    #e8834a 30%,
+    #c9603f 55%,
+    #8a4235 78%,
+    #4a2620 100%
+  );
+}
+
+.themeWestern.themeDark {
+  background: linear-gradient(
+    to bottom,
+    #7a4a30 0%,
+    #5c3524 30%,
+    #402720 55%,
+    #241512 78%,
+    #120a08 100%
+  );
+}
+
+/* Hide the default drifting gradient — the sunset sky replaces it */
+.themeWestern .gradientLayerOne,
+.themeWestern .gradientLayerTwo,
+.themeWestern .gradientLayerGround {
+  display: none;
+}
+
+/* ---------- Ghost town skyline silhouette ---------- */
+.themeWestern .ghostTownSkyline {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 100%;
+  height: 22%;
+  color: rgba(20, 10, 6, 0.75);
+  fill: currentColor;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.themeWestern.themeDark .ghostTownSkyline {
+  color: rgba(0, 0, 0, 0.8);
+}
+
+/* ---------- Rolling, rotating tumbleweeds ---------- */
+.themeWestern .tumbleweedField {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.themeWestern .tumbleweed {
+  position: absolute;
+  bottom: 4%;
+  width: 100px;
+  height: 100px;
+  color: rgba(45, 25, 12, 0.95);
+  filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.35));
+  animation: tumbleRoll linear infinite;
+}
+
+.themeWestern .tumbleweed1 {
+  animation-duration: 8s;
+  animation-delay: 0s;
+}
+
+.themeWestern .tumbleweed2 {
+  bottom: 8%;
+  width: 68px;
+  height: 68px;
+  animation-duration: 12s;
+  animation-delay: 3.5s;
+  opacity: 0.9;
+}
+
+@keyframes tumbleRoll {
+  0%   { left: -8%;  transform: rotate(0deg); }
+  100% { left: 108%; transform: rotate(1080deg); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .themeWestern .tumbleweed {
+    animation: none;
+    left: 50%;
+  }
+}
+
+/* ---------- Rustic wood-toned title ---------- */
+.themeWestern .storyPageTitle {
+  font-family: 'Bevan', 'Georgia', serif;
+  font-weight: 400;
+  letter-spacing: 0.02em;
+  color: #ffe0b0;
+  text-shadow: 0 3px 12px rgba(0, 0, 0, 0.5);
+}
+
+/* ---------- Weathered wood card ---------- */
+.themeWestern .storyCard {
+  background: rgba(250, 235, 210, 0.93);
+  border: 2px solid rgba(120, 66, 30, 0.4);
+  box-shadow: 0 10px 36px rgba(40, 18, 8, 0.4);
+}
+
+.themeWestern .storyCard .storyMetaDetails,
+.themeWestern .storyCard .storyMetaDescription,
+.themeWestern .storyCard .passageText,
+.themeWestern .storyCard .endingNote {
+  color: #3a2313;
+}
+
+.themeWestern .storyMeta {
+  border-bottom-color: rgba(120, 66, 30, 0.3);
+}
+
+.themeWestern.themeDark .storyCard {
+  background: rgba(40, 26, 16, 0.93);
+  border-color: rgba(180, 120, 60, 0.3);
+}
+
+.themeWestern.themeDark .storyCard .storyMetaDetails,
+.themeWestern.themeDark .storyCard .storyMetaDescription,
+.themeWestern.themeDark .storyCard .passageText,
+.themeWestern.themeDark .storyCard .endingNote {
+  color: #f2ddc0;
+}
+
+/* ---------- Choice buttons: sun-baked leather tone ---------- */
+.themeWestern .choiceButton {
+  background: rgba(255, 246, 230, 0.85);
+  border: 1.5px solid rgba(140, 78, 30, 0.45);
+  color: #3a2313;
+}
+
+.themeWestern .choiceButton:hover {
+  background: #fff6e6;
+  border-color: rgba(140, 78, 30, 0.75);
+}
+
+.themeWestern .choiceLabel {
+  background: #8a4220;
+  color: #ffe8cc;
+}
+
+.themeWestern.themeDark .choiceButton {
+  background: rgba(40, 26, 16, 0.85);
+  color: #f2ddc0;
+}
+
+.themeWestern.themeDark .choiceButton:hover {
+  background: rgba(55, 36, 22, 0.95);
+}
+
+/* ---------- Scrollbar ---------- */
+.themeWestern .storyCardScroll {
+  scrollbar-width: thin;
+  scrollbar-color: #8a4220 transparent;
+}
+
+.themeWestern .storyCardScroll::-webkit-scrollbar {
+  width: 8px;
+}
+
+.themeWestern .storyCardScroll::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.themeWestern .storyCardScroll::-webkit-scrollbar-thumb {
+  background: #8a4220;
+  border-radius: 8px;
+}
+
+/* ---------- Restart / toolbar buttons ---------- */
+.themeWestern .restartButton {
+  background: rgba(250, 235, 210, 0.85);
+  color: #3a2313;
+  font-family: 'Bevan', 'Georgia', serif;
+  font-weight: 400;
+  letter-spacing: 0.02em;
+}
+
+.themeWestern .restartButton:hover {
+  background: rgba(255, 246, 230, 0.95);
 }

@@ -29,6 +29,12 @@ export const storyList = [
     genre: 'Romance',
     description: "A missed ferry, a stranger's boat, and a storm that changes everything.",
   },
+  {
+    id: 6,
+    title: 'The Last Stand at Red Gulch',
+    genre: 'Western',
+    description: "A stranger rides into a lawless town where every choice could mean a showdown — or a way out.",
+  },
 ];
 
 export const storyGraph = {
@@ -680,6 +686,67 @@ export const storyGraph = {
       63: {
         id: 63,
         content: "Their paths never crossed again, not in any dramatic airport reunion, not in any chance encounter \u2014 just two lives that had touched briefly during one storm and then quietly, permanently, diverged. Mara thought of him sometimes, on rainy nights especially, and never quite stopped being glad, in a wistful sort of way, that she'd once said yes to a stranger's boat.",
+        isEnding: true,
+        choices: [],
+      },
+    },
+  },
+  6: {
+    id: 6,
+    title: 'The Last Stand at Red Gulch',
+    genre: 'Western',
+    author: 'Questwyst Team',
+    description: "A stranger rides into a lawless town where every choice could mean a showdown — or a way out.",
+    startPassageId: 1,
+    passages: {
+      1: {
+        id: 1,
+        content: "The sun hangs low over Red Gulch as you ride in, dust settling behind you like a warning. The town's gone quiet the way towns do when everyone already knows trouble's coming — they just don't know it's you yet. Through the saloon doors, you can make out the shape of the man you've been tracking for three hundred miles: Silas Cole, wanted for murder in two territories, sitting like he owns the place. The sheriff's office sits dark and locked. Whatever happens here, it happens without help.",
+        isEnding: false,
+        choices: [
+          { text: "Walk straight into the saloon and call him out", next: 2 },
+          { text: "Ask around town first and learn what you're riding into", next: 3 },
+        ],
+      },
+      2: {
+        id: 2,
+        content: "The saloon goes silent when the doors swing shut behind you. Cole doesn't stand, doesn't even set down his cards — just looks up with the calm of a man who's done this before and always walked away. \"You're a long way from home, stranger,\" he says. \"Word of advice: turn around while you still can.\" Every eye in the room is on your hands.",
+        isEnding: false,
+        choices: [
+          { text: "Draw first — don't give him the chance", next: 4 },
+          { text: "Keep your hands still and try to talk him down", next: 5 },
+        ],
+      },
+      3: {
+        id: 3,
+        content: "You find the barkeep more willing to talk than expected, once he sees the badge tucked under your coat. Cole didn't just kill a man in the last town — he's been buying up half of Red Gulch through a rancher named Whitfield, who's scared enough of him to let it happen. \"Sheriff tried to stop it,\" the barkeep mutters. \"That's why there ain't a sheriff no more.\" You now know exactly what you're up against, and who else might be willing to help — or get in the way.",
+        isEnding: false,
+        choices: [
+          { text: "Find the sheriff's old deputy and do this by the law", next: 6 },
+          { text: "Corner Whitfield yourself and force him to turn on Cole", next: 7 },
+        ],
+      },
+      4: {
+        id: 4,
+        content: "Your hand moves before his does, and it's over in less time than it takes to say his name. The saloon erupts into noise a half second later — chairs scraping, someone yelling for the undertaker — but you're already walking out into the sun, three hundred miles of tracking finally behind you. Red Gulch will tell this story for years, and in most versions, you're not the hero. You didn't come here to be one. You came here to finish it, and you did.",
+        isEnding: true,
+        choices: [],
+      },
+      5: {
+        id: 5,
+        content: "\"I'm not looking to die today, and I don't think you are either,\" you say, hands open, voice steady. Cole studies you a long moment — long enough that the whole saloon seems to hold its breath with you. Then, slowly, he sets his cards face-down on the table. \"Territory marshal's two days out,\" he says. \"Wire ahead, tell him where to find me. I'm tired of running.\" It isn't the ending you rode in expecting, but it's the one nobody in that room has to bury.",
+        isEnding: true,
+        choices: [],
+      },
+      6: {
+        id: 6,
+        content: "The deputy's rusty on the badge but steady on the trigger, and between the two of you, Cole's arrest goes by the book — witnesses, warrant, the whole slow machinery of justice that towns like Red Gulch usually can't afford. Whitfield turns state's witness inside a week, terrified of a cell more than he ever was of Cole. It's not fast, and it's not clean, but six months later Red Gulch has a real sheriff again, and nobody's afraid to walk past the saloon after dark.",
+        isEnding: true,
+        choices: [],
+      },
+      7: {
+        id: 7,
+        content: "Whitfield breaks easier than you expect once you make it clear his choices are talking or explaining himself to Cole personally. By midnight, half the town knows exactly what Cole's been doing, and by morning, Cole's riding out of Red Gulch alone, disowned by the very men he thought he'd bought. You never fired a shot. You also never got a confession on record, never got him behind bars — just gone, and someone else's problem now. Red Gulch is free. Whether that's justice depends on who you ask.",
         isEnding: true,
         choices: [],
       },

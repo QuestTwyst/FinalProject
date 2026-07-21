@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { parseSaveFile } from '../utils/saveFile';
 import NavBar from './NavBar';
 import styles from './StoryIntro.module.css';
 
@@ -8,6 +9,7 @@ function StoryIntro() {
   const [isDark, setIsDark] = useState(false);
   const [isMuted, setIsMuted] = useState(false);
   const [selectedStory, setSelectedStory] = useState(null);
+  const [importMessage, setImportMessage] = useState('');
 
   const handleThemeToggle = () => {
     setIsDark((prev) => !prev);
@@ -15,6 +17,17 @@ function StoryIntro() {
 
   const handleSoundToggle = () => {
     setIsMuted((prev) => !prev);
+  };
+
+  const handleImportProgress = (file) => {
+    parseSaveFile(
+      file,
+      (data) => {
+        setImportMessage('');
+        navigate(`/stories/${data.storyId}`, { state: { resumePassageId: data.passageId } });
+      },
+      () => setImportMessage("That file doesn't look like a valid Questwyst save.")
+    );
   };
 
   const stories = ['comedy', 'horror', 'romance', 'scifi', 'western'];
@@ -43,7 +56,9 @@ function StoryIntro() {
             onThemeToggle={handleThemeToggle}
             isMuted={isMuted}
             onSoundToggle={handleSoundToggle}
+            onImportProgress={handleImportProgress}
           />
+          {importMessage && <p className={styles.importMessage}>{importMessage}</p>}
         </div>
 
         <div className={styles.contentRow}>

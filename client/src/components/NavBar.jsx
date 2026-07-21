@@ -1,19 +1,40 @@
-import { useRef } from 'react';
+import { useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styles from './NavBar.module.css';
 
-function NavBar({ isDark, onThemeToggle, isMuted, onSoundToggle }) {
+function NavBar({ isDark, onThemeToggle, isMuted, onSoundToggle, onSaveProgress, onImportProgress }) {
   const navigate = useNavigate();
   const fileInputRef = useRef(null);
+  const [showFileMenu, setShowFileMenu] = useState(false);
+  const hasProgressActions = Boolean(onSaveProgress || onImportProgress);
 
-  const handleImportSave = () => {
+  const handleFileButtonClick = () => {
+    if (hasProgressActions) {
+      setShowFileMenu((prev) => !prev);
+    } else {
+      fileInputRef.current?.click();
+    }
+  };
+
+  const handleSaveClick = () => {
+    setShowFileMenu(false);
+    onSaveProgress?.();
+  };
+
+  const handleImportClick = () => {
+    setShowFileMenu(false);
     fileInputRef.current?.click();
   };
 
   const handleFileChange = (e) => {
-    if (e.target.files.length) {
-      console.log('File selected:', e.target.files[0].name);
+    const file = e.target.files[0];
+    if (!file) return;
+    if (onImportProgress) {
+      onImportProgress(file);
+    } else {
+      console.log('File selected:', file.name);
     }
+    e.target.value = '';
   };
 
   const handleReturn = () => {
@@ -68,20 +89,36 @@ function NavBar({ isDark, onThemeToggle, isMuted, onSoundToggle }) {
         </svg>
       </button>
 
-      <button
-        className={styles.navBtn}
-        type="button"
-        aria-label="Import or save file"
-        title="Import / save file"
-        onClick={handleImportSave}
-      >
-        <svg className={styles.icon} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-          <polyline points="7 10 12 15 17 10"></polyline>
-          <line x1="12" y1="15" x2="12" y2="3"></line>
-        </svg>
-      </button>
-      <input type="file" ref={fileInputRef} hidden onChange={handleFileChange} />
+      <div className={styles.fileMenuWrapper}>
+        <button
+          className={styles.navBtn}
+          type="button"
+          aria-label={hasProgressActions ? 'Save or import progress' : 'Import or save file'}
+          title={hasProgressActions ? 'Save or import progress' : 'Import / save file'}
+          onClick={handleFileButtonClick}
+        >
+          <svg className={styles.icon} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+            <polyline points="7 10 12 15 17 10"></polyline>
+            <line x1="12" y1="15" x2="12" y2="3"></line>
+          </svg>
+        </button>
+
+        {showFileMenu && hasProgressActions && (
+          <>
+            <div className={styles.fileMenuOverlay} onClick={() => setShowFileMenu(false)} />
+            <div className={styles.fileMenu}>
+              <button className={styles.fileMenuItem} type="button" onClick={handleSaveClick}>
+                Save progress
+              </button>
+              <button className={styles.fileMenuItem} type="button" onClick={handleImportClick}>
+                Import progress
+              </button>
+            </div>
+          </>
+        )}
+      </div>
+      <input type="file" accept="application/json" ref={fileInputRef} hidden onChange={handleFileChange} />
 
       <button
         className={styles.navBtn}

@@ -67,3 +67,67 @@
 .themeDark .navBtn:hover {
   background: rgba(20, 30, 50, 0.8);
 }
+
+/* ---------- Save / Import dropdown menu ---------- */
+.fileMenuWrapper {
+  position: relative;
+}
+
+.fileMenuOverlay {
+  position: fixed;
+  inset: 0;
+  z-index: 40;
+}
+
+.fileMenu {
+  position: absolute;
+  top: calc(100% + 0.5rem);
+  left: 0;
+  z-index: 50;
+  display: flex;
+  flex-direction: column;
+  min-width: 170px;
+  overflow: hidden;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.97);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 8px 28px rgba(20, 50, 90, 0.25);
+}
+
+.fileMenuItem {
+  padding: 0.75rem 1rem;
+  border: none;
+  background: transparent;
+  color: #16324f;
+  font-family: inherit;
+  font-size: 0.9rem;
+  font-weight: 500;
+  text-align: left;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+
+.fileMenuItem:hover {
+  background: rgba(22, 50, 79, 0.08);
+}
+
+.fileMenuItem + .fileMenuItem {
+  border-top: 1px solid rgba(22, 50, 79, 0.1);
+}
+
+.themeDark .fileMenu {
+  background: rgba(20, 30, 50, 0.97);
+  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.45);
+}
+
+.themeDark .fileMenuItem {
+  color: #f4f4f8;
+}
+
+.themeDark .fileMenuItem:hover {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.themeDark .fileMenuItem + .fileMenuItem {
+  border-top-color: rgba(255, 255, 255, 0.1);
+}
