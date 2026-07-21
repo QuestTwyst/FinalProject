@@ -99,6 +99,17 @@
   z-index: 10;
 }
 
+.importMessage {
+  margin-top: 0.75rem;
+  padding: 0.6rem 1rem;
+  max-width: 320px;
+  border-radius: 12px;
+  background: rgba(220, 53, 69, 0.15);
+  border: 1px solid rgba(220, 53, 69, 0.4);
+  color: #ffffff;
+  font-size: 0.8rem;
+}
+
 /* ---------- Content area: scrolls internally within the fixed stage ---------- */
 .contentArea {
   position: absolute;

@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
+import { parseSaveFile } from '../utils/saveFile';
 import NavBar from './NavBar';
 import StoryCard from './StoryCard';
 import styles from './StoryLibrary.module.css';
@@ -12,6 +13,7 @@ function StoryLibrary() {
   const [selectedGenre, setSelectedGenre] = useState(genreFromUrl || 'All');
   const [isDark, setIsDark] = useState(false);
   const [isMuted, setIsMuted] = useState(false);
+  const [importMessage, setImportMessage] = useState('');
 
   const handleThemeToggle = () => {
     setIsDark((prev) => !prev);
@@ -19,6 +21,17 @@ function StoryLibrary() {
 
   const handleSoundToggle = () => {
     setIsMuted((prev) => !prev);
+  };
+
+  const handleImportProgress = (file) => {
+    parseSaveFile(
+      file,
+      (data) => {
+        setImportMessage('');
+        navigate(`/stories/${data.storyId}`, { state: { resumePassageId: data.passageId } });
+      },
+      () => setImportMessage("That file doesn't look like a valid Questwyst save.")
+    );
   };
 
   const genres = ['All', ...Array.from(new Set(storyList.map((story) => story.genre))).sort()];
@@ -43,7 +56,9 @@ function StoryLibrary() {
             onThemeToggle={handleThemeToggle}
             isMuted={isMuted}
             onSoundToggle={handleSoundToggle}
+            onImportProgress={handleImportProgress}
           />
+          {importMessage && <p className={styles.importMessage}>{importMessage}</p>}
         </div>
 
         <div className={styles.contentArea}>
