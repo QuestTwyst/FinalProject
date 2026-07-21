@@ -203,15 +203,7 @@ function StoryReader() {
           </svg>
 
           <div className={styles.tumbleweedField} aria-hidden="true">
-            <svg className={`${styles.tumbleweed} ${styles.tumbleweed1}`} viewBox="0 0 60 60">
-              <circle cx="30" cy="30" r="24" fill="none" strokeWidth="3.5" stroke="currentColor" />
-              <path d="M8,20 Q30,5 52,20" fill="none" strokeWidth="2.8" stroke="currentColor" />
-              <path d="M8,40 Q30,55 52,40" fill="none" strokeWidth="2.8" stroke="currentColor" />
-              <path d="M10,10 Q35,30 10,50" fill="none" strokeWidth="2.8" stroke="currentColor" />
-              <path d="M50,10 Q25,30 50,50" fill="none" strokeWidth="2.8" stroke="currentColor" />
-              <path d="M6,30 Q30,15 54,30 Q30,45 6,30 Z" fill="none" strokeWidth="2.2" stroke="currentColor" />
-            </svg>
-            <svg className={`${styles.tumbleweed} ${styles.tumbleweed2}`} viewBox="0 0 60 60">
+            <svg className={styles.tumbleweed} viewBox="0 0 60 60">
               <circle cx="30" cy="30" r="24" fill="none" strokeWidth="3.5" stroke="currentColor" />
               <path d="M8,20 Q30,5 52,20" fill="none" strokeWidth="2.8" stroke="currentColor" />
               <path d="M8,40 Q30,55 52,40" fill="none" strokeWidth="2.8" stroke="currentColor" />
