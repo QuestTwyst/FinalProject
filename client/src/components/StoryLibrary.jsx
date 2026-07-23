@@ -1,6 +1,7 @@
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { parseSaveFile } from '../utils/saveFile';
+import { useBackgroundAudio } from '../utils/useBackgroundAudio';
 import NavBar from './NavBar';
 import StoryCard from './StoryCard';
 import styles from './StoryLibrary.module.css';
@@ -13,7 +14,11 @@ function StoryLibrary() {
   const [selectedGenre, setSelectedGenre] = useState(genreFromUrl || 'All');
   const [isDark, setIsDark] = useState(false);
   const [isMuted, setIsMuted] = useState(false);
+  const [volume, setVolume] = useState(0.5);
   const [importMessage, setImportMessage] = useState('');
+  const audioRef = useRef(null);
+
+  useBackgroundAudio(audioRef, isMuted, volume);
 
   const handleThemeToggle = () => {
     setIsDark((prev) => !prev);
@@ -46,6 +51,7 @@ function StoryLibrary() {
 
   return (
     <div className={`${styles.libraryPage} ${isDark ? styles.themeDark : ''}`}>
+      <audio ref={audioRef} src="/sounds/main.wav" loop />
       <div className={`${styles.stage} ${isDark ? styles.themeDark : ''}`}>
         <div className={`${styles.gradientLayer} ${styles.gradientLayerOne}`} aria-hidden="true" />
         <div className={`${styles.gradientLayer} ${styles.gradientLayerTwo}`} aria-hidden="true" />
@@ -56,6 +62,8 @@ function StoryLibrary() {
             onThemeToggle={handleThemeToggle}
             isMuted={isMuted}
             onSoundToggle={handleSoundToggle}
+            volume={volume}
+            onVolumeChange={setVolume}
             onImportProgress={handleImportProgress}
           />
           {importMessage && <p className={styles.importMessage}>{importMessage}</p>}

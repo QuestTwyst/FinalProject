@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Bevan&family=Great+Vibes&family=Orbitron:wght@500;700&family=Special+Elite&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Bangers&family=Bevan&family=Great+Vibes&family=Orbitron:wght@500;700&family=Special+Elite&display=swap');
 
 .readerPage {
   position: relative;
@@ -1161,4 +1161,147 @@
 
 .themeWestern .restartButton:hover {
   background: rgba(255, 246, 230, 0.95);
+}
+
+/* ============================================================
+   COMEDY THEME — applied automatically when story.genre is
+   "Comedy" (see StoryReader.jsx: isComedy check)
+   Uses /comedy_1a.jpg as the background photo.
+   ============================================================ */
+
+.themeComedy {
+  background-color: #2a0e18;
+  background-image:
+    linear-gradient(rgba(20, 5, 15, 0.15), rgba(20, 5, 15, 0.3)),
+    url('/comedy_1a.jpg');
+  background-size: contain;
+  background-position: center bottom;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+}
+
+.themeComedy.themeDark {
+  background-image:
+    linear-gradient(rgba(30, 10, 40, 0.72), rgba(20, 5, 30, 0.82)),
+    url('/comedy_1a.jpg');
+}
+
+/* Hide the drifting sky gradient — the photo carries the mood instead */
+.themeComedy .gradientLayerOne,
+.themeComedy .gradientLayerTwo,
+.themeComedy .gradientLayerGround {
+  display: none;
+}
+
+/* ---------- Comic-book title ---------- */
+.themeComedy .storyPageTitle {
+  font-family: 'Bangers', 'Comic Sans MS', cursive;
+  font-weight: 400;
+  letter-spacing: 0.04em;
+  color: #ffd60a;
+  -webkit-text-stroke: 2.5px #1a1a1a;
+  paint-order: stroke fill;
+  text-shadow: 4px 4px 0 rgba(0, 0, 0, 0.25);
+}
+
+/* ---------- Comic panel card ---------- */
+.themeComedy .storyCard {
+  background: rgba(255, 255, 255, 0.95);
+  border: 4px solid #1a1a1a;
+  border-radius: 14px;
+  box-shadow: 8px 8px 0 rgba(0, 0, 0, 0.85);
+}
+
+.themeComedy .storyCard .storyMetaDetails,
+.themeComedy .storyCard .storyMetaDescription,
+.themeComedy .storyCard .passageText,
+.themeComedy .storyCard .endingNote {
+  color: #1a1a1a;
+}
+
+.themeComedy .storyMeta {
+  border-bottom: 2px dashed rgba(26, 26, 26, 0.3);
+}
+
+.themeComedy.themeDark .storyCard {
+  background: rgba(35, 30, 25, 0.96);
+  border-color: #ffd60a;
+  box-shadow: 8px 8px 0 rgba(0, 0, 0, 0.6);
+}
+
+.themeComedy.themeDark .storyCard .storyMetaDetails,
+.themeComedy.themeDark .storyCard .storyMetaDescription,
+.themeComedy.themeDark .storyCard .passageText,
+.themeComedy.themeDark .storyCard .endingNote {
+  color: #fdf6e3;
+}
+
+/* ---------- Choice buttons: bold comic panels ---------- */
+.themeComedy .choiceButton {
+  background: #ffd60a;
+  border: 3px solid #1a1a1a;
+  border-radius: 10px;
+  color: #1a1a1a;
+  font-weight: 700;
+  box-shadow: 4px 4px 0 rgba(0, 0, 0, 0.85);
+  transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
+}
+
+.themeComedy .choiceButton:hover {
+  background: #ff2f6e;
+  color: #ffffff;
+  transform: translate(-2px, -2px);
+  box-shadow: 6px 6px 0 rgba(0, 0, 0, 0.85);
+}
+
+.themeComedy .choiceLabel {
+  background: #1a1a1a;
+  color: #ffd60a;
+  border-radius: 50%;
+}
+
+.themeComedy.themeDark .choiceButton {
+  background: #2a2420;
+  border-color: #ffd60a;
+  color: #fdf6e3;
+  box-shadow: 4px 4px 0 rgba(0, 0, 0, 0.6);
+}
+
+.themeComedy.themeDark .choiceButton:hover {
+  background: #ff2f6e;
+}
+
+/* ---------- Scrollbar ---------- */
+.themeComedy .storyCardScroll {
+  scrollbar-width: thin;
+  scrollbar-color: #ff2f6e transparent;
+}
+
+.themeComedy .storyCardScroll::-webkit-scrollbar {
+  width: 8px;
+}
+
+.themeComedy .storyCardScroll::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.themeComedy .storyCardScroll::-webkit-scrollbar-thumb {
+  background: #ff2f6e;
+  border-radius: 8px;
+}
+
+/* ---------- Restart button ---------- */
+.themeComedy .restartButton {
+  background: #ffd60a;
+  border: 3px solid #1a1a1a;
+  color: #1a1a1a;
+  font-family: 'Bangers', 'Comic Sans MS', cursive;
+  font-weight: 400;
+  letter-spacing: 0.03em;
+  box-shadow: 3px 3px 0 rgba(0, 0, 0, 0.85);
+}
+
+.themeComedy .restartButton:hover {
+  background: #ff2f6e;
+  color: #ffffff;
 }

@@ -131,3 +131,31 @@
 .themeDark .fileMenuItem + .fileMenuItem {
   border-top-color: rgba(255, 255, 255, 0.1);
 }
+
+/* ---------- Volume slider ---------- */
+.volumeWrapper {
+  display: flex;
+  align-items: center;
+  height: 51px;
+  padding: 0 0.85rem;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.55);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 4px 16px rgba(20, 50, 90, 0.18);
+}
+
+.volumeSlider {
+  width: 90px;
+  height: 4px;
+  cursor: pointer;
+  accent-color: #16324f;
+}
+
+.themeDark .volumeWrapper {
+  background: rgba(20, 30, 50, 0.55);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.35);
+}
+
+.themeDark .volumeSlider {
+  accent-color: #f4f4f8;
+}

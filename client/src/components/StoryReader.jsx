@@ -1,11 +1,23 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { useNavigate, useParams, useLocation } from 'react-router-dom';
 import { storyGraph } from '../data/storyData';
 import { parseSaveFile } from '../utils/saveFile';
+import { useBackgroundAudio } from '../utils/useBackgroundAudio';
 import NavBar from './NavBar';
 import StoryPassage from './StoryPassage';
 import ChoiceButton from './ChoiceButton';
 import styles from './StoryReader.module.css';
+
+// Genre -> background sound file. Comedy is handled separately since it
+// picks randomly between two tracks each time you visit.
+const GENRE_SOUND_MAP = {
+  Mystery: '/sounds/mystery.wav',
+  'Sci-Fi': '/sounds/scifi.mp3',
+  Romance: '/sounds/romantic.wav',
+  Western: '/sounds/western.wav',
+  Horror: '/sounds/horror.wav',
+  Adventure: '/sounds/main.wav',
+};
 
 function StoryReader() {
   const { storyId } = useParams();
@@ -15,7 +27,9 @@ function StoryReader() {
   const [currentPassageId, setCurrentPassageId] = useState(story?.startPassageId ?? null);
   const [isDark, setIsDark] = useState(false);
   const [isMuted, setIsMuted] = useState(false);
+  const [volume, setVolume] = useState(0.5);
   const [importMessage, setImportMessage] = useState('');
+  const audioRef = useRef(null);
 
   useEffect(() => {
     const resumePassageId = location.state?.resumePassageId;
@@ -34,6 +48,19 @@ function StoryReader() {
     if (!story || currentPassageId == null) return null;
     return story.passages[currentPassageId];
   }, [story, currentPassageId]);
+
+  // Pick the background sound for this genre. Comedy alternates randomly
+  // between its two tracks each time you land on a Comedy story.
+  const soundSrc = useMemo(() => {
+    if (!story) return null;
+    if (story.genre === 'Comedy') {
+      return Math.random() < 0.5 ? '/sounds/Comdey.wav' : '/sounds/Comdey2.wav';
+    }
+    return GENRE_SOUND_MAP[story.genre] ?? null;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [story?.id]);
+
+  useBackgroundAudio(audioRef, isMuted, volume);
 
   const handleThemeToggle = () => setIsDark((prev) => !prev);
   const handleSoundToggle = () => setIsMuted((prev) => !prev);
@@ -90,7 +117,8 @@ function StoryReader() {
   const isAdventure = story?.genre === 'Adventure';
   const isSciFi = story?.genre === 'Sci-Fi';
   const isWestern = story?.genre === 'Western';
-  const pageClass = `${styles.readerPage} ${isRomance ? styles.themeRomance : ''} ${isMystery ? styles.themeMystery : ''} ${isAdventure ? styles.themeAdventure : ''} ${isSciFi ? styles.themeSciFi : ''} ${isWestern ? styles.themeWestern : ''} ${isDark ? styles.themeDark : ''}`;
+  const isComedy = story?.genre === 'Comedy';
+  const pageClass = `${styles.readerPage} ${isRomance ? styles.themeRomance : ''} ${isMystery ? styles.themeMystery : ''} ${isAdventure ? styles.themeAdventure : ''} ${isSciFi ? styles.themeSciFi : ''} ${isWestern ? styles.themeWestern : ''} ${isComedy ? styles.themeComedy : ''} ${isDark ? styles.themeDark : ''}`;
 
   if (!story) {
     return (
@@ -104,6 +132,8 @@ function StoryReader() {
             onThemeToggle={handleThemeToggle}
             isMuted={isMuted}
             onSoundToggle={handleSoundToggle}
+            volume={volume}
+            onVolumeChange={setVolume}
           />
           <section className={styles.storyPage}>
             <article className={styles.storyCard}>
@@ -121,6 +151,7 @@ function StoryReader() {
 
   return (
     <main className={pageClass}>
+      {soundSrc && <audio ref={audioRef} src={soundSrc} loop />}
       <div className={`${styles.gradientLayer} ${styles.gradientLayerOne}`} aria-hidden="true" />
       <div className={`${styles.gradientLayer} ${styles.gradientLayerTwo}`} aria-hidden="true" />
       <div className={`${styles.gradientLayer} ${styles.gradientLayerGround}`} aria-hidden="true" />
@@ -221,6 +252,8 @@ function StoryReader() {
           onThemeToggle={handleThemeToggle}
           isMuted={isMuted}
           onSoundToggle={handleSoundToggle}
+          volume={volume}
+          onVolumeChange={setVolume}
           onSaveProgress={handleSaveProgress}
           onImportProgress={handleImportProgress}
         />

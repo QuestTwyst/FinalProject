@@ -35,6 +35,12 @@ export const storyList = [
     genre: 'Western',
     description: "A stranger rides into a lawless town where every choice could mean a showdown — or a way out.",
   },
+  {
+    id: 7,
+    title: 'The Interview',
+    genre: 'Comedy',
+    description: 'One job interview. Several small disasters. Zero dignity remaining.',
+  },
 ];
 
 export const storyGraph = {
@@ -747,6 +753,67 @@ export const storyGraph = {
       7: {
         id: 7,
         content: "Whitfield breaks easier than you expect once you make it clear his choices are talking or explaining himself to Cole personally. By midnight, half the town knows exactly what Cole's been doing, and by morning, Cole's riding out of Red Gulch alone, disowned by the very men he thought he'd bought. You never fired a shot. You also never got a confession on record, never got him behind bars — just gone, and someone else's problem now. Red Gulch is free. Whether that's justice depends on who you ask.",
+        isEnding: true,
+        choices: [],
+      },
+    },
+  },
+  7: {
+    id: 7,
+    title: 'The Interview',
+    genre: 'Comedy',
+    author: 'Questwyst Team',
+    description: 'One job interview. Several small disasters. Zero dignity remaining.',
+    startPassageId: 1,
+    passages: {
+      1: {
+        id: 1,
+        content: "You've rehearsed this interview in the mirror for three days straight, and you are ready — right up until you trip over the welcome mat in the lobby and your entire iced coffee goes down the front of your blazer, ice cubes skittering across the marble floor like they're trying to escape too. The receptionist looks at you with the particular pity reserved for people about to have a very bad day. Your interview starts in four minutes.",
+        isEnding: false,
+        choices: [
+          { text: "Duck into the bathroom to salvage what you can", next: 2 },
+          { text: "Walk in soaked and own it with confidence", next: 3 },
+        ],
+      },
+      2: {
+        id: 2,
+        content: "The bathroom mirror confirms what you feared: you now look less like a candidate and more like a crime scene. You manage to blot most of the coffee out, but the paper towel dispenser is empty, so you're left dabbing your blazer with — and you will not be proud of this later — the only absorbent thing available in the dispenser next to it. It actually works shockingly well. You reenter the lobby two minutes late, blazer damp but no longer beige-and-brown, just as your name is called.",
+        isEnding: false,
+        choices: [
+          { text: "Explain exactly what happened — honesty is the best policy", next: 4 },
+          { text: "Say nothing and hope no one asks", next: 5 },
+        ],
+      },
+      3: {
+        id: 3,
+        content: "You march into the interview room dripping, introduce yourself with the calm dignity of someone who meant to do that, and shake the hiring manager's hand — leaving a faint damp handprint on hers. She looks down at it, then back at you, and to your enormous relief, starts laughing. \"Best entrance I've had all year,\" she says, grabbing a tissue. \"Sit down before you drip on the resume too.\"",
+        isEnding: false,
+        choices: [
+          { text: "Lean into the chaos and make jokes the whole interview", next: 6 },
+          { text: "Try to steer the conversation back to something professional", next: 7 },
+        ],
+      },
+      4: {
+        id: 4,
+        content: "\"I want to be transparent,\" you say, gesturing at the faint stain still visible under the fluorescent lights, \"that entrance involved some creative improvisation and I regret nothing.\" There's a beat of silence. Then the hiring manager laughs so hard she has to take off her glasses. \"Anyone who can explain that with a straight face can definitely handle our Monday stand-ups,\" she says. You get the job. The story gets told at every company holiday party for years.",
+        isEnding: true,
+        choices: [],
+      },
+      5: {
+        id: 5,
+        content: "You make it through the whole interview without anyone mentioning the stain, and you start to think you actually got away with it — right up until you're walking out and the receptionist says, warmly, \"Nice work in there. Also, there's a sticker on your back.\" There is, in fact, a sticker on your back. It says HELLO MY NAME IS, left over from a conference badge you forgot you were wearing. You never do find out if they noticed the coffee. The job offer arrives three days later anyway.",
+        isEnding: true,
+        choices: [],
+      },
+      6: {
+        id: 6,
+        content: "You spend the entire interview making increasingly elaborate jokes about your dramatic entrance, and somewhere around the fourth one, the hiring manager stops taking notes and just starts enjoying herself. \"Most people bore me for forty-five minutes,\" she says afterward, walking you out personally. \"You entertained me. That's rarer than you'd think.\" You get a call that evening — not just an offer, but an invitation to interview for a role two levels higher, because apparently confidence under pressure was exactly what they were hiring for.",
+        isEnding: true,
+        choices: [],
+      },
+      7: {
+        id: 7,
+        content: "You manage to wrestle the conversation back onto your actual qualifications, and it goes well enough — a solid, respectable, entirely dry (pun intended) interview. Two days later you get a polite rejection email. Weeks after that, you'll run into the hiring manager at a coffee shop, and she'll say, laughing, \"Honestly? We hired the candidate who wouldn't stop joking about the coffee thing. I still think about that entrance.\" Some lessons you only learn in hindsight.",
         isEnding: true,
         choices: [],
       },

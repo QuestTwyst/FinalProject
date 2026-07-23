@@ -2,7 +2,7 @@ import { useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styles from './NavBar.module.css';
 
-function NavBar({ isDark, onThemeToggle, isMuted, onSoundToggle, onSaveProgress, onImportProgress }) {
+function NavBar({ isDark, onThemeToggle, isMuted, onSoundToggle, volume, onVolumeChange, onSaveProgress, onImportProgress }) {
   const navigate = useNavigate();
   const fileInputRef = useRef(null);
   const [showFileMenu, setShowFileMenu] = useState(false);
@@ -89,6 +89,22 @@ function NavBar({ isDark, onThemeToggle, isMuted, onSoundToggle, onSaveProgress,
         </svg>
       </button>
 
+      {onVolumeChange && (
+        <div className={styles.volumeWrapper}>
+          <input
+            type="range"
+            className={styles.volumeSlider}
+            min="0"
+            max="1"
+            step="0.05"
+            value={volume ?? 0.5}
+            onChange={(e) => onVolumeChange(parseFloat(e.target.value))}
+            aria-label="Volume"
+            title="Volume"
+          />
+        </div>
+      )}
+
       <div className={styles.fileMenuWrapper}>
         <button
           className={styles.navBtn}
@@ -108,9 +124,11 @@ function NavBar({ isDark, onThemeToggle, isMuted, onSoundToggle, onSaveProgress,
           <>
             <div className={styles.fileMenuOverlay} onClick={() => setShowFileMenu(false)} />
             <div className={styles.fileMenu}>
-              <button className={styles.fileMenuItem} type="button" onClick={handleSaveClick}>
-                Save progress
-              </button>
+              {onSaveProgress && (
+                <button className={styles.fileMenuItem} type="button" onClick={handleSaveClick}>
+                  Save progress
+                </button>
+              )}
               <button className={styles.fileMenuItem} type="button" onClick={handleImportClick}>
                 Import progress
               </button>
