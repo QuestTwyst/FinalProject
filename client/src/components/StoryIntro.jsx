@@ -35,8 +35,9 @@ function StoryIntro() {
     );
   };
 
-  const stories = ['comedy', 'horror', 'romance', 'scifi', 'western'];
+  const stories = ['adventure', 'comedy', 'horror', 'romance', 'scifi', 'western'];
   const storyLabels = {
+    adventure: 'Adventure',
     comedy: 'Comedy',
     horror: 'Horror',
     romance: 'Romance',
