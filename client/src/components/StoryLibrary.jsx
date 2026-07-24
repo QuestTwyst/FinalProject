@@ -1,11 +1,11 @@
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { parseSaveFile } from '../utils/saveFile';
 import { useBackgroundAudio } from '../utils/useBackgroundAudio';
 import NavBar from './NavBar';
 import StoryCard from './StoryCard';
 import styles from './StoryLibrary.module.css';
-import { storyList } from '../data/storyData';
+import { API_BASE_URL } from '../config/api';
 
 function StoryLibrary() {
   const navigate = useNavigate();
@@ -16,13 +16,91 @@ function StoryLibrary() {
   const [isMuted, setIsMuted] = useState(false);
   const [volume, setVolume] = useState(0.5);
   const [importMessage, setImportMessage] = useState('');
+  const [stories, setStories] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [loadError, setLoadError] = useState('');
   const audioRef = useRef(null);
 
   useBackgroundAudio(audioRef, isMuted, volume);
 
+  useBackgroundAudio(audioRef, isMuted, volume);
+
+  useEffect(() => {
+    let isCancelled = false;
+
+    const loadStories = async () => {
+      try {
+        setIsLoading(true);
+        setLoadError('');
+
+        const storiesResponse = await fetch(`${API_BASE_URL}/stories`);
+
+        if (!storiesResponse.ok) {
+          throw new Error(
+            `Unable to retrieve stories: ${storiesResponse.status}`
+          );
+        }
+
+        const storyRows = await storiesResponse.json();
+
+        const storiesWithGenres = await Promise.all(
+          storyRows.map(async (story) => {
+            try {
+              const genreResponse = await fetch(
+                `${API_BASE_URL}/api/stories/${story.id}/genres`
+              );
+
+              if (!genreResponse.ok) {
+                return {
+                  ...story,
+                  genre: 'Uncategorized',
+                };
+              }
+
+              const genres = await genreResponse.json();
+
+              return {
+                ...story,
+                genre: genres[0]?.name || 'Uncategorized',
+              };
+            } catch {
+              return {
+                ...story,
+                genre: 'Uncategorized',
+              };
+            }
+          })
+        );
+
+        if (!isCancelled) {
+          setStories(storiesWithGenres);
+        }
+      } catch (error) {
+        console.error('Error loading stories:', error);
+
+        if (!isCancelled) {
+          setLoadError(
+            'The Story Library could not connect to the QuestTwyst backend.'
+          );
+        }
+      } finally {
+        if (!isCancelled) {
+          setIsLoading(false);
+        }
+      }
+    };
+
+    loadStories();
+
+    return () => {
+      isCancelled = true;
+    };
+  }, []);
+
   const handleThemeToggle = () => {
     setIsDark((prev) => !prev);
   };
+
 
   const handleSoundToggle = () => {
     setIsMuted((prev) => !prev);
@@ -39,11 +117,11 @@ function StoryLibrary() {
     );
   };
 
-  const genres = ['All', ...Array.from(new Set(storyList.map((story) => story.genre))).sort()];
+  const genres = ['All', ...Array.from(new Set(stories.map((story) => story.genre))).sort(),];
   const filteredStories =
     selectedGenre === 'All'
-      ? storyList
-      : storyList.filter((story) => story.genre === selectedGenre);
+      ? stories
+      : stories.filter((story) => story.genre === selectedGenre);
 
   const handleOpenStory = (storyId) => {
     navigate(`/stories/${storyId}`);
@@ -107,9 +185,17 @@ function StoryLibrary() {
           </section>
 
           <section className={styles.storyGrid}>
-            {filteredStories.length > 0 ? (
+            {isLoading ? (
+              <p className={styles.noResults}>Loading stories...</p>
+            ) : loadError ? (
+              <p className={styles.noResults}>{loadError}</p>
+            ) : filteredStories.length > 0 ? (
               filteredStories.map((story) => (
-                <StoryCard key={story.id} story={story} onOpen={handleOpenStory} />
+                <StoryCard
+                  key={story.id}
+                  story={story}
+                  onOpen={handleOpenStory}
+                />
               ))
             ) : (
               <p className={styles.noResults}>

@@ -47,21 +47,15 @@ The frontend provides dedicated Login and Create Account pages, letting users re
 
 The frontend will display all available stories as browsable cards showing a title, genre, and short description. Readers can filter the library by genre using a dropdown menu, and clicking a story card opens it directly in the Story Reader Interface.
 
-<<<<<<< HEAD
 ✅ For example, exploring the site as a whole, Romance genre selection and branching story
-=======
  For example, exploring the site as a whole, Romance genre selection and branching story
->>>>>>> 23a26f517eaec8432ad0281beebc679a63b531f8
 
 ![Romance feature demo](planning/gifs/QuestTwyst_websire_milestone3.gif)
 
 The backend will include Express routes that allow the app to retrieve available stories from the database. Readers will be able to view a list of stories and open a specific story by ID, but story creation will be handled through seeded/admin-managed data instead of regular user submissions.
-<<<<<<< HEAD
 
 
 
-=======
->>>>>>> 23a26f517eaec8432ad0281beebc679a63b531f8
 
 
 ### ✅ Branching Passage and Choice Interface
@@ -118,3 +112,45 @@ The frontend will provide a form-based editor where users can write a story titl
 ## Installation Instructions
 
 At this time website will be deployed through Render. 
+
+
+Frontend API: https://questtwyst-frontend.onrender.com/ 
+Backend API: https://questtwyst-backend.onrender.com
+
+    INSTRUCTIONS:
+
+        ### Manually Redeploying the BACKEND
+
+            After backend code has been updated to github:
+
+            1. Sign in to the Render Dashboard.
+            2. Open the `questtwyst-backend` Web Service.
+            3. Click **Manual Deploy** towards the upper-right corner.
+            4. Select **Deploy latest commit**.
+            5. Review the log or press the event tab to follow the deployment progress and errors.
+            7. Wait until the backend service displays a green **Live** status.
+            8. Open the backend URL (purple link) and test the required API endpoints.
+
+        ### Manually Redeploying the FRONTEND
+
+            After frontend code has been updated to github:
+
+            1. Sign in to the Render Dashboard.
+            2. Open the `questtwyst-frontend` Static Site.
+            3. Click **Manual Deploy** in the upper-right corner.
+            4. Select **Deploy latest commit**.
+            5. Open the **Events** page or review the log to follow the build and deployment progress.
+            6. Confirm that Vite successfully creates the `dist` build folder.
+            7. Wait until the frontend service displays a green **Live** status.
+            8. Open the frontend URL (purple link) and verify that the updated interface appears.
+
+
+        The following deployed endpoints were manually tested:
+                *Tested on Thunder Client and Render
+
+            https://questtwyst-backend.onrender.com/
+            https://questtwyst-backend.onrender.com/stories
+            https://questtwyst-backend.onrender.com/api/genres
+        The frontend was also verified at:
+
+            https://questtwyst-frontend.onrender.com/
