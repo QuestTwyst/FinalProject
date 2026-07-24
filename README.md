@@ -112,4 +112,32 @@ The frontend will provide a form-based editor where users can write a story titl
 ## Installation Instructions
 
 At this time website will be deployed through Render. 
+Frontend API: https://questtwyst-frontend.onrender.com/ 
 Backend API: https://questtwyst-backend.onrender.com
+
+    INSTRUCTIONS:
+
+        ### Manually Redeploying the BACKEND
+
+            After backend code has been updated to github:
+
+            1. Sign in to the Render Dashboard.
+            2. Open the `questtwyst-backend` Web Service.
+            3. Click **Manual Deploy** towards the upper-right corner.
+            4. Select **Deploy latest commit**.
+            5. Review the log or press the event tab to follow the deployment progress and errors.
+            7. Wait until the backend service displays a green **Live** status.
+            8. Open the backend URL (purple link) and test the required API endpoints.
+
+        ### Manually Redeploying the FRONTEND
+
+            After frontend code has been updated to github:
+
+            1. Sign in to the Render Dashboard.
+            2. Open the `questtwyst-frontend` Static Site.
+            3. Click **Manual Deploy** in the upper-right corner.
+            4. Select **Deploy latest commit**.
+            5. Open the **Events** page or review the log to follow the build and deployment progress.
+            6. Confirm that Vite successfully creates the `dist` build folder.
+            7. Wait until the frontend service displays a green **Live** status.
+            8. Open the frontend URL (purple link) and verify that the updated interface appears.
