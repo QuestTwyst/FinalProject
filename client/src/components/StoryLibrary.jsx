@@ -23,8 +23,6 @@ function StoryLibrary() {
 
   useBackgroundAudio(audioRef, isMuted, volume);
 
-  useBackgroundAudio(audioRef, isMuted, volume);
-
   useEffect(() => {
     let isCancelled = false;
 
