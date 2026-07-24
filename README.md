@@ -112,6 +112,8 @@ The frontend will provide a form-based editor where users can write a story titl
 ## Installation Instructions
 
 At this time website will be deployed through Render. 
+
+
 Frontend API: https://questtwyst-frontend.onrender.com/ 
 Backend API: https://questtwyst-backend.onrender.com
 
@@ -141,3 +143,14 @@ Backend API: https://questtwyst-backend.onrender.com
             6. Confirm that Vite successfully creates the `dist` build folder.
             7. Wait until the frontend service displays a green **Live** status.
             8. Open the frontend URL (purple link) and verify that the updated interface appears.
+
+
+        The following deployed endpoints were manually tested:
+                *Tested on Thunder Client and Render
+
+            https://questtwyst-backend.onrender.com/
+            https://questtwyst-backend.onrender.com/stories
+            https://questtwyst-backend.onrender.com/api/genres
+        The frontend was also verified at:
+
+            https://questtwyst-frontend.onrender.com/
