@@ -17,7 +17,7 @@ List each feature you completed and checked off in readme.md this unit, one per 
 
 ## Jojo:
 Issue #32: 
-            -path 
+            -client/src/components/StoryLibrary.jsx
 
 
 
