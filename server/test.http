@@ -11,13 +11,13 @@
 
 
 ###Get all stories
-GET http://localhost:3001/stories
+//GET http://localhost:3001/stories
 
 ###Get one story
-GET http://localhost:3001/stories/1
+//GET http://localhost:3001/stories/1
 
 ###Get a story that does not exist
-GET http://localhost:3001/stories/1111
+//GET http://localhost:3001/stories/1111
 
 //GET http://localhost:3001/stories/1/passages
 
@@ -88,3 +88,6 @@ GET http://localhost:3001/stories/1111
 
 //Delete user
 //DELETE http://localhost:3001/users/3
+
+//Get reading progress for a specific user and story
+//GET http://localhost:3001/api/progress/1/1
