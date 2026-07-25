@@ -67,7 +67,11 @@ function StoryLibrary() {
                 );
               }
 
-              const storyGenres = await storyGenresResponse.json();
+              const storyGenresData = await storyGenresResponse.json();
+
+              const storyGenres = Array.isArray(storyGenresData)
+                ? storyGenresData
+                : [];
 
               return {
                 ...story,
@@ -92,7 +96,9 @@ function StoryLibrary() {
         );
 
         if (!isCancelled) {
-          setAvailableGenres(genreRows);
+          setAvailableGenres(
+            Array.isArray(genreRows) ? genreRows : []
+          );
           setStories(storiesWithGenres);
         }
       } catch (error) {
@@ -137,11 +143,21 @@ function StoryLibrary() {
     );
   };
 
-  const genres = ['All', ...Array.from(new Set(stories.map((story) => story.genre))).sort(),];
+  const genres = [
+    'All',
+    ...availableGenres.map((genre) => genre.name).sort(),
+  ];
+
   const filteredStories =
     selectedGenre === 'All'
       ? stories
-      : stories.filter((story) => story.genre.some((genre) => genre.name) === selectedGenre);
+      : stories.filter(
+        (story) =>
+          Array.isArray(story.genres) &&
+          story.genres.some(
+            (genre) => genre.name === selectedGenre
+          )
+      );
 
   const handleOpenStory = (storyId) => {
     navigate(`/stories/${storyId}`);
