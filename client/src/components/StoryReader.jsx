@@ -25,6 +25,7 @@ function StoryReader() {
   const location = useLocation();
   const story = storyGraph[storyId];
   const [currentPassageId, setCurrentPassageId] = useState(story?.startPassageId ?? null);
+  const [choiceHistory, setChoiceHistory] = useState([]);
   const [isDark, setIsDark] = useState(false);
   const [isMuted, setIsMuted] = useState(false);
   const [volume, setVolume] = useState(0.5);
@@ -33,6 +34,7 @@ function StoryReader() {
 
   useEffect(() => {
     const resumePassageId = location.state?.resumePassageId;
+    setChoiceHistory([]);
     if (resumePassageId != null && story?.passages[resumePassageId]) {
       setCurrentPassageId(resumePassageId);
       // Clear the router state so a later plain navigation to this
@@ -65,12 +67,14 @@ function StoryReader() {
   const handleThemeToggle = () => setIsDark((prev) => !prev);
   const handleSoundToggle = () => setIsMuted((prev) => !prev);
 
-  const handleChoiceSelect = (nextPassageId) => {
-    setCurrentPassageId(nextPassageId);
+  const handleChoiceSelect = (choice) => {
+    setChoiceHistory((prev) => [...prev, choice.text]);
+    setCurrentPassageId(choice.next);
   };
 
   const handleRestart = () => {
     if (story) {
+      setChoiceHistory([]);
       setCurrentPassageId(story.startPassageId);
     }
   };
@@ -353,14 +357,28 @@ function StoryReader() {
                     ))}
                   </div>
                 ) : (
-                  <div className={styles.choiceRow}>
-                    <button
-                      className={`${styles.choiceButton} ${styles.choiceButtonEnd}`}
-                      type="button"
-                      onClick={handleRestart}
-                    >
-                      <span className={styles.choiceText}>Restart story</span>
-                    </button>
+                  <div className={styles.recapSection}>
+                    <h3 className={styles.recapTitle}>Your path through this story</h3>
+                    {choiceHistory.length > 0 ? (
+                      <ol className={styles.recapList}>
+                        {choiceHistory.map((choiceText, index) => (
+                          <li key={index} className={styles.recapItem}>{choiceText}</li>
+                        ))}
+                      </ol>
+                    ) : (
+                      <p className={styles.recapEmpty}>
+                        You reached this ending without making any choices yet this session.
+                      </p>
+                    )}
+                    <div className={styles.choiceRow}>
+                      <button
+                        className={`${styles.choiceButton} ${styles.choiceButtonEnd}`}
+                        type="button"
+                        onClick={handleRestart}
+                      >
+                        <span className={styles.choiceText}>Restart with different choices</span>
+                      </button>
+                    </div>
                   </div>
                 )}
               </>
