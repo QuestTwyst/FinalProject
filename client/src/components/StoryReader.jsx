@@ -44,31 +44,39 @@ function StoryReader() {
   const [importMessage, setImportMessage] = useState("");
   const audioRef = useRef(null);
 
-  //Load story from backend and determine starting passage
+  //Load story from backend
   useEffect(() => {
     async function loadStory() {
       try {
         const s = await getStoryById(storyId);
         setStory(s);
-
-        // Resume passage ID if user imported a save file
-        const resumePassageId = location.state?.resumePassageId;
-
-        if (resumePassageId != null) {
-          // Clear state before setting passage
-          navigate(location.pathname, { replace: true, state: {} });
-          setCurrentPassageId(resumePassageId);
-        } else {
-          // Use backend start_passage_id when not resuming
-          setCurrentPassageId(s.start_passage_id);
-        }
       } catch (err) {
         console.error("Failed to load story", err);
       }
     }
 
     loadStory();
-  }, [storyId, location.pathname, location.state, navigate]);
+  }, [storyId]);
+
+  //Determine starting passage or resume from save file
+  useEffect(() => {
+    if (!story) return;
+
+    const resumePassageId = location.state?.resumePassageId;
+
+    if (resumePassageId != null) {
+      // Resume from saved passage
+      setCurrentPassageId(resumePassageId);
+
+      // Clear router state so it doesn't re-trigger
+      navigate(location.pathname, { replace: true, state: {} });
+    } else {
+      // Use backend start_passage_id when not resuming
+      setCurrentPassageId(story.start_passage_id);
+    }
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [storyId, story?.start_passage_id]);
 
   //Load passage + choices from backend whenever currentPassageId changes
   useEffect(() => {
