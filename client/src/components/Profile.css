@@ -39,6 +39,11 @@
   min-width: 155px;
 }
 
+.home-btn {
+  min-width: 190px;
+  white-space: nowrap;
+}
+
 .nav-btn:hover,
 .library-btn:hover {
   background-color: rgba(220, 241, 255, 1);

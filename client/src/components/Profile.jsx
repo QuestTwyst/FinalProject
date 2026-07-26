@@ -122,7 +122,7 @@ function Profile() {
       <nav className="profile-nav">
         <Link
           to="/"
-          className="nav-btn"
+          className="nav-btn home-btn"
           aria-label="Back to home"
         >
           ← Back to Home
