@@ -40,7 +40,7 @@ Backend:
 
 The frontend provides dedicated Login and Create Account pages, letting users register a new account or sign in with existing credentials. Form validation ensures all required fields are completed before submission, and clear error messages guide users when something needs correction
 
-<img src='https://github.com/QuestTwyst/FinalProject/blob/e5d47216b54c08de2b37c4f11c00f2739cf3c4f1/AuthCreateAccountAndLogin.gif' title='Video Walkthrough' width='' alt='Video Walkthrough' />
+<img src='https://github.com/QuestTwyst/FinalProject/blob/main/planning/gifs/AuthCreateAccountAndLogin.gif' title='Video Walkthrough' width='' alt='Video Walkthrough' />
 
 
 ### ✅ Story Library API
