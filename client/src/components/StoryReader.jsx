@@ -1,95 +1,147 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
-import { useNavigate, useParams, useLocation } from 'react-router-dom';
-import { storyGraph } from '../data/storyData';
-import { parseSaveFile } from '../utils/saveFile';
-import { useBackgroundAudio } from '../utils/useBackgroundAudio';
-import NavBar from './NavBar';
-import StoryPassage from './StoryPassage';
-import ChoiceButton from './ChoiceButton';
-import styles from './StoryReader.module.css';
+import { useEffect, useMemo, useRef, useState } from "react";
+import { useNavigate, useParams, useLocation } from "react-router-dom";
+import { getStoryById, getPassageById } from "../config/api"; // choices come inside passage response
+import { parseSaveFile } from "../utils/saveFile";
+import { useBackgroundAudio } from "../utils/useBackgroundAudio";
+import NavBar from "./NavBar";
+import StoryPassage from "./StoryPassage";
+import ChoiceButton from "./ChoiceButton";
+import styles from "./StoryReader.module.css";
 
 // Genre -> background sound file. Comedy is handled separately since it
 // picks randomly between two tracks each time you visit.
 const GENRE_SOUND_MAP = {
-  Mystery: '/sounds/mystery.wav',
-  'Sci-Fi': '/sounds/scifi.mp3',
-  Romance: '/sounds/romantic.wav',
-  Western: '/sounds/western.wav',
-  Horror: '/sounds/horror.wav',
-  Adventure: '/sounds/main.wav',
+  Mystery: "/sounds/mystery.wav",
+  "Sci-Fi": "/sounds/scifi.mp3",
+  Romance: "/sounds/romantic.wav",
+  Western: "/sounds/western.wav",
+  Horror: "/sounds/horror.wav",
+  Adventure: "/sounds/main.wav",
 };
 
 function StoryReader() {
   const { storyId } = useParams();
   const navigate = useNavigate();
   const location = useLocation();
-  const story = storyGraph[storyId];
-  const [currentPassageId, setCurrentPassageId] = useState(story?.startPassageId ?? null);
+
+  // Story loaded from backend
+  const [story, setStory] = useState(null);
+
+  // Passage ID we should load next
+  const [currentPassageId, setCurrentPassageId] = useState(null);
+
+  // Passage object loaded from backend
+  const [currentPassage, setCurrentPassage] = useState(null);
+
+  // Choices for the current passage (from backend)
+  const [choices, setChoices] = useState([]);
+
+  console.log("StoryReader storyId param:", storyId);
+
   const [isDark, setIsDark] = useState(false);
   const [isMuted, setIsMuted] = useState(false);
   const [volume, setVolume] = useState(0.5);
-  const [importMessage, setImportMessage] = useState('');
+  const [importMessage, setImportMessage] = useState("");
   const audioRef = useRef(null);
 
+  //Load story from backend and determine starting passage
   useEffect(() => {
-    const resumePassageId = location.state?.resumePassageId;
-    if (resumePassageId != null && story?.passages[resumePassageId]) {
-      setCurrentPassageId(resumePassageId);
-      // Clear the router state so a later plain navigation to this
-      // story doesn't accidentally "resume" again from a stale value.
-      navigate(location.pathname, { replace: true, state: {} });
-    } else {
-      setCurrentPassageId(story?.startPassageId ?? null);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [storyId, story?.startPassageId]);
+    async function loadStory() {
+      try {
+        const s = await getStoryById(storyId);
+        setStory(s);
 
-  const currentPassage = useMemo(() => {
-    if (!story || currentPassageId == null) return null;
-    return story.passages[currentPassageId];
-  }, [story, currentPassageId]);
+        // Resume passage ID if user imported a save file
+        const resumePassageId = location.state?.resumePassageId;
+
+        if (resumePassageId != null) {
+          // Clear state before setting passage
+          navigate(location.pathname, { replace: true, state: {} });
+          setCurrentPassageId(resumePassageId);
+        } else {
+          // Use backend start_passage_id when not resuming
+          setCurrentPassageId(s.start_passage_id);
+        }
+      } catch (err) {
+        console.error("Failed to load story", err);
+      }
+    }
+
+    loadStory();
+  }, [storyId, location.pathname, location.state, navigate]);
+
+  //Load passage + choices from backend whenever currentPassageId changes
+  useEffect(() => {
+    if (!currentPassageId) return;
+
+    async function loadPassage() {
+      try {
+        const p = await getPassageById(currentPassageId);
+
+        // Passage object from backend
+        setCurrentPassage(p);
+
+        // Choices come inside passage response as "choices"
+        setChoices(p.choices || []);
+      } catch (err) {
+        console.error("Failed to load passage", err);
+      }
+    }
+
+    loadPassage();
+  }, [currentPassageId]);
 
   // Pick the background sound for this genre. Comedy alternates randomly
   // between its two tracks each time you land on a Comedy story.
   const soundSrc = useMemo(() => {
     if (!story) return null;
-    if (story.genre === 'Comedy') {
-      return Math.random() < 0.5 ? '/sounds/Comdey.wav' : '/sounds/Comdey2.wav';
+    if (story.genre === "Comedy") {
+      return Math.random() < 0.5 ? "/sounds/Comdey.wav" : "/sounds/Comdey2.wav";
     }
     return GENRE_SOUND_MAP[story.genre] ?? null;
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [story?.id]);
+  }, [story?.genre]);
 
   useBackgroundAudio(audioRef, isMuted, volume);
 
   const handleThemeToggle = () => setIsDark((prev) => !prev);
   const handleSoundToggle = () => setIsMuted((prev) => !prev);
 
-  const handleChoiceSelect = (nextPassageId) => {
-    setCurrentPassageId(nextPassageId);
+  // Move to next passage using backend field names
+  const handleChoiceSelect = (choice) => {
+    if (!choice?.next_passage_id) return;
+    setCurrentPassageId(choice.next_passage_id);
   };
 
+  // Restart story
   const handleRestart = () => {
     if (story) {
-      setCurrentPassageId(story.startPassageId);
+      // restart to story.start_passage_id
+      setCurrentPassageId(story.start_passage_id);
     }
   };
 
+  //Save progress to file
   const handleSaveProgress = () => {
     if (!story) return;
     const saveData = {
-      app: 'Questwyst',
+      app: "Questwyst",
       version: 1,
       storyId: story.id,
       title: story.title,
       passageId: currentPassageId,
       savedAt: new Date().toISOString(),
     };
-    const blob = new Blob([JSON.stringify(saveData, null, 2)], { type: 'application/json' });
+    const blob = new Blob([JSON.stringify(saveData, null, 2)], {
+      type: "application/json",
+    });
     const url = URL.createObjectURL(blob);
-    const link = document.createElement('a');
+    const link = document.createElement("a");
     link.href = url;
-    const safeTitle = story.title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+    const safeTitle = story.title
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, "-")
+      .replace(/(^-|-$)/g, "");
     link.download = `questwyst-save-${safeTitle}.json`;
     document.body.appendChild(link);
     link.click();
@@ -97,34 +149,49 @@ function StoryReader() {
     URL.revokeObjectURL(url);
   };
 
+  //Import progress from saved file
   const handleImportProgress = (file) => {
     parseSaveFile(
       file,
       (data) => {
-        setImportMessage('');
+        setImportMessage("");
+
+        // If same story, jump to passage
         if (String(data.storyId) === String(storyId)) {
           setCurrentPassageId(data.passageId);
         } else {
-          navigate(`/stories/${data.storyId}`, { state: { resumePassageId: data.passageId } });
+          // Navigate to different story and resume there
+          navigate(`/stories/${data.storyId}`, {
+            state: { resumePassageId: data.passageId },
+          });
         }
       },
-      () => setImportMessage("That file doesn't look like a valid Questwyst save.")
+      () =>
+        setImportMessage("That file doesn't look like a valid Questwyst save."),
     );
   };
 
-  const isRomance = story?.genre === 'Romance';
-  const isMystery = story?.genre === 'Mystery';
-  const isAdventure = story?.genre === 'Adventure';
-  const isSciFi = story?.genre === 'Sci-Fi';
-  const isWestern = story?.genre === 'Western';
-  const isComedy = story?.genre === 'Comedy';
-  const pageClass = `${styles.readerPage} ${isRomance ? styles.themeRomance : ''} ${isMystery ? styles.themeMystery : ''} ${isAdventure ? styles.themeAdventure : ''} ${isSciFi ? styles.themeSciFi : ''} ${isWestern ? styles.themeWestern : ''} ${isComedy ? styles.themeComedy : ''} ${isDark ? styles.themeDark : ''}`;
+  // Genre-based styling
+  const isRomance = story?.genre === "Romance";
+  const isMystery = story?.genre === "Mystery";
+  const isAdventure = story?.genre === "Adventure";
+  const isSciFi = story?.genre === "Sci-Fi";
+  const isWestern = story?.genre === "Western";
+  const isComedy = story?.genre === "Comedy";
+  const pageClass = `${styles.readerPage} ${isRomance ? styles.themeRomance : ""} ${isMystery ? styles.themeMystery : ""} ${isAdventure ? styles.themeAdventure : ""} ${isSciFi ? styles.themeSciFi : ""} ${isWestern ? styles.themeWestern : ""} ${isComedy ? styles.themeComedy : ""} ${isDark ? styles.themeDark : ""}`;
 
+  // If story failed to load
   if (!story) {
     return (
       <main className={pageClass}>
-        <div className={`${styles.gradientLayer} ${styles.gradientLayerOne}`} aria-hidden="true" />
-        <div className={`${styles.gradientLayer} ${styles.gradientLayerTwo}`} aria-hidden="true" />
+        <div
+          className={`${styles.gradientLayer} ${styles.gradientLayerOne}`}
+          aria-hidden="true"
+        />
+        <div
+          className={`${styles.gradientLayer} ${styles.gradientLayerTwo}`}
+          aria-hidden="true"
+        />
 
         <div className={styles.pageContent}>
           <NavBar
@@ -139,7 +206,8 @@ function StoryReader() {
             <article className={styles.storyCard}>
               <div className={styles.storyCardScroll}>
                 <p className={styles.passageText}>
-                  The story you selected does not exist. Use the Library button above to choose another tale.
+                  The story you selected does not exist. Use the Library button
+                  above to choose another tale.
                 </p>
               </div>
             </article>
@@ -149,12 +217,24 @@ function StoryReader() {
     );
   }
 
+  // Main render
   return (
     <main className={pageClass}>
       {soundSrc && <audio ref={audioRef} src={soundSrc} loop />}
-      <div className={`${styles.gradientLayer} ${styles.gradientLayerOne}`} aria-hidden="true" />
-      <div className={`${styles.gradientLayer} ${styles.gradientLayerTwo}`} aria-hidden="true" />
-      <div className={`${styles.gradientLayer} ${styles.gradientLayerGround}`} aria-hidden="true" />
+
+      {/* Background layers */}
+      <div
+        className={`${styles.gradientLayer} ${styles.gradientLayerOne}`}
+        aria-hidden="true"
+      />
+      <div
+        className={`${styles.gradientLayer} ${styles.gradientLayerTwo}`}
+        aria-hidden="true"
+      />
+      <div
+        className={`${styles.gradientLayer} ${styles.gradientLayerGround}`}
+        aria-hidden="true"
+      />
 
       {isRomance && (
         <>
@@ -181,10 +261,26 @@ function StoryReader() {
 
       {isSciFi && (
         <div className={styles.dataField} aria-hidden="true">
-          <img className={`${styles.dataImg} ${styles.data1}`} src="/scifi-data-1.png" alt="" />
-          <img className={`${styles.dataImg} ${styles.data2}`} src="/scifi-data-2.png" alt="" />
-          <img className={`${styles.dataImg} ${styles.data3}`} src="/scifi-data-3.png" alt="" />
-          <img className={`${styles.dataImg} ${styles.data4}`} src="/scifi-data-4.png" alt="" />
+          <img
+            className={`${styles.dataImg} ${styles.data1}`}
+            src="/scifi-data-1.png"
+            alt=""
+          />
+          <img
+            className={`${styles.dataImg} ${styles.data2}`}
+            src="/scifi-data-2.png"
+            alt=""
+          />
+          <img
+            className={`${styles.dataImg} ${styles.data3}`}
+            src="/scifi-data-3.png"
+            alt=""
+          />
+          <img
+            className={`${styles.dataImg} ${styles.data4}`}
+            src="/scifi-data-4.png"
+            alt=""
+          />
         </div>
       )}
 
@@ -201,14 +297,35 @@ function StoryReader() {
             <polygon points="55,70 155,70 105,20" />
             <rect x="70" y="130" width="8" height="90" />
             <rect x="132" y="130" width="8" height="90" />
-            <line x1="78" y1="150" x2="132" y2="175" strokeWidth="4" stroke="currentColor" />
-            <line x1="132" y1="150" x2="78" y2="175" strokeWidth="4" stroke="currentColor" />
+            <line
+              x1="78"
+              y1="150"
+              x2="132"
+              y2="175"
+              strokeWidth="4"
+              stroke="currentColor"
+            />
+            <line
+              x1="132"
+              y1="150"
+              x2="78"
+              y2="175"
+              strokeWidth="4"
+              stroke="currentColor"
+            />
 
             {/* Saloon with false front */}
             <rect x="230" y="90" width="260" height="130" />
             <rect x="230" y="60" width="260" height="35" />
             <rect x="340" y="150" width="40" height="70" fill="#1a0f08" />
-            <line x1="230" y1="120" x2="490" y2="120" strokeWidth="3" stroke="#1a0f08" />
+            <line
+              x1="230"
+              y1="120"
+              x2="490"
+              y2="120"
+              strokeWidth="3"
+              stroke="#1a0f08"
+            />
             <rect x="255" y="20" width="10" height="45" />
             <circle cx="260" cy="15" r="10" />
 
@@ -224,9 +341,30 @@ function StoryReader() {
 
             {/* Windmill */}
             <rect x="990" y="130" width="6" height="90" />
-            <circle cx="993" cy="120" r="34" fill="none" strokeWidth="3" stroke="currentColor" />
-            <line x1="993" y1="86" x2="993" y2="154" strokeWidth="3" stroke="currentColor" />
-            <line x1="959" y1="120" x2="1027" y2="120" strokeWidth="3" stroke="currentColor" />
+            <circle
+              cx="993"
+              cy="120"
+              r="34"
+              fill="none"
+              strokeWidth="3"
+              stroke="currentColor"
+            />
+            <line
+              x1="993"
+              y1="86"
+              x2="993"
+              y2="154"
+              strokeWidth="3"
+              stroke="currentColor"
+            />
+            <line
+              x1="959"
+              y1="120"
+              x2="1027"
+              y2="120"
+              strokeWidth="3"
+              stroke="currentColor"
+            />
 
             {/* Far shack */}
             <rect x="1080" y="150" width="110" height="70" />
@@ -235,12 +373,44 @@ function StoryReader() {
 
           <div className={styles.tumbleweedField} aria-hidden="true">
             <svg className={styles.tumbleweed} viewBox="0 0 60 60">
-              <circle cx="30" cy="30" r="24" fill="none" strokeWidth="3.5" stroke="currentColor" />
-              <path d="M8,20 Q30,5 52,20" fill="none" strokeWidth="2.8" stroke="currentColor" />
-              <path d="M8,40 Q30,55 52,40" fill="none" strokeWidth="2.8" stroke="currentColor" />
-              <path d="M10,10 Q35,30 10,50" fill="none" strokeWidth="2.8" stroke="currentColor" />
-              <path d="M50,10 Q25,30 50,50" fill="none" strokeWidth="2.8" stroke="currentColor" />
-              <path d="M6,30 Q30,15 54,30 Q30,45 6,30 Z" fill="none" strokeWidth="2.2" stroke="currentColor" />
+              <circle
+                cx="30"
+                cy="30"
+                r="24"
+                fill="none"
+                strokeWidth="3.5"
+                stroke="currentColor"
+              />
+              <path
+                d="M8,20 Q30,5 52,20"
+                fill="none"
+                strokeWidth="2.8"
+                stroke="currentColor"
+              />
+              <path
+                d="M8,40 Q30,55 52,40"
+                fill="none"
+                strokeWidth="2.8"
+                stroke="currentColor"
+              />
+              <path
+                d="M10,10 Q35,30 10,50"
+                fill="none"
+                strokeWidth="2.8"
+                stroke="currentColor"
+              />
+              <path
+                d="M50,10 Q25,30 50,50"
+                fill="none"
+                strokeWidth="2.8"
+                stroke="currentColor"
+              />
+              <path
+                d="M6,30 Q30,15 54,30 Q30,45 6,30 Z"
+                fill="none"
+                strokeWidth="2.2"
+                stroke="currentColor"
+              />
             </svg>
           </div>
         </>
@@ -261,34 +431,55 @@ function StoryReader() {
         <section className={styles.storyPage}>
           <div className={styles.storyPageTop}>
             <h1 className={styles.storyPageTitle}>{story.title}</h1>
-            <button className={styles.restartButton} type="button" onClick={handleRestart}>
+            <button
+              className={styles.restartButton}
+              type="button"
+              onClick={handleRestart}
+            >
               Restart story
             </button>
           </div>
 
-          {importMessage && <p className={styles.importMessage}>{importMessage}</p>}
+          {importMessage && (
+            <p className={styles.importMessage}>{importMessage}</p>
+          )}
 
           <article className={styles.storyCard}>
             <header className={styles.storyMeta}>
               <p className={styles.storyMetaDetails}>
-                {story.genre && <span className={styles.storyMetaGenre}>{story.genre}</span>}
-                {story.genre && <span className={styles.storyMetaSeparator} aria-hidden="true">·</span>}
-                <span className={styles.storyMetaAuthor}>by {story.author || 'Questwyst Team'}</span>
+                {story.genre && (
+                  <span className={styles.storyMetaGenre}>{story.genre}</span>
+                )}
+                {story.genre && (
+                  <span
+                    className={styles.storyMetaSeparator}
+                    aria-hidden="true"
+                  >
+                    ·
+                  </span>
+                )}
+                <span className={styles.storyMetaAuthor}>
+                  by {story.author || "Questwyst Team"}
+                </span>
               </p>
               {story.description && (
-                <p className={styles.storyMetaDescription}>{story.description}</p>
+                <p className={styles.storyMetaDescription}>
+                  {story.description}
+                </p>
               )}
             </header>
 
+            {/* Passage loaded */}
             {currentPassage ? (
               <>
                 <StoryPassage passage={currentPassage} />
 
-                {currentPassage.choices?.length > 0 ? (
+                {/* Choices loaded from backend */}
+                {choices.length > 0 ? (
                   <div className={styles.choiceRow}>
-                    {currentPassage.choices.map((choice, index) => (
+                    {choices.map((choice, index) => (
                       <ChoiceButton
-                        key={choice.text}
+                        key={choice.id}
                         choice={choice}
                         label={String.fromCharCode(65 + index)}
                         onSelect={handleChoiceSelect}
@@ -308,8 +499,11 @@ function StoryReader() {
                 )}
               </>
             ) : (
+              // Passage still loading
               <div className={styles.storyCardScroll}>
-                <p className={styles.passageText}>Loading the first passage of this story...</p>
+                <p className={styles.passageText}>
+                  Loading the first passage of this story...
+                </p>
               </div>
             )}
           </article>

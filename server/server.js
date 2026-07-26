@@ -21,6 +21,10 @@ app.use(express.json());
 app.use("/users", usersRoutes);
 app.use("/stories", storiesRoutes);
 app.use("/stories", passagesRoutes);
+
+//FIX: mount passages under /passages imnstead of /stories
+//app.use("/", passagesRoutes);
+
 app.use("/passages", choicesRoutes);
 
 app.use("/api/genres", genresRouter);
