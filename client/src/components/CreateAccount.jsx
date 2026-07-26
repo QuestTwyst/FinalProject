@@ -60,16 +60,61 @@ function CreateAccount() {
   };
 
   const handleSubmit = (e) => {
-    e.preventDefault();
+  e.preventDefault();
 
-    if (!validate()) {
-      setSubmitMessage("Please fix the highlighted fields before continuing.");
-      return;
-    }
+  if (!validate()) {
+    setSubmitMessage(
+      "Please fix the highlighted fields before continuing."
+    );
+    return;
+  }
 
-    setSubmitMessage("Registration successful! Redirecting to login...");
-    setTimeout(() => navigate("/login"), 750);
+  const savedUsers =
+    JSON.parse(localStorage.getItem("users")) || [];
+
+  const usernameExists = savedUsers.some(
+    (user) =>
+      user.username.toLowerCase() ===
+      formData.username.trim().toLowerCase()
+  );
+
+  if (usernameExists) {
+    setErrors((current) => ({
+      ...current,
+      username: "Username already exists. Please choose another.",
+    }));
+
+    setSubmitMessage(
+      "Please fix the highlighted fields before continuing."
+    );
+    return;
+  }
+
+  const newUser = {
+    firstName: formData.firstName.trim(),
+    middleName: formData.middleName.trim(),
+    lastName: formData.lastName.trim(),
+    username: formData.username.trim(),
+    password: formData.password,
+    favoriteGenre: "",
+    bio: "",
   };
+
+  const updatedUsers = [...savedUsers, newUser];
+
+  localStorage.setItem(
+    "users",
+    JSON.stringify(updatedUsers)
+  );
+
+  setSubmitMessage(
+    "Registration successful! Redirecting to login..."
+  );
+
+  setTimeout(() => {
+    navigate("/login");
+  }, 750);
+};
 
   return (
     <main className="auth-page">

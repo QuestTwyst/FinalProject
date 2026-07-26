@@ -1,24 +1,34 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
-
 function Login() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+
   const navigate = useNavigate();
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    setError("");
 
-    const user = {
-      username,
-      firstName: "Jerry",
-      lastName: "Rogers",
-      favoriteGenre: "",
-      bio: "",
-    };
+    // Get all registered users
+    const savedUsers = JSON.parse(localStorage.getItem("users")) || [];
 
-    localStorage.setItem("currentUser", JSON.stringify(user));
+    // Check if username and password match
+    const matchingUser = savedUsers.find(
+        (user) =>
+            user.username.toLowerCase() === username.trim().toLowerCase() &&
+            user.password === password
+);
+
+    if (!matchingUser) {
+      setError("Incorrect username or password.");
+      return;
+    }
+
+    // Save logged-in user
+    localStorage.setItem("currentUser", JSON.stringify(matchingUser));
 
     navigate("/profile");
   };
@@ -54,9 +64,29 @@ function Login() {
             onChange={(e) => setPassword(e.target.value)}
             required
           />
-          <div style={{ textAlign: "right", marginTop: "0.5rem" }}>
+
+          {error && (
+            <p
+              style={{
+                color: "red",
+                textAlign: "center",
+                marginTop: "0.75rem",
+                marginBottom: "0.5rem",
+              }}
+            >
+              {error}
+            </p>
+          )}
+
+          <div
+            style={{
+              textAlign: "right",
+              marginTop: "0.5rem",
+              marginBottom: "1rem",
+            }}
+          >
             <Link to="/password-reset">Forgot Password?</Link>
-            </div>
+          </div>
 
           <div
             style={{
@@ -66,7 +96,7 @@ function Login() {
               marginTop: "1rem",
             }}
           >
-            <button type="submit">Submit</button>
+            <button type="submit">Log In</button>
 
             <button
               type="button"
@@ -76,6 +106,16 @@ function Login() {
               Cancel
             </button>
           </div>
+
+          <p
+            style={{
+              textAlign: "center",
+              marginTop: "1.5rem",
+            }}
+          >
+            Don't have an account?{" "}
+            <Link to="/create-account">Create one here.</Link>
+          </p>
         </form>
       </article>
     </main>
