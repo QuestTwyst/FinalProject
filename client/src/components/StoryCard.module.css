@@ -45,8 +45,14 @@
   flex-grow: 1;
 }
 
-.openButton {
+.cardActions {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
   margin-top: 0.5rem;
+}
+
+.openButton {
   padding: 0.65rem 1.4rem;
   border: none;
   border-radius: 999px;
@@ -61,5 +67,23 @@
 
 .openButton:hover {
   background: #1f7fd6;
+  transform: translateY(-1px);
+}
+
+.deleteButton {
+  padding: 0.65rem 1.4rem;
+  border: none;
+  border-radius: 999px;
+  background: #c0392b;
+  color: #ffffff;
+  font-family: inherit;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s ease, transform 0.15s ease;
+}
+
+.deleteButton:hover {
+  background: #a93226;
   transform: translateY(-1px);
 }

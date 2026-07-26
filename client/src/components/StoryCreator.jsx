@@ -43,18 +43,17 @@ function StoryCreator() {
   const [storyError, setStoryError] = useState('');
   const [isSavingStory, setIsSavingStory] = useState(false);
 
-  // ---------- Passage-level state ----------
+  // ---------- Phase control ----------
+  // 'writing'  -> add all passages first, no choices yet
+  // 'linking'  -> connect choices between the passages just written
+  const [phase, setPhase] = useState('writing');
+
+  // ---------- Phase 1: writing passages ----------
   const [passageContent, setPassageContent] = useState('');
   const [isEnding, setIsEnding] = useState(false);
-  const [choiceAText, setChoiceAText] = useState('');
-  const [choiceANext, setChoiceANext] = useState('');
-  const [choiceBText, setChoiceBText] = useState('');
-  const [choiceBNext, setChoiceBNext] = useState('');
   const [passageError, setPassageError] = useState('');
   const [isSavingPassage, setIsSavingPassage] = useState(false);
-
-  // ---------- Saved passages (for the running list + previews) ----------
-  const [savedPassages, setSavedPassages] = useState([]);
+  const [writtenPassages, setWrittenPassages] = useState([]);
 
   const handleCreateStory = async (event) => {
     event.preventDefault();
@@ -81,6 +80,12 @@ function StoryCreator() {
         body: JSON.stringify({
           title: storyTitle.trim(),
           description: storyDescription.trim(),
+          // Placeholder until real user accounts/login exist. Tagging a
+          // creator_id (rather than leaving it null, like every
+          // officially-seeded story) is what lets the Library safely
+          // show a delete button only on stories made here, not on
+          // the built-in content.
+          creator_id: 1,
         }),
       });
 
@@ -106,15 +111,6 @@ function StoryCreator() {
     }
   };
 
-  const resetPassageForm = () => {
-    setPassageContent('');
-    setIsEnding(false);
-    setChoiceAText('');
-    setChoiceANext('');
-    setChoiceBText('');
-    setChoiceBNext('');
-  };
-
   const handleSavePassage = async (event) => {
     event.preventDefault();
     setPassageError('');
@@ -123,14 +119,9 @@ function StoryCreator() {
       setPassageError('Passage content is required.');
       return;
     }
-    if (!isEnding && (!choiceAText.trim() || !choiceBText.trim())) {
-      setPassageError('Both choices are required, unless this passage is marked as an ending.');
-      return;
-    }
 
     setIsSavingPassage(true);
     try {
-      // 1. Create the passage itself.
       const passageResponse = await fetch(`${API_BASE_URL}/stories/${storyId}/passages`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -146,45 +137,78 @@ function StoryCreator() {
       }
 
       const passage = await passageResponse.json();
-
-      // 2. If it's not an ending, create both choices under it, linking
-      //    each one to whichever existing passage was picked (if any).
-      if (!isEnding) {
-        const choicePairs = [
-          { text: choiceAText.trim(), next: choiceANext },
-          { text: choiceBText.trim(), next: choiceBNext },
-        ];
-        for (const { text, next } of choicePairs) {
-          const choiceResponse = await fetch(`${API_BASE_URL}/passages/${passage.id}/choices`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-              choice_text: text,
-              next_passage_id: next ? Number(next) : null,
-            }),
-          });
-
-          if (!choiceResponse.ok) {
-            const data = await choiceResponse.json().catch(() => ({}));
-            throw new Error(data.error || `Failed to create choice (${choiceResponse.status})`);
-          }
-        }
-      }
-
-      // 3. Re-fetch the passage WITH its choices joined, straight from
-      //    the database, so the preview shows exactly what was saved
-      //    (not just what's in local form state).
-      const previewResponse = await fetch(`${API_BASE_URL}/stories/passages/${passage.id}`);
-      const previewData = previewResponse.ok ? await previewResponse.json() : passage;
-
-      setSavedPassages((prev) => [...prev, previewData]);
-      resetPassageForm();
+      setWrittenPassages((prev) => [...prev, passage]);
+      setPassageContent('');
+      setIsEnding(false);
     } catch (error) {
       setPassageError(error.message || 'Something went wrong saving the passage.');
     } finally {
       setIsSavingPassage(false);
     }
   };
+
+  const nonEndingPassages = writtenPassages.filter((p) => !p.is_ending);
+
+  // ---------- Phase 2: connecting choices ----------
+  // One entry per non-ending passage: { choiceAText, choiceANext, choiceBText, choiceBNext, isSaved }
+  const [choiceDrafts, setChoiceDrafts] = useState({});
+  const [linkError, setLinkError] = useState('');
+  const [savingPassageId, setSavingPassageId] = useState(null);
+
+  const getDraft = (passageId) =>
+    choiceDrafts[passageId] || { choiceAText: '', choiceANext: '', choiceBText: '', choiceBNext: '' };
+
+  const updateDraft = (passageId, field, value) => {
+    setChoiceDrafts((prev) => ({
+      ...prev,
+      [passageId]: { ...getDraft(passageId), [field]: value },
+    }));
+  };
+
+  const handleSaveChoices = async (passage) => {
+    setLinkError('');
+    const draft = getDraft(passage.id);
+
+    if (!draft.choiceAText.trim() || !draft.choiceBText.trim()) {
+      setLinkError('Both choices need their own text before you can connect them.');
+      return;
+    }
+    if (!draft.choiceANext || !draft.choiceBNext) {
+      setLinkError('Pick a destination passage for both choices.');
+      return;
+    }
+
+    setSavingPassageId(passage.id);
+    try {
+      const choicePairs = [
+        { text: draft.choiceAText.trim(), next: draft.choiceANext },
+        { text: draft.choiceBText.trim(), next: draft.choiceBNext },
+      ];
+      for (const { text, next } of choicePairs) {
+        const response = await fetch(`${API_BASE_URL}/passages/${passage.id}/choices`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            choice_text: text,
+            next_passage_id: Number(next),
+          }),
+        });
+        if (!response.ok) {
+          const data = await response.json().catch(() => ({}));
+          throw new Error(data.error || `Failed to save choice (${response.status})`);
+        }
+      }
+      setChoiceDrafts((prev) => ({ ...prev, [passage.id]: { ...getDraft(passage.id), isSaved: true } }));
+    } catch (error) {
+      setLinkError(error.message || 'Something went wrong connecting that passage.');
+    } finally {
+      setSavingPassageId(null);
+    }
+  };
+
+  const allLinked =
+    nonEndingPassages.length > 0 &&
+    nonEndingPassages.every((p) => choiceDrafts[p.id]?.isSaved);
 
   return (
     <div className={`${styles.creatorPage} ${isDark ? styles.themeDark : ''}`}>
@@ -206,7 +230,7 @@ function StoryCreator() {
             <p className={styles.breadcrumb}>Home / Story Creator</p>
             <h1 className={styles.pageTitle}>Story Creator</h1>
             <p className={styles.pageSubtitle}>
-              Write your own branching story, one passage at a time.
+              Write your own branching story in two easy steps.
             </p>
           </div>
           <button type="button" className={styles.backButton} onClick={() => navigate('/')}>
@@ -222,17 +246,13 @@ function StoryCreator() {
               genre.
             </li>
             <li>
-              <strong>Write your ending(s) first.</strong> This is the one tricky part: a choice
-              can only link to a passage that already exists, so build backward &mdash; write the
-              scene(s) where your story ends before you write anything earlier.
+              <strong>Write all your scenes.</strong> Add as many passages as you want, in
+              whatever order you think of them. Check the box for any that are endings.
             </li>
             <li>
-              <strong>Add earlier passages.</strong> For each one, write two choices and use the
-              "Leads to" dropdown on each choice to link it to a passage you already saved.
-            </li>
-            <li>
-              <strong>Keep going backward</strong> until you've written the very first passage
-              &mdash; the one readers will actually start on.
+              <strong>Connect the choices.</strong> Once everything's written, go through each
+              non-ending passage and pick where its two choices lead &mdash; every passage will
+              already exist by this point, so there's no order to worry about.
             </li>
             <li>
               <strong>You're done!</strong> Head to the Library and find your story to read it.
@@ -291,126 +311,154 @@ function StoryCreator() {
               {isSavingStory ? 'Creating...' : 'Create story'}
             </button>
           </form>
-        ) : (
-          <form className={styles.card} onSubmit={handleSavePassage}>
-            <h2 className={styles.cardTitle}>
-              Step 2 &middot; Add a passage ({savedPassages.length} saved so far)
-            </h2>
+        ) : phase === 'writing' ? (
+          <>
+            <form className={styles.card} onSubmit={handleSavePassage}>
+              <h2 className={styles.cardTitle}>
+                Step 2 &middot; Write your scenes ({writtenPassages.length} written so far)
+              </h2>
 
-            <label className={styles.fieldLabel} htmlFor="passage-content">
-              Passage content
-            </label>
-            <textarea
-              id="passage-content"
-              className={styles.textArea}
-              value={passageContent}
-              onChange={(e) => setPassageContent(e.target.value)}
-              placeholder="What happens in this part of the story?"
-              rows={5}
-            />
-
-            <label className={styles.checkboxLabel}>
-              <input
-                type="checkbox"
-                checked={isEnding}
-                onChange={(e) => setIsEnding(e.target.checked)}
+              <label className={styles.fieldLabel} htmlFor="passage-content">
+                Passage content
+              </label>
+              <textarea
+                id="passage-content"
+                className={styles.textArea}
+                value={passageContent}
+                onChange={(e) => setPassageContent(e.target.value)}
+                placeholder="What happens in this part of the story?"
+                rows={5}
               />
-              Mark this passage as an ending
-            </label>
 
-            {!isEnding && (
-              <>
-                <p className={styles.helperText}>
-                  A choice can only lead to a passage that already exists. If
-                  you're building a branching story, save your endings first,
-                  then work backward toward the passage readers start on.
-                </p>
-
-                <label className={styles.fieldLabel} htmlFor="choice-a">
-                  Choice A
-                </label>
+              <label className={styles.checkboxLabel}>
                 <input
-                  id="choice-a"
-                  className={styles.textInput}
-                  type="text"
-                  value={choiceAText}
-                  onChange={(e) => setChoiceAText(e.target.value)}
-                  placeholder="e.g. Open the door"
+                  type="checkbox"
+                  checked={isEnding}
+                  onChange={(e) => setIsEnding(e.target.checked)}
                 />
-                <select
-                  className={styles.textInput}
-                  value={choiceANext}
-                  onChange={(e) => setChoiceANext(e.target.value)}
-                  aria-label="Choice A leads to"
-                >
-                  <option value="">Leads to: not linked yet</option>
-                  {savedPassages.map((p, index) => (
-                    <option key={p.id} value={p.id}>
-                      Leads to: Passage #{index + 1} ({p.content.slice(0, 40)}...)
-                    </option>
-                  ))}
-                </select>
+                This is an ending
+              </label>
 
-                <label className={styles.fieldLabel} htmlFor="choice-b">
-                  Choice B
-                </label>
-                <input
-                  id="choice-b"
-                  className={styles.textInput}
-                  type="text"
-                  value={choiceBText}
-                  onChange={(e) => setChoiceBText(e.target.value)}
-                  placeholder="e.g. Walk away"
-                />
-                <select
-                  className={styles.textInput}
-                  value={choiceBNext}
-                  onChange={(e) => setChoiceBNext(e.target.value)}
-                  aria-label="Choice B leads to"
-                >
-                  <option value="">Leads to: not linked yet</option>
-                  {savedPassages.map((p, index) => (
-                    <option key={p.id} value={p.id}>
-                      Leads to: Passage #{index + 1} ({p.content.slice(0, 40)}...)
-                    </option>
-                  ))}
-                </select>
-              </>
+              {passageError && <p className={styles.errorText}>{passageError}</p>}
+
+              <button type="submit" className={styles.primaryButton} disabled={isSavingPassage}>
+                {isSavingPassage ? 'Saving...' : 'Add this passage'}
+              </button>
+            </form>
+
+            {writtenPassages.length > 0 && (
+              <section className={styles.previewSection}>
+                <h2 className={styles.previewHeading}>Passages written so far</h2>
+                {writtenPassages.map((passage, index) => (
+                  <article key={passage.id} className={styles.previewCard}>
+                    <p className={styles.previewLabel}>
+                      Passage #{index + 1}
+                      {passage.is_ending && ' · ENDING'}
+                    </p>
+                    <p className={styles.previewContent}>{passage.content}</p>
+                  </article>
+                ))}
+              </section>
             )}
 
-            {passageError && <p className={styles.errorText}>{passageError}</p>}
+            {nonEndingPassages.length > 0 && (
+              <button
+                type="button"
+                className={styles.primaryButton}
+                onClick={() => setPhase('linking')}
+              >
+                I'm done writing &mdash; connect the choices
+              </button>
+            )}
+          </>
+        ) : (
+          <>
+            <section className={styles.card}>
+              <h2 className={styles.cardTitle}>Step 3 &middot; Connect the choices</h2>
+              <p className={styles.helperText}>
+                For each passage below, write its two choices and pick which passage each one
+                leads to.
+              </p>
 
-            <button type="submit" className={styles.primaryButton} disabled={isSavingPassage}>
-              {isSavingPassage ? 'Saving...' : 'Save passage'}
-            </button>
-          </form>
-        )}
+              {linkError && <p className={styles.errorText}>{linkError}</p>}
 
-        {savedPassages.length > 0 && (
-          <section className={styles.previewSection}>
-            <h2 className={styles.previewHeading}>Saved passages (confirmed from the database)</h2>
-            {savedPassages.map((passage, index) => (
-              <article key={passage.id} className={styles.previewCard}>
-                <p className={styles.previewLabel}>
-                  Passage #{index + 1} &middot; database id {passage.id}
-                  {passage.is_ending && ' · ENDING'}
-                </p>
-                <p className={styles.previewContent}>{passage.content}</p>
-                {passage.choices && passage.choices.length > 0 && (
-                  <ul className={styles.previewChoiceList}>
-                    {passage.choices.map((choice) => (
-                      <li key={choice.id}>
-                        {choice.choice_text}
-                        {choice.next_passage_id
-                          ? ` (leads to passage ${choice.next_passage_id})`
-                          : ' (not linked yet)'}
-                      </li>
-                    ))}
-                  </ul>
-                )}
-              </article>
-            ))}
-          </section>
+              {nonEndingPassages.map((passage, index) => {
+                const draft = getDraft(passage.id);
+                return (
+                  <div key={passage.id} className={styles.linkingRow}>
+                    <p className={styles.previewLabel}>
+                      Passage #{index + 1}
+                      {draft.isSaved && ' · CONNECTED'}
+                    </p>
+                    <p className={styles.previewContent}>{passage.content}</p>
+
+                    {!draft.isSaved && (
+                      <>
+                        <input
+                          className={styles.textInput}
+                          type="text"
+                          value={draft.choiceAText}
+                          onChange={(e) => updateDraft(passage.id, 'choiceAText', e.target.value)}
+                          placeholder="Choice A text, e.g. Open the door"
+                        />
+                        <select
+                          className={styles.textInput}
+                          value={draft.choiceANext}
+                          onChange={(e) => updateDraft(passage.id, 'choiceANext', e.target.value)}
+                        >
+                          <option value="">Choice A leads to...</option>
+                          {writtenPassages
+                            .filter((p) => p.id !== passage.id)
+                            .map((p) => (
+                              <option key={p.id} value={p.id}>
+                                Passage #{writtenPassages.indexOf(p) + 1} ({p.content.slice(0, 30)}...)
+                              </option>
+                            ))}
+                        </select>
+
+                        <input
+                          className={styles.textInput}
+                          type="text"
+                          value={draft.choiceBText}
+                          onChange={(e) => updateDraft(passage.id, 'choiceBText', e.target.value)}
+                          placeholder="Choice B text, e.g. Walk away"
+                        />
+                        <select
+                          className={styles.textInput}
+                          value={draft.choiceBNext}
+                          onChange={(e) => updateDraft(passage.id, 'choiceBNext', e.target.value)}
+                        >
+                          <option value="">Choice B leads to...</option>
+                          {writtenPassages
+                            .filter((p) => p.id !== passage.id)
+                            .map((p) => (
+                              <option key={p.id} value={p.id}>
+                                Passage #{writtenPassages.indexOf(p) + 1} ({p.content.slice(0, 30)}...)
+                              </option>
+                            ))}
+                        </select>
+
+                        <button
+                          type="button"
+                          className={styles.primaryButton}
+                          onClick={() => handleSaveChoices(passage)}
+                          disabled={savingPassageId === passage.id}
+                        >
+                          {savingPassageId === passage.id ? 'Connecting...' : 'Connect this passage'}
+                        </button>
+                      </>
+                    )}
+                  </div>
+                );
+              })}
+            </section>
+
+            {allLinked && (
+              <p className={styles.instructionsCard}>
+                🎉 Every passage is connected! Head to the Library to read your story.
+              </p>
+            )}
+          </>
         )}
       </div>
     </div>
