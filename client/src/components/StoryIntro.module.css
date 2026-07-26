@@ -258,6 +258,28 @@
   color: #ffffff;
 }
 
+.createStoryBtn {
+  margin-top: 0.4rem;
+  border: 1.5px dashed rgba(31, 127, 214, 0.5);
+  background: rgba(31, 127, 214, 0.1);
+  color: #1f7fd6;
+  font-weight: 600;
+}
+
+.createStoryBtn:hover {
+  background: rgba(31, 127, 214, 0.2);
+}
+
+.themeDark .createStoryBtn {
+  border-color: rgba(160, 210, 255, 0.5);
+  background: rgba(160, 210, 255, 0.1);
+  color: #a0d2ff;
+}
+
+.themeDark .createStoryBtn:hover {
+  background: rgba(160, 210, 255, 0.2);
+}
+
 /* ---------- Dark theme ---------- */
 .themeDark .storyMenu {
   background: rgba(20, 30, 50, 0.55);

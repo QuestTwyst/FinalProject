@@ -1,11 +1,11 @@
 import { useEffect, useRef, useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
+import { API_BASE_URL } from '../config/api';
 import { parseSaveFile } from '../utils/saveFile';
 import { useBackgroundAudio } from '../utils/useBackgroundAudio';
 import NavBar from './NavBar';
 import StoryCard from './StoryCard';
 import styles from './StoryLibrary.module.css';
-import { API_BASE_URL } from '../config/api';
 
 function StoryLibrary() {
   const navigate = useNavigate();
@@ -99,7 +99,6 @@ function StoryLibrary() {
     setIsDark((prev) => !prev);
   };
 
-
   const handleSoundToggle = () => {
     setIsMuted((prev) => !prev);
   };
@@ -123,6 +122,21 @@ function StoryLibrary() {
 
   const handleOpenStory = (storyId) => {
     navigate(`/stories/${storyId}`);
+  };
+
+  const handleDeleteStory = async (storyId) => {
+    try {
+      const response = await fetch(`${API_BASE_URL}/stories/${storyId}`, {
+        method: 'DELETE',
+      });
+      if (!response.ok) {
+        throw new Error(`Failed to delete story (${response.status})`);
+      }
+      setStories((prev) => prev.filter((story) => story.id !== storyId));
+    } catch (error) {
+      console.error('Error deleting story:', error);
+      window.alert('Something went wrong deleting that story. Please try again.');
+    }
   };
 
   return (
@@ -193,6 +207,7 @@ function StoryLibrary() {
                   key={story.id}
                   story={story}
                   onOpen={handleOpenStory}
+                  onDelete={handleDeleteStory}
                 />
               ))
             ) : (

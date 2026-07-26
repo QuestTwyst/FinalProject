@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { useNavigate, useParams, useLocation } from 'react-router-dom';
 import { storyGraph } from '../data/storyData';
+import { API_BASE_URL } from '../config/api';
 import { parseSaveFile } from '../utils/saveFile';
 import { useBackgroundAudio } from '../utils/useBackgroundAudio';
 import NavBar from './NavBar';
@@ -23,7 +24,10 @@ function StoryReader() {
   const { storyId } = useParams();
   const navigate = useNavigate();
   const location = useLocation();
-  const story = storyGraph[storyId];
+  const localStory = storyGraph[storyId];
+  const [remoteStory, setRemoteStory] = useState(null);
+  const [isLoadingRemote, setIsLoadingRemote] = useState(false);
+  const story = localStory || remoteStory;
   const [currentPassageId, setCurrentPassageId] = useState(story?.startPassageId ?? null);
   const [choiceHistory, setChoiceHistory] = useState([]);
   const [isDark, setIsDark] = useState(false);
@@ -31,6 +35,75 @@ function StoryReader() {
   const [volume, setVolume] = useState(0.5);
   const [importMessage, setImportMessage] = useState('');
   const audioRef = useRef(null);
+
+  // If the story isn't in the local storyData.js file, it may be a
+  // story someone created through the Story Creator, which only lives
+  // in the real database. Fetch it from there instead.
+  useEffect(() => {
+    if (localStory) {
+      setRemoteStory(null);
+      return undefined;
+    }
+
+    let cancelled = false;
+    setIsLoadingRemote(true);
+    setRemoteStory(null);
+
+    const loadRemoteStory = async () => {
+      try {
+        const storyRes = await fetch(`${API_BASE_URL}/stories/${storyId}`);
+        if (!storyRes.ok) throw new Error('Story not found');
+        const storyRow = await storyRes.json();
+
+        const genresRes = await fetch(`${API_BASE_URL}/api/stories/${storyId}/genres`);
+        const genreRows = genresRes.ok ? await genresRes.json() : [];
+        const rawGenreName = genreRows[0]?.name;
+        // "Science Fiction" in the database maps to "Sci-Fi" in our
+        // theme/sound lookups elsewhere in this file.
+        const genreName = rawGenreName === 'Science Fiction' ? 'Sci-Fi' : rawGenreName;
+
+        const passagesRes = await fetch(`${API_BASE_URL}/stories/${storyId}/passages`);
+        const passageRows = passagesRes.ok ? await passagesRes.json() : [];
+
+        const passages = {};
+        for (const p of passageRows) {
+          const choicesRes = await fetch(`${API_BASE_URL}/passages/${p.id}/choices`);
+          const choiceRows = choicesRes.ok ? await choicesRes.json() : [];
+          passages[p.id] = {
+            id: p.id,
+            content: p.content,
+            isEnding: p.is_ending,
+            // Only choices that actually point somewhere are shown --
+            // an unlinked choice would otherwise lead to a blank passage.
+            choices: choiceRows
+              .filter((c) => c.next_passage_id != null)
+              .map((c) => ({ text: c.choice_text, next: c.next_passage_id })),
+          };
+        }
+
+        if (cancelled) return;
+
+        setRemoteStory({
+          id: storyRow.id,
+          title: storyRow.title,
+          description: storyRow.description,
+          genre: genreName,
+          startPassageId: passageRows[0]?.id ?? null,
+          passages,
+        });
+      } catch (error) {
+        if (!cancelled) setRemoteStory(null);
+      } finally {
+        if (!cancelled) setIsLoadingRemote(false);
+      }
+    };
+
+    loadRemoteStory();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [storyId, localStory]);
 
   useEffect(() => {
     const resumePassageId = location.state?.resumePassageId;
@@ -144,7 +217,9 @@ function StoryReader() {
             <article className={styles.storyCard}>
               <div className={styles.storyCardScroll}>
                 <p className={styles.passageText}>
-                  The story you selected does not exist. Use the Library button above to choose another tale.
+                  {isLoadingRemote
+                    ? 'Loading story...'
+                    : 'The story you selected does not exist. Use the Library button above to choose another tale.'}
                 </p>
               </div>
             </article>

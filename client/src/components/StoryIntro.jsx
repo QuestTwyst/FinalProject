@@ -91,6 +91,13 @@ function StoryIntro() {
                 {storyLabels[story]}
               </button>
             ))}
+            <button
+              type="button"
+              className={`${styles.storyBtn} ${styles.createStoryBtn}`}
+              onClick={() => navigate('/create')}
+            >
+              + Create your own story
+            </button>
           </div>
         </div>
       </div>
