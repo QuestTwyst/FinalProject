@@ -122,10 +122,10 @@ function Profile() {
       <nav className="profile-nav">
         <Link
           to="/"
-          className="nav-btn home-btn"
+          className="library-btn"
           aria-label="Back to home"
         >
-          ← Back to Home
+          Home
         </Link>
 
         <Link to="/library" className="library-btn">
@@ -134,7 +134,7 @@ function Profile() {
 
         <Link
           to="/profile"
-          className="nav-btn"
+          className="nav-btn profile-icon-btn"
           aria-label="Open profile"
         >
           👤
