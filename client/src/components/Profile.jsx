@@ -3,16 +3,39 @@ import { Link } from "react-router-dom";
 import "./Profile.css";
 
 function Profile() {
-  const [profile, setProfile] = useState({
-    username: "",
-    firstName: "",
-    middleName: "",
-    lastName: "",
-    password: "",
-    confirmPassword: "",
-    favoriteGenre: "",
-    bio: "",
+  const [profile, setProfile] = useState(() => {
+    const savedUser = localStorage.getItem("currentUser");
+
+    if (savedUser) {
+      try {
+        const user = JSON.parse(savedUser);
+
+        return {
+          username: user.username || "",
+          firstName: user.firstName || "",
+          middleName: user.middleName || "",
+          lastName: user.lastName || "",
+          favoriteGenre: user.favoriteGenre || "",
+          bio: user.bio || "",
+        };
+      } catch (error) {
+        console.error("Could not load profile:", error);
+      }
+    }
+
+    return {
+      username: "",
+      firstName: "",
+      middleName: "",
+      lastName: "",
+      favoriteGenre: "",
+      bio: "",
+    };
   });
+
+  const [originalUsername, setOriginalUsername] = useState(
+    profile.username
+  );
 
   const [isEditing, setIsEditing] = useState(false);
 
@@ -26,14 +49,82 @@ function Profile() {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    console.log("Updated Profile:", profile);
+    const users =
+      JSON.parse(localStorage.getItem("users")) || [];
+
+    const existingUser = users.find(
+      (user) =>
+        user.username.toLowerCase() ===
+        originalUsername.toLowerCase()
+    );
+
+    if (!existingUser) {
+      alert("The user account could not be found.");
+      return;
+    }
+
+    const updatedProfile = {
+      ...existingUser,
+      username: profile.username.trim(),
+      firstName: profile.firstName.trim(),
+      middleName: profile.middleName.trim(),
+      lastName: profile.lastName.trim(),
+      favoriteGenre: profile.favoriteGenre,
+      bio: profile.bio.trim(),
+      password: existingUser.password,
+    };
+
+    const usernameTaken = users.some(
+      (user) =>
+        user.username.toLowerCase() ===
+          updatedProfile.username.toLowerCase() &&
+        user.username.toLowerCase() !==
+          originalUsername.toLowerCase()
+    );
+
+    if (usernameTaken) {
+      alert("That username is already being used.");
+      return;
+    }
+
+    const updatedUsers = users.map((user) =>
+      user.username.toLowerCase() ===
+      originalUsername.toLowerCase()
+        ? updatedProfile
+        : user
+    );
+
+    localStorage.setItem(
+      "users",
+      JSON.stringify(updatedUsers)
+    );
+
+    localStorage.setItem(
+      "currentUser",
+      JSON.stringify(updatedProfile)
+    );
+
+    setProfile({
+      username: updatedProfile.username,
+      firstName: updatedProfile.firstName,
+      middleName: updatedProfile.middleName,
+      lastName: updatedProfile.lastName,
+      favoriteGenre: updatedProfile.favoriteGenre,
+      bio: updatedProfile.bio,
+    });
+
+    setOriginalUsername(updatedProfile.username);
     setIsEditing(false);
   };
 
   return (
     <main className="profile-page">
       <nav className="profile-nav">
-        <Link to="/" className="nav-btn" aria-label="Back to home">
+        <Link
+          to="/"
+          className="nav-btn"
+          aria-label="Back to home"
+        >
           ← Back to Home
         </Link>
 
@@ -41,7 +132,11 @@ function Profile() {
           Library
         </Link>
 
-        <Link to="/profile" className="nav-btn" aria-label="Open profile">
+        <Link
+          to="/profile"
+          className="nav-btn"
+          aria-label="Open profile"
+        >
           👤
         </Link>
       </nav>
@@ -75,7 +170,9 @@ function Profile() {
 
             <div className="profile-field">
               <span>Favorite genre</span>
-              <p>{profile.favoriteGenre || "Not selected"}</p>
+              <p>
+                {profile.favoriteGenre || "Not selected"}
+              </p>
             </div>
 
             <div className="profile-field">
@@ -92,7 +189,10 @@ function Profile() {
             </button>
           </div>
         ) : (
-          <form className="profile-form" onSubmit={handleSubmit}>
+          <form
+            className="profile-form"
+            onSubmit={handleSubmit}
+          >
             <label>
               Username
               <input
@@ -137,6 +237,7 @@ function Profile() {
                 required
               >
                 <option value="">Select a genre</option>
+                <option value="Adventure">Adventure</option>
                 <option value="Comedy">Comedy</option>
                 <option value="Horror">Horror</option>
                 <option value="Romance">Romance</option>
@@ -165,7 +266,10 @@ function Profile() {
                 Cancel
               </button>
 
-              <button type="submit" className="save-button">
+              <button
+                type="submit"
+                className="save-button"
+              >
                 Save Changes
               </button>
             </div>

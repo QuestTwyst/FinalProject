@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { API_BASE_URL } from "../config/api.js";
 
 function CreateAccount() {
   const [formData, setFormData] = useState({
@@ -12,6 +13,7 @@ function CreateAccount() {
   });
   const [errors, setErrors] = useState({});
   const [submitMessage, setSubmitMessage] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const navigate = useNavigate();
 
@@ -59,7 +61,7 @@ function CreateAccount() {
     setSubmitMessage("");
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     if (!validate()) {
@@ -67,8 +69,50 @@ function CreateAccount() {
       return;
     }
 
-    setSubmitMessage("Registration successful! Redirecting to login...");
-    setTimeout(() => navigate("/login"), 750);
+    const fullName = [
+      formData.firstName.trim(),
+      formData.middleName.trim(),
+      formData.lastName.trim(),
+    ]
+      .filter(Boolean)
+      .join(" ");
+
+    setIsSubmitting(true);
+    setSubmitMessage("");
+
+    try {
+      const response = await fetch(`${API_BASE_URL}/users`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: fullName,
+          email: formData.username.trim(),
+          password_hash: formData.password,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        if (response.status === 409) {
+          setErrors((current) => ({
+            ...current,
+            username: "That username is already registered.",
+          }));
+          setSubmitMessage("Please fix the highlighted fields before continuing.");
+        } else {
+          setSubmitMessage(data.error || "Something went wrong. Please try again.");
+        }
+        return;
+      }
+
+      setSubmitMessage("Registration successful! Redirecting to login...");
+      setTimeout(() => navigate("/login"), 750);
+    } catch (error) {
+      setSubmitMessage("Could not reach the server. Please try again.");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -147,7 +191,9 @@ function CreateAccount() {
           {errors.confirmPassword && <p className="field-error">{errors.confirmPassword}</p>}
 
           <div className="auth-actions">
-            <button type="submit">Create Account</button>
+            <button type="submit" disabled={isSubmitting}>
+              {isSubmitting ? "Creating..." : "Create Account"}
+            </button>
             <button type="button" className="secondary" onClick={handleCancel}>
               Cancel
             </button>

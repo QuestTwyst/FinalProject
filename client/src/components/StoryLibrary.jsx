@@ -17,6 +17,7 @@ function StoryLibrary() {
   const [volume, setVolume] = useState(0.5);
   const [importMessage, setImportMessage] = useState('');
   const [stories, setStories] = useState([]);
+  const [availableGenres, setAvailableGenres] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [loadError, setLoadError] = useState('');
   const audioRef = useRef(null);
@@ -26,12 +27,15 @@ function StoryLibrary() {
   useEffect(() => {
     let isCancelled = false;
 
-    const loadStories = async () => {
+    const loadLibraryData = async () => {
       try {
         setIsLoading(true);
         setLoadError('');
 
-        const storiesResponse = await fetch(`${API_BASE_URL}/stories`);
+        const [storiesResponse, genresResponse] = await Promise.all([
+          fetch(`${API_BASE_URL}/stories`),
+          fetch(`${API_BASE_URL}/api/genres`),
+        ]);
 
         if (!storiesResponse.ok) {
           throw new Error(
@@ -39,31 +43,52 @@ function StoryLibrary() {
           );
         }
 
-        const storyRows = await storiesResponse.json();
+        if (!genresResponse.ok) {
+          throw new Error(
+            `Unable to retrieve genres: ${genresResponse.status}`
+          );
+        }
+
+        const [storyRows, genreRows] = await Promise.all([
+          storiesResponse.json(),
+          genresResponse.json(),
+        ]);
 
         const storiesWithGenres = await Promise.all(
           storyRows.map(async (story) => {
             try {
-              const genreResponse = await fetch(
+              const storyGenresResponse = await fetch(
                 `${API_BASE_URL}/api/stories/${story.id}/genres`
               );
 
-              if (!genreResponse.ok) {
-                return {
-                  ...story,
-                  genre: 'Uncategorized',
-                };
+              if (!storyGenresResponse.ok) {
+                throw new Error(
+                  `Unable to retrieve genres for story ${story.id}`
+                );
               }
 
-              const genres = await genreResponse.json();
+              const storyGenresData = await storyGenresResponse.json();
+
+              const storyGenres = Array.isArray(storyGenresData)
+                ? storyGenresData
+                : [];
 
               return {
                 ...story,
-                genre: genres[0]?.name || 'Uncategorized',
+                genres: storyGenres,
+                genre:
+                  storyGenres.map((genre) => genre.name).join(', ') ||
+                  'Uncategorized',
               };
-            } catch {
+            } catch (error) {
+              console.error(
+                `Error loading genres for story ${story.id}:`,
+                error
+              );
+
               return {
                 ...story,
+                genres: [],
                 genre: 'Uncategorized',
               };
             }
@@ -71,10 +96,13 @@ function StoryLibrary() {
         );
 
         if (!isCancelled) {
+          setAvailableGenres(
+            Array.isArray(genreRows) ? genreRows : []
+          );
           setStories(storiesWithGenres);
         }
       } catch (error) {
-        console.error('Error loading stories:', error);
+        console.error('Error loading Story Library:', error);
 
         if (!isCancelled) {
           setLoadError(
@@ -88,7 +116,7 @@ function StoryLibrary() {
       }
     };
 
-    loadStories();
+    loadLibraryData();
 
     return () => {
       isCancelled = true;
@@ -114,11 +142,21 @@ function StoryLibrary() {
     );
   };
 
-  const genres = ['All', ...Array.from(new Set(stories.map((story) => story.genre))).sort(),];
+  const genres = [
+    'All',
+    ...availableGenres.map((genre) => genre.name).sort(),
+  ];
+
   const filteredStories =
     selectedGenre === 'All'
       ? stories
-      : stories.filter((story) => story.genre === selectedGenre);
+      : stories.filter(
+        (story) =>
+          Array.isArray(story.genres) &&
+          story.genres.some(
+            (genre) => genre.name === selectedGenre
+          )
+      );
 
   const handleOpenStory = (storyId) => {
     navigate(`/stories/${storyId}`);
