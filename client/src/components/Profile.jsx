@@ -3,15 +3,38 @@ import { Link } from "react-router-dom";
 import "./Profile.css";
 
 function Profile() {
-  const [profile, setProfile] = useState({
-    username: "",
-    firstName: "",
-    middleName: "",
-    lastName: "",
-    password: "",
-    confirmPassword: "",
-    favoriteGenre: "",
-    bio: "",
+  const [profile, setProfile] = useState(() => {
+    const savedUser = localStorage.getItem("currentUser");
+
+    if (savedUser) {
+      try {
+        const user = JSON.parse(savedUser);
+
+        return {
+          username: user.username || "",
+          firstName: user.firstName || "",
+          middleName: user.middleName || "",
+          lastName: user.lastName || "",
+          password: "",
+          confirmPassword: "",
+          favoriteGenre: user.favoriteGenre || "",
+          bio: user.bio || "",
+        };
+      } catch (error) {
+        console.error("Could not load profile:", error);
+      }
+    }
+
+    return {
+      username: "",
+      firstName: "",
+      middleName: "",
+      lastName: "",
+      password: "",
+      confirmPassword: "",
+      favoriteGenre: "",
+      bio: "",
+    };
   });
 
   const [isEditing, setIsEditing] = useState(false);
@@ -25,6 +48,8 @@ function Profile() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+
+    localStorage.setItem("currentUser", JSON.stringify(profile));
 
     console.log("Updated Profile:", profile);
     setIsEditing(false);
@@ -137,6 +162,7 @@ function Profile() {
                 required
               >
                 <option value="">Select a genre</option>
+                <option value="Adventure">Adventure</option>
                 <option value="Comedy">Comedy</option>
                 <option value="Horror">Horror</option>
                 <option value="Romance">Romance</option>
