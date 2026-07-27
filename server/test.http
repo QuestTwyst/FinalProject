@@ -1,15 +1,3 @@
-//DELETE http://localhost:3001/stories/4
-
-//POST http://localhost:3001/stories
-//Content-Type: application/json
-
-//{
-//  "title": "Ocean Depths",
-//  "description": "A mysterious adventure beneath the waves.",
-//  "creator_id": null
-//}
-
-
 ###Get all stories
 //GET http://localhost:3001/stories
 
@@ -19,34 +7,61 @@
 ###Get a story that does not exist
 //GET http://localhost:3001/stories/1111
 
+###Create a story
+//POST http://localhost:3001/stories
+//Content-Type: application/json
+
+//{
+//  "title": "Test Story",
+//  "description": "A temporary test story.",
+//  "creator_id": null
+//}
+
+###Update a story
+//PATCH http://localhost:3001/stories/10
+//Content-Type: application/json
+
+//{
+// "title": "Updated Test Story",
+// "description": "Updates",
+// "creator_id": 5
+//}
+
+###Delete a story
+//DELETE http://localhost:3001/stories/10
+
+
+###Get all passages for a story
 //GET http://localhost:3001/stories/1/passages
 
+###Create a passage for a story
 //POST http://localhost:3001/stories/1/passages
 //Content-Type: application/json
 
 //{
- // "content": "You step into a clearing filled with glowing flowers.",
- // "is_ending": false
-//}
-
-//DELETE http://localhost:3001/stories/passages/5
-
-//PATCH http://localhost:3001/stories/2
-//Content-Type: application/json
-
-//{
-//  "title": "Ocean Depths — The Hidden Currents",
-//  "description": "Beneath the waves lies a world of shifting currents, glowing creatures, and ancient secrets waiting to be uncovered.",
-//  "creator_id": 5
-//}
-
-//PATCH http://localhost:3001/stories/passages/2
-//Content-Type: application/json
-
-//{
-//  "content": "You follow the left path and discover a hidden waterfall.",
+//  "content": "This is a new passage for story 1.",
 //  "is_ending": false
 //}
+
+###Get a single passage
+//GET http://localhost:3001/stories/passages/1
+
+###Update a passage
+//PATCH http://localhost:3001/stories/passages/93
+//Content-Type: application/json
+
+//{
+//  "content": "Updated passage.",
+//  "is_ending": false
+//}
+
+###Delete a passage
+//DELETE http://localhost:3001/stories/passages/93
+
+
+###Get choices for a passage
+//GET http://localhost:3001/passages/1/choices
+
 
 //POST http://localhost:3001/passages/1/choices
 //Content-Type: application/json
@@ -56,17 +71,14 @@
  // "next_passage_id": 3
 //}
 
-//GET http://localhost:3001/passages/1/choices
 
-
-//Get all users
+###Get all users
 //GET http://localhost:3001/users
 
-//Get user by ID
+###Get user by ID
 //GET http://localhost:3001/users/1
 
-//Create a user
-
+###Create a user
 //POST http://localhost:3001/users
 //Content-Type: application/json
 
@@ -76,7 +88,7 @@
 //  "password_hash": "hashed_pw_3"
 //}
 
-//Update user
+###Update user
 //PATCH http://localhost:3001/users/3
 //Content-Type: application/json
 
@@ -86,8 +98,8 @@
 //  "password_hash": "hashed_pw_3_updated"
 //}
 
-//Delete user
+###Delete user
 //DELETE http://localhost:3001/users/3
 
-//Get reading progress for a specific user and story
+###Get reading progress for a specific user and story
 //GET http://localhost:3001/api/progress/1/1

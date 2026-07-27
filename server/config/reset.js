@@ -1,17 +1,25 @@
 import "dotenv/config";
 import pool from "./database.js";
+import { storyGraph } from "../data/storyData.js";
 
+//Drop tables
 const dropAssignedTables = async () => {
   await pool.query(`
     DROP TABLE IF EXISTS story_history CASCADE;
     DROP TABLE IF EXISTS reading_progress CASCADE;
     DROP TABLE IF EXISTS story_genres CASCADE;
     DROP TABLE IF EXISTS genres CASCADE;
+
+    DROP TABLE IF EXISTS choices CASCADE;
+    DROP TABLE IF EXISTS passages CASCADE;
+    DROP TABLE IF EXISTS stories CASCADE;
+
   `);
 
   console.log("✔️ Assigned tables dropped.");
 };
 
+//Create tables
 const createUsersTable = async () => {
   await pool.query(`
     CREATE TABLE IF NOT EXISTS users (
@@ -34,6 +42,7 @@ const createStoriesTable = async () => {
       title TEXT NOT NULL,
       description TEXT NOT NULL,
       creator_id INTEGER,
+      start_passage_id INTEGER,
       created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
     );
   `);
@@ -197,206 +206,136 @@ const seedUsers = async () => {
   console.log("✔️ Sample users inserted.");
 };
 
-const seedStories = async () => {
-  await pool.query(`
-    INSERT INTO stories (
-      title,
-      description,
-      creator_id
-    )
-    SELECT
-      'The Lost Forest',
-      'A magical forest full of secrets.',
-      NULL
-    WHERE NOT EXISTS (
-      SELECT 1
-      FROM stories
-      WHERE title = 'The Lost Forest'
+//Seed Stories (without start_passage_id)
+const seedStoriesInitial = async () => {
+  for (const story of Object.values(storyGraph)) {
+    await pool.query(
+      `
+      INSERT INTO stories (id, title, description, creator_id)
+      VALUES ($1, $2, $3, NULL)
+      ON CONFLICT (id) DO UPDATE
+        SET title = EXCLUDED.title,
+            description = EXCLUDED.description;
+    `,
+      [story.id, story.title, story.description],
     );
-  `);
+  }
 
-  await pool.query(`
-    INSERT INTO stories (
-      title,
-      description,
-      creator_id
-    )
-    SELECT
-      'Cyber City',
-      'A neon world of hackers and androids.',
-      NULL
-    WHERE NOT EXISTS (
-      SELECT 1
-      FROM stories
-      WHERE title = 'Cyber City'
-    );
-  `);
-
-  await pool.query(`
-    INSERT INTO stories (
-      title,
-      description,
-      creator_id
-    )
-    SELECT
-      'Midnight Train',
-      'A mystery unfolding on a night train.',
-      NULL
-    WHERE NOT EXISTS (
-      SELECT 1
-      FROM stories
-      WHERE title = 'Midnight Train'
-    );
-  `);
-
-  console.log("✔️ Sample stories inserted.");
+  console.log("✔️ StoryGraph stories inserted (initial).");
 };
 
+//Seed passages (build mapping)
 const seedPassages = async () => {
-  await pool.query(`
-    INSERT INTO passages (
-      story_id,
-      content,
-      is_ending
-    )
-    SELECT
-      stories.id,
-      'You wake up in a dark forest. Two paths lie ahead.',
-      FALSE
-    FROM stories
-    WHERE stories.title = 'The Lost Forest'
-      AND NOT EXISTS (
-        SELECT 1
-        FROM passages
-        WHERE content =
-          'You wake up in a dark forest. Two paths lie ahead.'
-      );
-  `);
+  const passageIdMap = {};
 
-  await pool.query(`
-    INSERT INTO passages (
-      story_id,
-      content,
-      is_ending
-    )
-    SELECT
-      stories.id,
-      'You follow the left path and find a quiet river.',
-      FALSE
-    FROM stories
-    WHERE stories.title = 'The Lost Forest'
-      AND NOT EXISTS (
-        SELECT 1
-        FROM passages
-        WHERE content =
-          'You follow the left path and find a quiet river.'
+  for (const story of Object.values(storyGraph)) {
+    for (const passage of Object.values(story.passages)) {
+      const result = await pool.query(
+        `
+        INSERT INTO passages (story_id, content, is_ending)
+        VALUES ($1, $2, $3)
+        RETURNING id;
+      `,
+        [story.id, passage.content, passage.isEnding],
       );
-  `);
 
-  await pool.query(`
-    INSERT INTO passages (
-      story_id,
-      content,
-      is_ending
-    )
-    SELECT
-      stories.id,
-      'You follow the right path and encounter a strange creature.',
-      FALSE
-    FROM stories
-    WHERE stories.title = 'The Lost Forest'
-      AND NOT EXISTS (
-        SELECT 1
-        FROM passages
-        WHERE content =
-          'You follow the right path and encounter a strange creature.'
-      );
-  `);
+      const dbId = result.rows[0].id;
+      passageIdMap[`${story.id}:${passage.id}`] = dbId;
+    }
+  }
 
-  await pool.query(`
-    INSERT INTO passages (
-      story_id,
-      content,
-      is_ending
-    )
-    SELECT
-      stories.id,
-      'You reach the end of your journey.',
-      TRUE
-    FROM stories
-    WHERE stories.title = 'The Lost Forest'
-      AND NOT EXISTS (
-        SELECT 1
-        FROM passages
-        WHERE content =
-          'You reach the end of your journey.'
-      );
-  `);
+  console.log("✔️ StoryGraph passages inserted.");
+  return passageIdMap;
+};
 
-  console.log("✔️ Sample passages inserted.");
+//Update stories with start_passage_id
+const updateStoryStartPassageIds = async (passageIdMap) => {
+  for (const story of Object.values(storyGraph)) {
+    const dbStartPassageId =
+      passageIdMap[`${story.id}:${story.startPassageId}`];
+
+    await pool.query(
+      `
+      UPDATE stories
+      SET start_passage_id = $2
+      WHERE id = $1;
+    `,
+      [story.id, dbStartPassageId],
+    );
+  }
+
+  console.log("✔️ Story start_passage_id updated.");
+};
+
+//Seed choices (using mapping)
+const seedChoices = async (passageIdMap) => {
+  let choiceId = 1;
+
+  for (const story of Object.values(storyGraph)) {
+    for (const passage of Object.values(story.passages)) {
+      const fromDbPassageId = passageIdMap[`${story.id}:${passage.id}`];
+
+      for (const choice of passage.choices) {
+        const toDbPassageId =
+          choice.next != null
+            ? passageIdMap[`${story.id}:${choice.next}`]
+            : null;
+
+        await pool.query(
+          `
+          INSERT INTO choices (id, passage_id, choice_text, next_passage_id)
+          VALUES ($1, $2, $3, $4)
+          ON CONFLICT (id) DO UPDATE
+            SET passage_id = EXCLUDED.passage_id,
+                choice_text = EXCLUDED.choice_text,
+                next_passage_id = EXCLUDED.next_passage_id;
+        `,
+          [choiceId, fromDbPassageId, choice.text, toDbPassageId],
+        );
+
+        choiceId += 1;
+      }
+    }
+  }
+
+  console.log("✔️ StoryGraph choices inserted.");
 };
 
 const seedGenres = async () => {
-  await pool.query(`
-    INSERT INTO genres (name)
-    VALUES
-      ('Adventure'),
-      ('Science Fiction'),
-      ('Mystery'),
-      ('Horror')
-    ON CONFLICT (name) DO NOTHING;
-  `);
+  const genreNames = new Set(
+    Object.values(storyGraph).map((story) => story.genre),
+  );
 
-  console.log("✔️ Sample genres inserted.");
+  for (const name of genreNames) {
+    await pool.query(
+      `
+      INSERT INTO genres (name)
+      VALUES ($1)
+      ON CONFLICT (name) DO NOTHING;
+    `,
+      [name],
+    );
+  }
+
+  console.log("✔️ StoryGraph genres inserted.");
 };
 
 const seedStoryGenres = async () => {
-  await pool.query(`
-    INSERT INTO story_genres (
-      story_id,
-      genre_id
-    )
-    SELECT
-      stories.id,
-      genres.id
-    FROM stories
-    CROSS JOIN genres
-    WHERE stories.title = 'The Lost Forest'
-      AND genres.name = 'Adventure'
-    ON CONFLICT (story_id, genre_id) DO NOTHING;
-  `);
+  for (const story of Object.values(storyGraph)) {
+    await pool.query(
+      `
+      INSERT INTO story_genres (story_id, genre_id)
+      SELECT s.id, g.id
+      FROM stories s
+      JOIN genres g ON g.name = $2
+      WHERE s.id = $1
+      ON CONFLICT (story_id, genre_id) DO NOTHING;
+    `,
+      [story.id, story.genre],
+    );
+  }
 
-  await pool.query(`
-    INSERT INTO story_genres (
-      story_id,
-      genre_id
-    )
-    SELECT
-      stories.id,
-      genres.id
-    FROM stories
-    CROSS JOIN genres
-    WHERE stories.title = 'Cyber City'
-      AND genres.name = 'Science Fiction'
-    ON CONFLICT (story_id, genre_id) DO NOTHING;
-  `);
-
-  await pool.query(`
-    INSERT INTO story_genres (
-      story_id,
-      genre_id
-    )
-    SELECT
-      stories.id,
-      genres.id
-    FROM stories
-    CROSS JOIN genres
-    WHERE stories.title = 'Midnight Train'
-      AND genres.name = 'Mystery'
-    ON CONFLICT (story_id, genre_id) DO NOTHING;
-  `);
-
-  console.log("✔️ Sample story-genre relationships inserted.");
+  console.log("✔️ StoryGraph story-genre relationships inserted.");
 };
 
 const seedReadingProgress = async () => {
@@ -456,12 +395,14 @@ const resetAssignedTables = async () => {
   try {
     console.log("Resetting QuestTwyst database tables...");
 
+    await dropAssignedTables();
+
     await createUsersTable();
     await createStoriesTable();
     await createPassagesTable();
     await createChoicesTable();
 
-    await dropAssignedTables();
+    //await dropAssignedTables();
 
     await createGenresTable();
     await createStoryGenresTable();
@@ -469,8 +410,19 @@ const resetAssignedTables = async () => {
     await createStoryHistoryTable();
 
     await seedUsers();
-    await seedStories();
-    await seedPassages();
+
+    // 1. Insert stories first
+    await seedStoriesInitial();
+
+    // 2. Insert passages and build mapping
+    const passageIdMap = await seedPassages();
+
+    // 3. Update stories with correct start_passage_id
+    await updateStoryStartPassageIds(passageIdMap);
+
+    // 4. Insert choices
+    await seedChoices(passageIdMap);
+
     await seedGenres();
     await seedStoryGenres();
     await seedReadingProgress();
