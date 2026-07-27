@@ -87,14 +87,12 @@ The backend will track a reader’s current location within a story. This allows
 
 [gif goes here]
 
-### Story Path History
+### ✅ Story Path History
 
-After a reader finishes a story, the frontend will display a visual recap of the choices they made along the way, letting them see the full path they took and easily restart to try a different route.
-[gif goes here] (COMING SOON)
+After a reader finishes a story, the frontend displays a recap of every choice they made along the way, in order, under "Your path through this story." A "Restart with different choices" button on the recap screen resets the story and clears the tracked history, letting the reader try a different path and see an accurate recap of that new playthrough.
 
-The backend will save the choices a reader makes while moving through a story. This allows the app to show the path the reader took and makes it possible for users to replay the same story using different choices.
+<img src='https://github.com/QuestTwyst/FinalProject/blob/29cdf2c6a85b3be165e138ee3e573ec289f951ca/planning/gifs/StoryPathHistoryandFilterGenre.gif' title='Video Walkthrough' width='' alt='Video Walkthrough' />
 
-[gif goes here] 
 
 ### Admin Story Management
 The backend will support admin-managed story content. Admins or developers will be able to add, update, or delete stories, passages, choices, and genres while readers focus on reading and choosing story paths.
