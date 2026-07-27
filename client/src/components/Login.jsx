@@ -48,7 +48,7 @@ navigate("/profile");
           <label htmlFor="email">Email:</label>
 
           <input
-            type="text"
+            type="email"
             id="email"
             placeholder="Enter your email"
             value={email}
