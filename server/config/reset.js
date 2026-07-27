@@ -43,11 +43,37 @@ const createStoriesTable = async () => {
       description TEXT NOT NULL,
       creator_id INTEGER,
       start_passage_id INTEGER,
-      created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+      created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+      CONSTRAINT fk_stories_creator
+        FOREIGN KEY (creator_id)
+        REFERENCES users(id)
+        ON DELETE SET NULL
     );
   `);
 
   console.log("✔️ Stories table created.");
+};
+
+const addStoriesCreatorForeignKey = async () => {
+  await pool.query(`
+    DO $$
+    BEGIN
+      IF NOT EXISTS (
+        SELECT 1
+        FROM pg_constraint
+        WHERE conname = 'fk_stories_creator'
+      ) THEN
+        ALTER TABLE stories
+          ADD CONSTRAINT fk_stories_creator
+          FOREIGN KEY (creator_id)
+          REFERENCES users(id)
+          ON DELETE SET NULL;
+      END IF;
+    END $$;
+  `);
+
+  console.log("✔️ Stories.creator_id foreign key confirmed.");
 };
 
 const createPassagesTable = async () => {
@@ -399,6 +425,7 @@ const resetAssignedTables = async () => {
 
     await createUsersTable();
     await createStoriesTable();
+    await addStoriesCreatorForeignKey();
     await createPassagesTable();
     await createChoicesTable();
 
