@@ -1,78 +1,125 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 function Login() {
-    const [username, setUsername] = useState("");
-    const [password, setPassword] = useState("");
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
 
-    const handleSubmit = (e) => {
-        e.preventDefault();
+  const navigate = useNavigate();
 
-        console.log({ username, password });
-    };
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    setError("");
 
-    const navigate = useNavigate();
+    // Get all registered users
+    const savedUsers = JSON.parse(localStorage.getItem("users")) || [];
 
-   const handleCancel = () => {
+    // Check if username and password match
+    const matchingUser = savedUsers.find(
+        (user) =>
+            user.username.toLowerCase() === username.trim().toLowerCase() &&
+            user.password === password
+);
+
+    if (!matchingUser) {
+      setError("Incorrect username or password.");
+      return;
+    }
+
+    // Save logged-in user
+    localStorage.setItem("currentUser", JSON.stringify(matchingUser));
+
+    navigate("/profile");
+  };
+
+  const handleCancel = () => {
     navigate("/");
-};
+  };
 
-    return (
-        <main className="container">
-            <article>
-                <h2 style={{ textAlign: "center" }}>Log In</h2>
+  return (
+    <main className="container">
+      <article>
+        <h2 style={{ textAlign: "center" }}>Log In</h2>
 
-                <form onSubmit={handleSubmit}>
-                    <label htmlFor="username">
-                        Username:
-                    </label>
+        <form onSubmit={handleSubmit}>
+          <label htmlFor="username">Username:</label>
 
-                    <input
-                        type="text"
-                        id="username"
-                        placeholder="Enter your username"
-                        value={username}
-                        onChange={(e) => setUsername(e.target.value)}
-                        required
-                    />
+          <input
+            type="text"
+            id="username"
+            placeholder="Enter your username"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+            required
+          />
 
-                    <label htmlFor="password">
-                        Password:
-                    </label>
+          <label htmlFor="password">Password:</label>
 
-                    <input
-                        type="password"
-                        id="password"
-                        placeholder="Enter your password"
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
-                        required
-                    />
+          <input
+            type="password"
+            id="password"
+            placeholder="Enter your password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+          />
 
-                    <div
-                        style={{
-                            display: "flex",
-                            justifyContent: "center",
-                            gap: "1rem",
-                            marginTop: "1rem",
-                        }}
-                    >
-                        <button type="submit">
-                            Submit
-                        </button>
+          {error && (
+            <p
+              style={{
+                color: "red",
+                textAlign: "center",
+                marginTop: "0.75rem",
+                marginBottom: "0.5rem",
+              }}
+            >
+              {error}
+            </p>
+          )}
 
-                        <button
-                            type="button"
-                            className="secondary"
-                            onClick={handleCancel}
-                        >
-                            Cancel
-                        </button>
-                    </div>
-                </form>
-            </article>
-        </main>
-    );
+          <div
+            style={{
+              textAlign: "right",
+              marginTop: "0.5rem",
+              marginBottom: "1rem",
+            }}
+          >
+            <Link to="/password-reset">Forgot Password?</Link>
+          </div>
+
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              gap: "1rem",
+              marginTop: "1rem",
+            }}
+          >
+            <button type="submit">Log In</button>
+
+            <button
+              type="button"
+              className="secondary"
+              onClick={handleCancel}
+            >
+              Cancel
+            </button>
+          </div>
+
+          <p
+            style={{
+              textAlign: "center",
+              marginTop: "1.5rem",
+            }}
+          >
+            Don't have an account?{" "}
+            <Link to="/create-account">Create one here.</Link>
+          </p>
+        </form>
+      </article>
+    </main>
+  );
 }
 
 export default Login;

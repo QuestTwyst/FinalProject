@@ -1,4 +1,7 @@
 import pool from "../config/database.js";
+import bcrypt from "bcrypt";
+
+const SALT_ROUNDS = 10;
 
 export const getUsers = async (req, res) => {
   try {
@@ -37,15 +40,20 @@ export const createUser = async (req, res) => {
         .json({ error: "name, email, and password_hash are required" });
     }
 
+    const hashedPassword = await bcrypt.hash(password_hash, SALT_ROUNDS);
+
     const result = await pool.query(
       `INSERT INTO users (name, email, password_hash)
        VALUES ($1, $2, $3)
-       RETURNING *`,
-      [name, email, password_hash],
+       RETURNING id, name, email, created_at`,
+      [name, email, hashedPassword],
     );
 
     res.status(201).json(result.rows[0]);
   } catch (error) {
+    if (error.code === "23505") {
+      return res.status(409).json({ error: "Email already in use" });
+    }
     res.status(500).json({ error: "Failed to create user" });
   }
 };

@@ -189,6 +189,19 @@ function NavBar({ isDark, onThemeToggle, isMuted, onSoundToggle, volume, onVolum
           <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
         </svg>
       </button>
+      
+      <button
+        className={styles.navBtn}
+        type="button"
+        aria-label="Open Profile"
+        title="Profile"
+        onClick={() => navigate('/profile')}
+      >
+        <svg className={styles.icon} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <circle cx="12" cy="8" r="4"></circle>
+        <path d="M4 21a8 8 0 0 1 16 0"></path>
+        </svg>
+        </button>
     </nav>
   );
 }

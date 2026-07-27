@@ -190,7 +190,6 @@ function StoryReader() {
     );
   };
 
-  // Genre-based styling
   const isRomance = story?.genre === "Romance";
   const isMystery = story?.genre === "Mystery";
   const isAdventure = story?.genre === "Adventure";
@@ -198,15 +197,7 @@ function StoryReader() {
   const isWestern = story?.genre === "Western";
   const isComedy = story?.genre === "Comedy";
   const isHorror = story?.genre === "Horror";
-  const pageClass = `${styles.readerPage} ${
-    isRomance ? styles.themeRomance : ""
-  } ${isMystery ? styles.themeMystery : ""} ${
-    isAdventure ? styles.themeAdventure : ""
-  } ${isSciFi ? styles.themeSciFi : ""} ${
-    isWestern ? styles.themeWestern : ""
-  } ${isComedy ? styles.themeComedy : ""} ${
-    isHorror ? styles.themeHorror : ""
-  } ${isDark ? styles.themeDark : ""}`;
+  const pageClass = `${styles.readerPage} ${isRomance ? styles.themeRomance : ""} ${isMystery ? styles.themeMystery : ""} ${isAdventure ? styles.themeAdventure : ""} ${isSciFi ? styles.themeSciFi : ""} ${isWestern ? styles.themeWestern : ""} ${isComedy ? styles.themeComedy : ""} ${isHorror ? styles.themeHorror : ""} ${isDark ? styles.themeDark : ""}`;
 
   // If story failed to load
   if (!story) {
@@ -439,6 +430,77 @@ function StoryReader() {
                 strokeWidth="2.2"
                 stroke="currentColor"
               />
+            </svg>
+          </div>
+        </>
+      )}
+
+      {isHorror && (
+        <>
+          <svg className={styles.moon} viewBox="0 0 100 100" aria-hidden="true">
+            <circle cx="50" cy="50" r="42" />
+          </svg>
+
+          <svg
+            className={styles.hauntedSkyline}
+            viewBox="0 0 1280 240"
+            preserveAspectRatio="none"
+            aria-hidden="true"
+          >
+            {/* Bare twisted trees */}
+            <path
+              d="M40,240 L40,150 L20,120 M40,150 L60,110 M40,180 L15,170 M40,190 L65,175"
+              fill="none"
+              strokeWidth="5"
+              stroke="currentColor"
+              strokeLinecap="round"
+            />
+            <path
+              d="M1220,240 L1220,140 L1245,105 M1220,140 L1195,100 M1220,170 L1250,160 M1220,185 L1190,165"
+              fill="none"
+              strokeWidth="5"
+              stroke="currentColor"
+              strokeLinecap="round"
+            />
+
+            {/* Crooked mansion */}
+            <polygon points="380,240 380,110 480,60 580,110 580,240" />
+            <polygon points="420,60 480,30 540,60" />
+            <rect x="455" y="20" width="10" height="45" />
+            <rect x="440" y="150" width="30" height="90" fill="#050403" />
+            <circle cx="410" cy="140" r="10" fill="#e8c94a" opacity="0.6" />
+            <circle cx="545" cy="140" r="10" fill="#e8c94a" opacity="0.35" />
+            <circle cx="480" cy="95" r="12" fill="#e8c94a" opacity="0.5" />
+
+            {/* Iron fence */}
+            <rect x="620" y="200" width="8" height="40" />
+            <rect x="660" y="195" width="8" height="45" />
+            <rect x="700" y="200" width="8" height="40" />
+            <rect x="740" y="195" width="8" height="45" />
+            <line
+              x1="620"
+              y1="210"
+              x2="748"
+              y2="210"
+              strokeWidth="4"
+              stroke="currentColor"
+            />
+          </svg>
+
+          <div className={styles.fogField} aria-hidden="true">
+            <div className={`${styles.fogLayer} ${styles.fogOne}`}></div>
+            <div className={`${styles.fogLayer} ${styles.fogTwo}`}></div>
+          </div>
+
+          <div className={styles.batField} aria-hidden="true">
+            <svg className={`${styles.bat} ${styles.bat1}`} viewBox="0 0 60 30">
+              <path d="M30,15 C22,2 8,2 2,12 C10,10 18,13 26,20 C18,15 8,18 4,24 C14,22 24,20 30,20 C36,20 46,22 56,24 C52,18 42,15 34,20 C42,13 50,10 58,12 C52,2 38,2 30,15 Z" />
+            </svg>
+            <svg className={`${styles.bat} ${styles.bat2}`} viewBox="0 0 60 30">
+              <path d="M30,15 C22,2 8,2 2,12 C10,10 18,13 26,20 C18,15 8,18 4,24 C14,22 24,20 30,20 C36,20 46,22 56,24 C52,18 42,15 34,20 C42,13 50,10 58,12 C52,2 38,2 30,15 Z" />
+            </svg>
+            <svg className={`${styles.bat} ${styles.bat3}`} viewBox="0 0 60 30">
+              <path d="M30,15 C22,2 8,2 2,12 C10,10 18,13 26,20 C18,15 8,18 4,24 C14,22 24,20 30,20 C36,20 46,22 56,24 C52,18 42,15 34,20 C42,13 50,10 58,12 C52,2 38,2 30,15 Z" />
             </svg>
           </div>
         </>

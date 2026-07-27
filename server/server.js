@@ -9,6 +9,7 @@ import genresRouter from "./routes/genres.js";
 import storyGenresRouter from "./routes/storyGenres.js";
 import readingProgressRouter from "./routes/readingProgress.js";
 import storyHistoryRouter from "./routes/storyHistory.js";
+import authRoutes from "./routes/auth.js";
 
 dotenv.config();
 
@@ -31,6 +32,7 @@ app.use("/api/genres", genresRouter);
 app.use("/api/stories", storyGenresRouter);
 app.use("/api/progress", readingProgressRouter);
 app.use("/api/story-history", storyHistoryRouter);
+app.use("/auth", authRoutes);
 
 app.get("/", (req, res) => {
   res.status(200).json({

@@ -40,7 +40,14 @@ Backend:
 
 The frontend provides dedicated Login and Create Account pages, letting users register a new account or sign in with existing credentials. Form validation ensures all required fields are completed before submission, and clear error messages guide users when something needs correction
 
-<img src='https://github.com/QuestTwyst/FinalProject/blob/e5d47216b54c08de2b37c4f11c00f2739cf3c4f1/AuthCreateAccountAndLogin.gif' title='Video Walkthrough' width='' alt='Video Walkthrough' />
+<img src='https://github.com/QuestTwyst/FinalProject/blob/main/planning/gifs/AuthCreateAccountAndLogin.gif' title='Video Walkthrough' width='' alt='Video Walkthrough' />
+
+### ✅ Real Password Hashing and Login Endpoint
+
+Account creation and login are now backed by real authentication instead of browser storage. When a new account is created, the password is hashed with bcrypt before it's ever saved, so plaintext passwords are never stored in the database. A dedicated login endpoint looks up the submitted email, verifies the password against the stored hash, and returns a generic "Invalid email or password" error for either a wrong password or a nonexistent account, so failed attempts don't reveal which one was incorrect. Creating an account with an email that's already registered is also rejected with a clear error instead of silently overwriting or duplicating the account.
+
+<img src='https://github.com/QuestTwyst/FinalProject/blob/9245e2aaa59b3a722682e4294d45f5794beb5633/planning/gifs/CreateAccountAuthDuplicateHashedPassword.gif' title='Video Walkthrough' width='' alt='Video Walkthrough' />
+
 
 
 ### ✅ Story Library API
@@ -80,14 +87,12 @@ The backend will track a reader’s current location within a story. This allows
 
 [gif goes here]
 
-### Story Path History
+### ✅ Story Path History
 
-After a reader finishes a story, the frontend will display a visual recap of the choices they made along the way, letting them see the full path they took and easily restart to try a different route.
-[gif goes here] (COMING SOON)
+After a reader finishes a story, the frontend displays a recap of every choice they made along the way, in order, under "Your path through this story." A "Restart with different choices" button on the recap screen resets the story and clears the tracked history, letting the reader try a different path and see an accurate recap of that new playthrough.
 
-The backend will save the choices a reader makes while moving through a story. This allows the app to show the path the reader took and makes it possible for users to replay the same story using different choices.
+<img src='https://github.com/QuestTwyst/FinalProject/blob/29cdf2c6a85b3be165e138ee3e573ec289f951ca/planning/gifs/StoryPathHistoryandFilterGenre.gif' title='Video Walkthrough' width='' alt='Video Walkthrough' />
 
-[gif goes here] 
 
 ### Admin Story Management
 The backend will support admin-managed story content. Admins or developers will be able to add, update, or delete stories, passages, choices, and genres while readers focus on reading and choosing story paths.
