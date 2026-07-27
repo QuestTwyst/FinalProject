@@ -4,7 +4,7 @@ import { API_BASE_URL } from "../config/api.js";
 
 function Login() {
   const [formData, setFormData] = useState({
-    username: "",
+    email: "",
     password: "",
   });
 
@@ -17,8 +17,8 @@ function Login() {
   const validate = () => {
     const nextErrors = {};
 
-    if (!formData.username.trim()) {
-      nextErrors.username = "Username is required.";
+    if (!formData.email.trim()) {
+      nextErrors.email = "Email is required.";
     }
 
     if (!formData.password) {
@@ -68,7 +68,7 @@ function Login() {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          email: formData.username.trim(),
+          email: formData.email.trim(),
           password: formData.password,
         }),
       });
@@ -119,20 +119,20 @@ function Login() {
         )}
 
         <form onSubmit={handleSubmit} noValidate>
-          <label htmlFor="username">Username</label>
+          <label htmlFor="email">Email</label>
 
           <input
-            id="username"
-            name="username"
-            type="text"
-            placeholder="Enter your username"
-            value={formData.username}
+            id="email"
+            name="email"
+            type="email"
+            placeholder="Enter your email"
+            value={formData.email}
             onChange={handleChange}
             autoComplete="email"
           />
 
           {errors.username && (
-            <p className="field-error">{errors.username}</p>
+            <p className="field-error">{errors.email}</p>
           )}
 
           <label htmlFor="password">Password</label>
