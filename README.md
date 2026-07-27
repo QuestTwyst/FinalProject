@@ -109,6 +109,12 @@ Story metadata header showing title, genre, author, and description at the top o
 
 ![Story Reader Interface demo](planning/gifs/QuestTwyst_Story-Reader-Interface.gif)
 
+### ✅ Database Integrity: Foreign Key on stories.creator_id
+
+Added a foreign key constraint linking `stories.creator_id` to `users(id)`, so every story is properly and reliably tied to the user who created it, as originally scoped in the database schema. If a user account is ever deleted, their stories aren't deleted along with them — `creator_id` is set to `NULL` instead, keeping the story intact. Inserting a story with an invalid `creator_id` now fails immediately at the database level, preventing orphaned or broken story-author references.
+
+<img src='https://github.com/QuestTwyst/FinalProject/blob/3ea670622cd3eaf1488c663ad031b24c75a30239/planning/gifs/ForeignKey.gif' width='' alt='Video Walkthrough' />
+
 ### Story Creator Interface
 The frontend will provide a form-based editor where users can write a story title, add passages, and fill in the two choices that branch off each passage. Validation will prevent saving a passage until the title and both choices are filled in, and users can mark any passage as an ending.
 [gif goes here] (COMING SOON)
