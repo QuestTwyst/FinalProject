@@ -388,9 +388,9 @@ function Profile() {
                 </p>
               )}
               <Link
-              to={`/stories/${storyId}`}
-              state={{ passageId: currentPassage}}
-              className="continue-button"
+                to={`/stories/${storyId}`}
+                state={{ resumePassageId: currentPassage }}
+                className="continue-button"
               >
                 Continue Reading
               </Link>
