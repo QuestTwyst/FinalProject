@@ -6,7 +6,7 @@ Completion percentage for Milestone 4 - Unit 8: %
 List each issue you completed this unit and the main file or folder where that work lives, one per line:
 - Issue #28: Finish Render Deployment Documentation & Link — README.md
 - Issue #29: Add Missing Foreign Key on stories.creator_id — server/config/reset.js
-- Issue #30: Connect Story Library UI to the Real Backend API — client//components/StoryLibrary.jsx
+- Issue #30: Connect Story Library UI to the Real Backend API — client/components/StoryLibrary.jsx
 - Issue #31: Connect Story Reader to Real Backend API — client/src/config/api.js, client/src/components/StoryReader.jsx, client/src/components/StoryPassage.jsx, client/src/components/ChoiceButton.jsx, server/config/reset.js, server/data/storyData.js
 - Issue #32: Connect Genre Filtering to Backend API — client/src/components/StoryLibrary.jsx
 - Issue #33: Implement Real Password Hashing and a Login Endpoint — server/controllers/auth.js, server/controllers/users.js
