@@ -15,6 +15,7 @@ List each issue you completed this unit and the main file or folder where that w
 ## Features Completed This Unit
 List each feature you completed and checked off in readme.md this unit, one per line:
 - Real Password Hashing and Login Endpoint
+- Story Path History 
 
 
 
