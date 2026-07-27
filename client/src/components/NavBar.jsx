@@ -8,6 +8,18 @@ function NavBar({ isDark, onThemeToggle, isMuted, onSoundToggle, volume, onVolum
   const [showFileMenu, setShowFileMenu] = useState(false);
   const hasProgressActions = Boolean(onSaveProgress || onImportProgress);
 
+  const getProfileLabel = () => {
+    try {
+      const saved = localStorage.getItem('currentUser');
+      if (!saved) return 'Profile';
+      const user = JSON.parse(saved);
+      return user.firstName || user.username || 'Profile';
+    } catch (error) {
+      return 'Profile';
+    }
+  };
+  const profileLabel = getProfileLabel();
+
   const handleFileButtonClick = () => {
     if (hasProgressActions) {
       setShowFileMenu((prev) => !prev);
@@ -46,6 +58,7 @@ function NavBar({ isDark, onThemeToggle, isMuted, onSoundToggle, volume, onVolum
   };
 
   return (
+    <>
     <nav className={`${styles.navBar} ${isDark ? styles.themeDark : ''}`}>
       <button
         className={styles.navBtn}
@@ -189,20 +202,21 @@ function NavBar({ isDark, onThemeToggle, isMuted, onSoundToggle, volume, onVolum
           <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
         </svg>
       </button>
-      
-      <button
-        className={styles.navBtn}
-        type="button"
-        aria-label="Open Profile"
-        title="Profile"
-        onClick={() => navigate('/profile')}
-      >
-        <svg className={styles.icon} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-        <circle cx="12" cy="8" r="4"></circle>
-        <path d="M4 21a8 8 0 0 1 16 0"></path>
-        </svg>
-        </button>
     </nav>
+
+    <button
+      className={styles.profileBtn}
+      type="button"
+      aria-label={`View profile: ${profileLabel}`}
+      title={profileLabel}
+      onClick={() => navigate('/profile')}
+    >
+      <svg className={styles.icon} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+        <circle cx="12" cy="7" r="4"></circle>
+      </svg>
+    </button>
+    </>
   );
 }
 

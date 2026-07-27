@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import { API_BASE_URL } from "../config/api";
 import "./Profile.css";
 
 function Profile() {
@@ -12,10 +13,10 @@ function Profile() {
 
         return {
           username: user.username || "",
-          firstName: user.firstName || "",
-          middleName: user.middleName || "",
-          lastName: user.lastName || "",
-          favoriteGenre: user.favoriteGenre || "",
+          firstName: user.first_name || user.firstName || "",
+          middleName: user.middle_name || user.middleName || "",
+          lastName: user.last_name || user.lastName || "",
+          favoriteGenre: user.favorite_genre || user.favoriteGenre || "",
           bio: user.bio || "",
         };
       } catch (error) {
@@ -38,6 +39,8 @@ function Profile() {
   );
 
   const [isEditing, setIsEditing] = useState(false);
+  const [isSaving, setIsSaving] = useState(false);
+  const [saveError, setSaveError] = useState("");
 
   const handleChange = (e) => {
     setProfile({
@@ -46,75 +49,59 @@ function Profile() {
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    setSaveError("");
 
-    const users =
-      JSON.parse(localStorage.getItem("users")) || [];
+    const savedUser = localStorage.getItem("currentUser");
+    const currentUser = savedUser ? JSON.parse(savedUser) : null;
 
-    const existingUser = users.find(
-      (user) =>
-        user.username.toLowerCase() ===
-        originalUsername.toLowerCase()
-    );
-
-    if (!existingUser) {
-      alert("The user account could not be found.");
+    if (!currentUser || !currentUser.id) {
+      setSaveError("You need to be logged in to update your profile.");
       return;
     }
 
-    const updatedProfile = {
-      ...existingUser,
-      username: profile.username.trim(),
-      firstName: profile.firstName.trim(),
-      middleName: profile.middleName.trim(),
-      lastName: profile.lastName.trim(),
-      favoriteGenre: profile.favoriteGenre,
-      bio: profile.bio.trim(),
-      password: existingUser.password,
-    };
+    setIsSaving(true);
+    try {
+      const response = await fetch(`${API_BASE_URL}/users/${currentUser.id}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          username: profile.username.trim(),
+          first_name: profile.firstName.trim(),
+          middle_name: profile.middleName.trim(),
+          last_name: profile.lastName.trim(),
+          favorite_genre: profile.favoriteGenre,
+          bio: profile.bio.trim(),
+        }),
+      });
 
-    const usernameTaken = users.some(
-      (user) =>
-        user.username.toLowerCase() ===
-          updatedProfile.username.toLowerCase() &&
-        user.username.toLowerCase() !==
-          originalUsername.toLowerCase()
-    );
+      const data = await response.json();
 
-    if (usernameTaken) {
-      alert("That username is already being used.");
-      return;
+      if (!response.ok) {
+        setSaveError(data.error || "Something went wrong updating your profile.");
+        return;
+      }
+
+      const updatedUser = { ...currentUser, ...data };
+      localStorage.setItem("currentUser", JSON.stringify(updatedUser));
+
+      setProfile({
+        username: updatedUser.username || "",
+        firstName: updatedUser.first_name || "",
+        middleName: updatedUser.middle_name || "",
+        lastName: updatedUser.last_name || "",
+        favoriteGenre: updatedUser.favorite_genre || "",
+        bio: updatedUser.bio || "",
+      });
+
+      setOriginalUsername(updatedUser.username || "");
+      setIsEditing(false);
+    } catch (error) {
+      setSaveError("Could not reach the server. Please try again.");
+    } finally {
+      setIsSaving(false);
     }
-
-    const updatedUsers = users.map((user) =>
-      user.username.toLowerCase() ===
-      originalUsername.toLowerCase()
-        ? updatedProfile
-        : user
-    );
-
-    localStorage.setItem(
-      "users",
-      JSON.stringify(updatedUsers)
-    );
-
-    localStorage.setItem(
-      "currentUser",
-      JSON.stringify(updatedProfile)
-    );
-
-    setProfile({
-      username: updatedProfile.username,
-      firstName: updatedProfile.firstName,
-      middleName: updatedProfile.middleName,
-      lastName: updatedProfile.lastName,
-      favoriteGenre: updatedProfile.favoriteGenre,
-      bio: updatedProfile.bio,
-    });
-
-    setOriginalUsername(updatedProfile.username);
-    setIsEditing(false);
   };
 
   return (
@@ -148,6 +135,8 @@ function Profile() {
         </div>
 
         <h1>My Profile</h1>
+
+        {saveError && <p className="field-error">{saveError}</p>}
 
         {!isEditing ? (
           <div className="profile-information">
@@ -269,8 +258,9 @@ function Profile() {
               <button
                 type="submit"
                 className="save-button"
+                disabled={isSaving}
               >
-                Save Changes
+                {isSaving ? "Saving..." : "Save Changes"}
               </button>
             </div>
           </form>

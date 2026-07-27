@@ -1,8 +1,6 @@
 import pool from "../config/database.js";
 import bcrypt from "bcrypt";
-
 const SALT_ROUNDS = 10;
-
 export const getUsers = async (req, res) => {
   try {
     const result = await pool.query(`SELECT * FROM users ORDER BY id ASC`);
@@ -11,44 +9,35 @@ export const getUsers = async (req, res) => {
     res.status(500).json({ error: "Failed to fetch users" });
   }
 };
-
 export const getUserById = async (req, res) => {
   try {
     const { userId } = req.params;
-
     const result = await pool.query(`SELECT * FROM users WHERE id = $1`, [
       userId,
     ]);
-
     if (result.rows.length === 0) {
       return res.status(404).json({ error: "User not found" });
     }
-
     res.status(200).json(result.rows[0]);
   } catch (error) {
     res.status(500).json({ error: "Failed to fetch user" });
   }
 };
-
 export const createUser = async (req, res) => {
   try {
     const { name, email, password_hash } = req.body;
-
     if (!name || !email || !password_hash) {
       return res
         .status(400)
         .json({ error: "name, email, and password_hash are required" });
     }
-
     const hashedPassword = await bcrypt.hash(password_hash, SALT_ROUNDS);
-
     const result = await pool.query(
       `INSERT INTO users (name, email, password_hash)
        VALUES ($1, $2, $3)
        RETURNING id, name, email, created_at`,
       [name, email, hashedPassword],
     );
-
     res.status(201).json(result.rows[0]);
   } catch (error) {
     if (error.code === "23505") {
@@ -57,45 +46,87 @@ export const createUser = async (req, res) => {
     res.status(500).json({ error: "Failed to create user" });
   }
 };
-
 export const updateUser = async (req, res) => {
   try {
     const { userId } = req.params;
-    const { name, email, password_hash } = req.body;
+    const {
+      name,
+      email,
+      password_hash,
+      username,
+      first_name,
+      middle_name,
+      last_name,
+      favorite_genre,
+      bio,
+    } = req.body;
+
+    // Only update fields that were actually sent in the request --
+    // this fixes a real bug in the previous version, which always
+    // overwrote name/email/password_hash unconditionally, even with
+    // undefined values (which would have nulled out a user's real
+    // password_hash if this endpoint were ever called with just
+    // profile fields, like from the Profile page).
+    const fields = [];
+    const values = [];
+    let paramIndex = 1;
+
+    const maybeAdd = (column, value) => {
+      if (value !== undefined) {
+        fields.push(`${column} = $${paramIndex}`);
+        values.push(value);
+        paramIndex += 1;
+      }
+    };
+
+    maybeAdd("name", name);
+    maybeAdd("email", email);
+    if (password_hash !== undefined) {
+      const hashedPassword = await bcrypt.hash(password_hash, SALT_ROUNDS);
+      maybeAdd("password_hash", hashedPassword);
+    }
+    maybeAdd("username", username);
+    maybeAdd("first_name", first_name);
+    maybeAdd("middle_name", middle_name);
+    maybeAdd("last_name", last_name);
+    maybeAdd("favorite_genre", favorite_genre);
+    maybeAdd("bio", bio);
+
+    if (fields.length === 0) {
+      return res.status(400).json({ error: "No fields provided to update" });
+    }
+
+    values.push(userId);
 
     const result = await pool.query(
       `UPDATE users
-       SET name = $1,
-           email = $2,
-           password_hash = $3
-       WHERE id = $4
-       RETURNING *`,
-      [name, email, password_hash, userId],
+       SET ${fields.join(", ")}
+       WHERE id = $${paramIndex}
+       RETURNING id, name, email, username, first_name, middle_name, last_name, favorite_genre, bio, created_at`,
+      values,
     );
 
     if (result.rows.length === 0) {
       return res.status(404).json({ error: "User not found" });
     }
-
     res.status(200).json(result.rows[0]);
   } catch (error) {
+    if (error.code === "23505") {
+      return res.status(409).json({ error: "That username is already taken" });
+    }
     res.status(500).json({ error: "Failed to update user" });
   }
 };
-
 export const deleteUser = async (req, res) => {
   try {
     const { userId } = req.params;
-
     const result = await pool.query(
       `DELETE FROM users WHERE id = $1 RETURNING *`,
       [userId],
     );
-
     if (result.rows.length === 0) {
       return res.status(404).json({ error: "User not found" });
     }
-
     res.status(200).json({ message: "User deleted" });
   } catch (error) {
     res.status(500).json({ error: "Failed to delete user" });
