@@ -94,7 +94,7 @@ After a reader finishes a story, the frontend displays a recap of every choice t
 <img src='https://github.com/QuestTwyst/FinalProject/blob/29cdf2c6a85b3be165e138ee3e573ec289f951ca/planning/gifs/StoryPathHistoryandFilterGenre.gif' title='Video Walkthrough' width='' alt='Video Walkthrough' />
 
 
-### Admin Story Management
+### ✅ Admin Story Management
 The backend will support admin-managed story content. Admins or developers will be able to add, update, or delete stories, passages, choices, and genres while readers focus on reading and choosing story paths.
     (Currently in progress through multiple testing towards frontend interface and 
     protected routes including admin/user implementations.)
