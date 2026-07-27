@@ -7,7 +7,7 @@ function CreateAccount() {
     firstName: "",
     middleName: "",
     lastName: "",
-    username: "",
+    email: "",
     password: "",
     confirmPassword: "",
   });
@@ -32,8 +32,8 @@ function CreateAccount() {
       nextErrors.lastName = "Last name is required.";
     }
 
-    if (!formData.username.trim()) {
-      nextErrors.username = "Username is required.";
+    if (!formData.email.trim()) {
+      nextErrors.email = "Email is required.";
     }
 
     if (!formData.password) {
@@ -86,7 +86,7 @@ function CreateAccount() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           name: fullName,
-          email: formData.username.trim(),
+          email: formData.email.trim(),
           password_hash: formData.password,
         }),
       });
@@ -97,7 +97,7 @@ function CreateAccount() {
         if (response.status === 409) {
           setErrors((current) => ({
             ...current,
-            username: "That username is already registered.",
+            email: "That email is already registered.",
           }));
           setSubmitMessage("Please fix the highlighted fields before continuing.");
         } else {
@@ -160,15 +160,15 @@ function CreateAccount() {
             </div>
           </div>
 
-          <label htmlFor="username">Username</label>
+          <label htmlFor="email">Email</label>
           <input
-            type="text"
-            id="username"
-            name="username"
-            value={formData.username}
+            type="email"
+            id="email"
+            name="email"
+            value={formData.email}
             onChange={handleChange}
           />
-          {errors.username && <p className="field-error">{errors.username}</p>}
+          {errors.email && <p className="field-error">{errors.email}</p>}
 
           <label htmlFor="password">Password</label>
           <input

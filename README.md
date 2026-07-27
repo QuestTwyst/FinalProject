@@ -87,19 +87,19 @@ The backend will track a reader’s current location within a story. This allows
 
 [gif goes here]
 
-### Story Path History
+### ✅ Story Path History
 
-After a reader finishes a story, the frontend will display a visual recap of the choices they made along the way, letting them see the full path they took and easily restart to try a different route.
-[gif goes here] (COMING SOON)
+After a reader finishes a story, the frontend displays a recap of every choice they made along the way, in order, under "Your path through this story." A "Restart with different choices" button on the recap screen resets the story and clears the tracked history, letting the reader try a different path and see an accurate recap of that new playthrough.
 
-The backend will save the choices a reader makes while moving through a story. This allows the app to show the path the reader took and makes it possible for users to replay the same story using different choices.
+<img src='https://github.com/QuestTwyst/FinalProject/blob/29cdf2c6a85b3be165e138ee3e573ec289f951ca/planning/gifs/StoryPathHistoryandFilterGenre.gif' title='Video Walkthrough' width='' alt='Video Walkthrough' />
 
-[gif goes here] 
 
-### Admin Story Management
+### ✅ Admin Story Management
 The backend will support admin-managed story content. Admins or developers will be able to add, update, or delete stories, passages, choices, and genres while readers focus on reading and choosing story paths.
+    (Currently in progress through multiple testing towards frontend interface and 
+    protected routes including admin/user implementations.)
 
-[gif goes here] (COMING SOON)
+(![Admin Tory Management (in progress)](planning/gifs/adminfeature_progress.gif))
 
 
 ### [ADDITIONAL FEATURES GO HERE - ADD ALL FEATURES HERE IN THE FORMAT ABOVE; you will check these off and add gifs as you complete them]
@@ -110,6 +110,12 @@ The frontend will display one passage at a time along with two clickable choice 
 Story metadata header showing title, genre, author, and description at the top of the reader
 
 ![Story Reader Interface demo](planning/gifs/QuestTwyst_Story-Reader-Interface.gif)
+
+### ✅ Database Integrity: Foreign Key on stories.creator_id
+
+Added a foreign key constraint linking `stories.creator_id` to `users(id)`, so every story is properly and reliably tied to the user who created it, as originally scoped in the database schema. If a user account is ever deleted, their stories aren't deleted along with them — `creator_id` is set to `NULL` instead, keeping the story intact. Inserting a story with an invalid `creator_id` now fails immediately at the database level, preventing orphaned or broken story-author references.
+
+<img src='https://github.com/QuestTwyst/FinalProject/blob/3ea670622cd3eaf1488c663ad031b24c75a30239/planning/gifs/ForeignKey.gif' width='' alt='Video Walkthrough' />
 
 ### Story Creator Interface
 The frontend will provide a form-based editor where users can write a story title, add passages, and fill in the two choices that branch off each passage. Validation will prevent saving a passage until the title and both choices are filled in, and users can mark any passage as an ending.

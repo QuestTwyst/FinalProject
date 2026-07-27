@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { API_BASE_URL } from "../config/api";
 import "./Profile.css";
@@ -12,7 +12,7 @@ function Profile() {
         const user = JSON.parse(savedUser);
 
         return {
-          username: user.username || "",
+          email: user.email || "",
           firstName: user.first_name || user.firstName || "",
           middleName: user.middle_name || user.middleName || "",
           lastName: user.last_name || user.lastName || "",
@@ -25,7 +25,7 @@ function Profile() {
     }
 
     return {
-      username: "",
+      email: "",
       firstName: "",
       middleName: "",
       lastName: "",
@@ -34,13 +34,44 @@ function Profile() {
     };
   });
 
-  const [originalUsername, setOriginalUsername] = useState(
-    profile.username
+  const [originalEmail, setOriginalEmail] = useState(
+    profile.email
   );
 
   const [isEditing, setIsEditing] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
   const [saveError, setSaveError] = useState("");
+  const [readingProgress, setReadingProgress] = useState([]);
+  const [isLoadingProgress, setIsLoadingProgress] = useState(true);
+  const [progressError, setProgressError] = useState("");
+
+  useEffect(() => {
+    const fetchReadingProgress = async () => {
+      try {
+        setIsLoadingProgress(true);
+        setProgressError("");
+
+        const response = await fetch(`${API_BASE_URL}/api/progress`);
+
+        if (!response.ok) {
+          throw new Error("Could not load reading progress.");
+        }
+        const data = await response.json();
+
+        const progressList = Array.isArray(data)
+          ? data
+          : data.progress || [];
+
+        setReadingProgress(progressList);
+      } catch (error) {
+        console.error("Progress error:", error);
+        setProgressError("Unable to load your saved stories.");
+      } finally {
+        setIsLoadingProgress(false);
+      }
+    };
+    fetchReadingProgress();
+  }, []);
 
   const handleChange = (e) => {
     setProfile({
@@ -67,7 +98,7 @@ function Profile() {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          username: profile.username.trim(),
+          email: profile.email.trim(),
           first_name: profile.firstName.trim(),
           middle_name: profile.middleName.trim(),
           last_name: profile.lastName.trim(),
@@ -87,7 +118,7 @@ function Profile() {
       localStorage.setItem("currentUser", JSON.stringify(updatedUser));
 
       setProfile({
-        username: updatedUser.username || "",
+        email: updatedUser.email || "",
         firstName: updatedUser.first_name || "",
         middleName: updatedUser.middle_name || "",
         lastName: updatedUser.last_name || "",
@@ -95,7 +126,7 @@ function Profile() {
         bio: updatedUser.bio || "",
       });
 
-      setOriginalUsername(updatedUser.username || "");
+      setOriginalEmail(updatedUser.email || "");
       setIsEditing(false);
     } catch (error) {
       setSaveError("Could not reach the server. Please try again.");
@@ -103,6 +134,10 @@ function Profile() {
       setIsSaving(false);
     }
   };
+
+  const fullName =
+    `${profile.firstName} ${profile.lastName}`.trim() ||
+    "Reader";
 
   return (
     <main className="profile-page">
@@ -130,8 +165,8 @@ function Profile() {
 
       <section className="profile-card">
         <div className="profile-avatar">
-          {profile.firstName.charAt(0)}
-          {profile.lastName.charAt(0)}
+          {profile.firstName.charAt(0).toUpperCase()}
+          {profile.lastName.charAt(0).toUpperCase()}
         </div>
 
         <h1>My Profile</h1>
@@ -141,8 +176,13 @@ function Profile() {
         {!isEditing ? (
           <div className="profile-information">
             <div className="profile-field">
-              <span>Username</span>
-              <p>{profile.username || "Not provided"}</p>
+              <span>Name</span>
+              <p>{fullName}</p>
+            </div>
+
+            <div className="profile-field">
+              <span>Email</span>
+              <p>{profile.email || "Not provided"}</p>
             </div>
 
             <div className="profile-name-grid">
@@ -183,11 +223,11 @@ function Profile() {
             onSubmit={handleSubmit}
           >
             <label>
-              Username
+              Email
               <input
                 type="text"
-                name="username"
-                value={profile.username}
+                name="email"
+                value={profile.email}
                 onChange={handleChange}
                 required
               />
@@ -265,6 +305,88 @@ function Profile() {
             </div>
           </form>
         )}
+      </section>
+
+      <section className="continue-section">
+        <h2>Continue Reading</h2>
+
+        {isLoadingProgress && (
+          <p className="progress-message">
+            Loading your saved stories...
+          </p>
+        )}
+
+        {!isLoadingProgress && progressError && (
+          <p className="progress-error">
+            {progressError}
+          </p>
+        )}
+
+        {!isLoadingProgress &&
+          !progressError &&
+          readingProgress.length === 0 && (
+            <div className="empty-progress-card">
+              <h3>No saved stories yet</h3>
+
+              <p>
+                Start reading a story and your progress will
+                appear here.
+              </p>
+              <Link
+                to="/library"
+                className="browse-stories-button"
+              >
+                Browse Stories
+              </Link>
+            </div>
+          )}
+
+        {!isLoadingProgress &&
+          !progressError &&
+          readingProgress.length > 0 && (
+            <div className="progress-grid">
+              {readingProgress.map((item) => {
+                const storyId =
+                  item.storyId || item.story_id;
+
+                const storyTitle =
+                  item.storyTitle ||
+                  item.story_title ||
+                  item.title ||
+                  "Untitled Story";
+
+                const currentPassage =
+                  item.currentPassage ||
+                  item.current_passage ||
+                  item.passageId ||
+                  item.passage_id;
+                return (
+                  <article
+                    className="progress-card"
+                    key={
+                      item.id ||
+                      `${storyId}-${currentPassage}`
+                    }
+                  >
+                    <h3>{storyTitle}</h3>
+
+                    {item.genre && (
+                      <p className="story-genre">
+                        {item.genre}
+                      </p>
+                    )}
+                    <Link
+                      to={`/stories/${storyId}`}
+                      state={{ resumePassageId: currentPassage }}
+                      className="continue-button"
+                    >
+                      Continue Reading
+                    </Link>
+                  </article>
+                );
+              })}
+            </div>
+          )}
       </section>
     </main>
   );

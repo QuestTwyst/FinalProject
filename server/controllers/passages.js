@@ -3,11 +3,14 @@ import pool from "../config/database.js";
 export const getPassagesByStory = async (req, res) => {
   try {
     const { id } = req.params;
+    console.log("id:", id);
 
     const result = await pool.query(
       `SELECT * FROM passages WHERE story_id = $1 ORDER BY id ASC;`,
       [id],
     );
+
+    console.log("rows length", result.rows.length);
 
     res.status(200).json(result.rows);
   } catch (error) {
