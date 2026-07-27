@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useNavigate, useParams, useLocation } from "react-router-dom";
-import { getStoryById, getPassageById } from "../config/api"; // choices come inside passage response
+import { getStoryById, getPassageById } from "../config/api"; // Story + passages from backend
 import { parseSaveFile } from "../utils/saveFile";
 import { useBackgroundAudio } from "../utils/useBackgroundAudio";
 import NavBar from "./NavBar";
@@ -36,7 +36,8 @@ function StoryReader() {
   // Choices for the current passage (from backend)
   const [choices, setChoices] = useState([]);
 
-  console.log("StoryReader storyId param:", storyId);
+  // Track the choices the reader made this session
+  const [choiceHistory, setChoiceHistory] = useState([]);
 
   const [isDark, setIsDark] = useState(false);
   const [isMuted, setIsMuted] = useState(false);
@@ -44,7 +45,9 @@ function StoryReader() {
   const [importMessage, setImportMessage] = useState("");
   const audioRef = useRef(null);
 
-  //Load story from backend
+  console.log("StoryReader storyId param:", storyId);
+
+  // Load story from backend
   useEffect(() => {
     async function loadStory() {
       try {
@@ -52,17 +55,19 @@ function StoryReader() {
         setStory(s);
       } catch (err) {
         console.error("Failed to load story", err);
+        setStory(null);
       }
     }
 
     loadStory();
   }, [storyId]);
 
-  //Determine starting passage or resume from save file
+  // Determine starting passage or resume from save file
   useEffect(() => {
     if (!story) return;
 
     const resumePassageId = location.state?.resumePassageId;
+    setChoiceHistory([]);
 
     if (resumePassageId != null) {
       // Resume from saved passage
@@ -78,7 +83,7 @@ function StoryReader() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [storyId, story?.start_passage_id]);
 
-  //Load passage + choices from backend whenever currentPassageId changes
+  // Load passage + choices from backend whenever currentPassageId changes
   useEffect(() => {
     if (!currentPassageId) return;
 
@@ -90,9 +95,13 @@ function StoryReader() {
         setCurrentPassage(p);
 
         // Choices come inside passage response as "choices"
-        setChoices(p.choices || []);
+        // Only choices that actually point somewhere are shown --
+        // an unlinked choice would otherwise lead to a blank passage.
+        setChoices((p.choices || []).filter((c) => c.next_passage_id != null));
       } catch (err) {
         console.error("Failed to load passage", err);
+        setCurrentPassage(null);
+        setChoices([]);
       }
     }
 
@@ -118,18 +127,20 @@ function StoryReader() {
   // Move to next passage using backend field names
   const handleChoiceSelect = (choice) => {
     if (!choice?.next_passage_id) return;
+    setChoiceHistory((prev) => [...prev, choice.choice_text]);
     setCurrentPassageId(choice.next_passage_id);
   };
 
   // Restart story
   const handleRestart = () => {
     if (story) {
+      setChoiceHistory([]);
       // restart to story.start_passage_id
       setCurrentPassageId(story.start_passage_id);
     }
   };
 
-  //Save progress to file
+  // Save progress to file
   const handleSaveProgress = () => {
     if (!story) return;
     const saveData = {
@@ -157,7 +168,7 @@ function StoryReader() {
     URL.revokeObjectURL(url);
   };
 
-  //Import progress from saved file
+  // Import progress from saved file
   const handleImportProgress = (file) => {
     parseSaveFile(
       file,
@@ -186,7 +197,16 @@ function StoryReader() {
   const isSciFi = story?.genre === "Sci-Fi";
   const isWestern = story?.genre === "Western";
   const isComedy = story?.genre === "Comedy";
-  const pageClass = `${styles.readerPage} ${isRomance ? styles.themeRomance : ""} ${isMystery ? styles.themeMystery : ""} ${isAdventure ? styles.themeAdventure : ""} ${isSciFi ? styles.themeSciFi : ""} ${isWestern ? styles.themeWestern : ""} ${isComedy ? styles.themeComedy : ""} ${isDark ? styles.themeDark : ""}`;
+  const isHorror = story?.genre === "Horror";
+  const pageClass = `${styles.readerPage} ${
+    isRomance ? styles.themeRomance : ""
+  } ${isMystery ? styles.themeMystery : ""} ${
+    isAdventure ? styles.themeAdventure : ""
+  } ${isSciFi ? styles.themeSciFi : ""} ${
+    isWestern ? styles.themeWestern : ""
+  } ${isComedy ? styles.themeComedy : ""} ${
+    isHorror ? styles.themeHorror : ""
+  } ${isDark ? styles.themeDark : ""}`;
 
   // If story failed to load
   if (!story) {
@@ -424,6 +444,77 @@ function StoryReader() {
         </>
       )}
 
+      {isHorror && (
+        <>
+          <svg className={styles.moon} viewBox="0 0 100 100" aria-hidden="true">
+            <circle cx="50" cy="50" r="42" />
+          </svg>
+
+          <svg
+            className={styles.hauntedSkyline}
+            viewBox="0 0 1280 240"
+            preserveAspectRatio="none"
+            aria-hidden="true"
+          >
+            {/* Bare twisted trees */}
+            <path
+              d="M40,240 L40,150 L20,120 M40,150 L60,110 M40,180 L15,170 M40,190 L65,175"
+              fill="none"
+              strokeWidth="5"
+              stroke="currentColor"
+              strokeLinecap="round"
+            />
+            <path
+              d="M1220,240 L1220,140 L1245,105 M1220,140 L1195,100 M1220,170 L1250,160 M1220,185 L1190,165"
+              fill="none"
+              strokeWidth="5"
+              stroke="currentColor"
+              strokeLinecap="round"
+            />
+
+            {/* Crooked mansion */}
+            <polygon points="380,240 380,110 480,60 580,110 580,240" />
+            <polygon points="420,60 480,30 540,60" />
+            <rect x="455" y="20" width="10" height="45" />
+            <rect x="440" y="150" width="30" height="90" fill="#050403" />
+            <circle cx="410" cy="140" r="10" fill="#e8c94a" opacity="0.6" />
+            <circle cx="545" cy="140" r="10" fill="#e8c94a" opacity="0.35" />
+            <circle cx="480" cy="95" r="12" fill="#e8c94a" opacity="0.5" />
+
+            {/* Iron fence */}
+            <rect x="620" y="200" width="8" height="40" />
+            <rect x="660" y="195" width="8" height="45" />
+            <rect x="700" y="200" width="8" height="40" />
+            <rect x="740" y="195" width="8" height="45" />
+            <line
+              x1="620"
+              y1="210"
+              x2="748"
+              y2="210"
+              strokeWidth="4"
+              stroke="currentColor"
+            />
+          </svg>
+
+          <div className={styles.fogField} aria-hidden="true">
+            <div className={`${styles.fogLayer} ${styles.fogOne}`}></div>
+            <div className={`${styles.fogLayer} ${styles.fogTwo}`}></div>
+          </div>
+
+          <div className={styles.batField} aria-hidden="true">
+            <svg className={`${styles.bat} ${styles.bat1}`} viewBox="0 0 60 30">
+              <path d="M30,15 C22,2 8,2 2,12 C10,10 18,13 26,20 C18,15 8,18 4,24 C14,22 24,20 30,20 C36,20 46,22 56,24 C52,18 42,15 34,20 C42,13 50,10 58,12 C52,2 38,2 30,15 Z" />
+            </svg>
+            <svg className={`${styles.bat} ${styles.bat2}`} viewBox="0 0 60 30">
+              <path d="M30,15 C22,2 8,2 2,12 C10,10 18,13 26,20 C18,15 8,18 4,24 C14,22 24,20 30,20 C36,20 46,22 56,24 C52,18 42,15 34,20 C42,13 50,10 58,12 C52,2 38,2 30,15 Z" />
+            </svg>
+            <svg className={`${styles.bat} ${styles.bat3}`} viewBox="0 0 60 30">
+              <path d="M30,15 C22,2 8,2 2,12 C10,10 18,13 26,20 C18,15 8,18 4,24 C14,22 24,20 30,20 C36,20 46,22 56,24 C52,18 42,15 34,20 C42,13 50,10 58,12 C52,2 38,2 30,15 Z" />
+            </svg>
+          </div>
+        </>
+      )}
+
       <div className={styles.pageContent}>
         <NavBar
           isDark={isDark}
@@ -477,12 +568,10 @@ function StoryReader() {
               )}
             </header>
 
-            {/* Passage loaded */}
             {currentPassage ? (
               <>
                 <StoryPassage passage={currentPassage} />
 
-                {/* Choices loaded from backend */}
                 {choices.length > 0 ? (
                   <div className={styles.choiceRow}>
                     {choices.map((choice, index) => (
@@ -495,19 +584,39 @@ function StoryReader() {
                     ))}
                   </div>
                 ) : (
-                  <div className={styles.choiceRow}>
-                    <button
-                      className={`${styles.choiceButton} ${styles.choiceButtonEnd}`}
-                      type="button"
-                      onClick={handleRestart}
-                    >
-                      <span className={styles.choiceText}>Restart story</span>
-                    </button>
+                  <div className={styles.recapSection}>
+                    <h3 className={styles.recapTitle}>
+                      Your path through this story
+                    </h3>
+                    {choiceHistory.length > 0 ? (
+                      <ol className={styles.recapList}>
+                        {choiceHistory.map((choiceText, index) => (
+                          <li key={index} className={styles.recapItem}>
+                            {choiceText}
+                          </li>
+                        ))}
+                      </ol>
+                    ) : (
+                      <p className={styles.recapEmpty}>
+                        You reached this ending without making any choices yet
+                        this session.
+                      </p>
+                    )}
+                    <div className={styles.choiceRow}>
+                      <button
+                        className={`${styles.choiceButton} ${styles.choiceButtonEnd}`}
+                        type="button"
+                        onClick={handleRestart}
+                      >
+                        <span className={styles.choiceText}>
+                          Restart with different choices
+                        </span>
+                      </button>
+                    </div>
                   </div>
                 )}
               </>
             ) : (
-              // Passage still loading
               <div className={styles.storyCardScroll}>
                 <p className={styles.passageText}>
                   Loading the first passage of this story...
