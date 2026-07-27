@@ -15,7 +15,14 @@ List each issue you completed this unit and the main file or folder where that w
 ## Features Completed This Unit
 List each feature you completed and checked off in readme.md this unit, one per line:
 - Real Password Hashing and Login Endpoint
-- Story Path History 
+- Story Path History
+- Issue #31: Connect Story Reader to Real Backend API - client/src/config/api.js, client/src/components/StoryReader.jsx, client/src/components/StoryPassage.jsx, client/src/components/ChoiceButton.jsx, server/config/reset.js, server/data/storyData.js
+- Issue #41: Fix Broken Legacy routes/progress.js File - server/routes/progress.js (removed)
+- Issue #42: Audit /stories Route Mounting for Collisions - server/server.js, server/test.http‎
+           
+            
+            
+           
 
 
 
@@ -26,4 +33,9 @@ Issue #32:
 
 
 
-## Gaby:
+
+            
+            -
+
+
+
