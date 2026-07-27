@@ -96,8 +96,10 @@ After a reader finishes a story, the frontend displays a recap of every choice t
 
 ### Admin Story Management
 The backend will support admin-managed story content. Admins or developers will be able to add, update, or delete stories, passages, choices, and genres while readers focus on reading and choosing story paths.
+    (Currently in progress through multiple testing towards frontend interface and 
+    protected routes including admin/user implementations.)
 
-[gif goes here] (COMING SOON)
+(![Admin Tory Management (in progress)](planning/gifs/adminfeature_progress.gif))
 
 
 ### [ADDITIONAL FEATURES GO HERE - ADD ALL FEATURES HERE IN THE FORMAT ABOVE; you will check these off and add gifs as you complete them]
