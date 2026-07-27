@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
 function Login() {
-  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
 
@@ -15,22 +15,24 @@ function Login() {
     // Get all registered users
     const savedUsers = JSON.parse(localStorage.getItem("users")) || [];
 
-    // Check if username and password match
-    const matchingUser = savedUsers.find(
-        (user) =>
-            user.username.toLowerCase() === username.trim().toLowerCase() &&
-            user.password === password
+    // Check if email and password match
+   const matchingUser = savedUsers.find(
+  (user) =>
+    user.email?.toLowerCase() === email.trim().toLowerCase() &&
+    user.password === password
 );
 
-    if (!matchingUser) {
-      setError("Incorrect username or password.");
-      return;
-    }
+if (!matchingUser) {
+  setError("Incorrect email or password.");
+  return;
+}
 
-    // Save logged-in user
-    localStorage.setItem("currentUser", JSON.stringify(matchingUser));
+localStorage.setItem(
+  "currentUser",
+  JSON.stringify(matchingUser)
+);
 
-    navigate("/profile");
+navigate("/profile");
   };
 
   const handleCancel = () => {
@@ -43,14 +45,14 @@ function Login() {
         <h2 style={{ textAlign: "center" }}>Log In</h2>
 
         <form onSubmit={handleSubmit}>
-          <label htmlFor="username">Username:</label>
+          <label htmlFor="email">Email:</label>
 
           <input
             type="text"
-            id="username"
-            placeholder="Enter your username"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
+            id="email"
+            placeholder="Enter your email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
             required
           />
 
