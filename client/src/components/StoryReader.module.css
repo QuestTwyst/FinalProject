@@ -1508,7 +1508,8 @@
 
 /* ---------- Weathered dark card ---------- */
 .themeHorror .storyCard {
-  background: rgba(15, 17, 20, 0.92);
+  background: rgba(15, 17, 20, 0.55);
+  backdrop-filter: blur(6px);
   border: 1px solid rgba(120, 30, 30, 0.4);
   box-shadow:
     0 0 30px rgba(100, 10, 10, 0.15),
@@ -1527,7 +1528,8 @@
 }
 
 .themeHorror.themeDark .storyCard {
-  background: rgba(8, 9, 11, 0.95);
+  background: rgba(8, 9, 11, 0.6);
+  backdrop-filter: blur(6px);
   border-color: rgba(150, 30, 30, 0.35);
 }
 
