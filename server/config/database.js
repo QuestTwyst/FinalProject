@@ -1,3 +1,4 @@
+// server/config/database.js
 import pg from "pg";
 import dotenv from "dotenv";
 
@@ -5,12 +6,10 @@ dotenv.config();
 
 const { Pool } = pg;
 
-const isProduction = process.env.NODE_ENV === "production";
-
 const pool = process.env.DATABASE_URL
   ? new Pool({
       connectionString: process.env.DATABASE_URL,
-      ssl: isProduction ? { rejectUnauthorized: false } : false,
+      ssl: { rejectUnauthorized: false },
     })
   : new Pool({
       host: process.env.PGHOST,
@@ -18,7 +17,7 @@ const pool = process.env.DATABASE_URL
       database: process.env.PGDATABASE,
       user: process.env.PGUSER,
       password: process.env.PGPASSWORD,
-      ssl: isProduction ? { rejectUnauthorized: false } : false,
+      ssl: { rejectUnauthorized: false },
     });
 
 pool.on("connect", () => {
