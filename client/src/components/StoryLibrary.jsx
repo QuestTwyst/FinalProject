@@ -164,19 +164,24 @@ function StoryLibrary() {
   };
 
   const handleDeleteStory = async (storyId) => {
-    try {
-      const response = await fetch(`${API_BASE_URL}/stories/${storyId}`, {
-        method: 'DELETE',
-      });
-      if (!response.ok) {
-        throw new Error(`Failed to delete story (${response.status})`);
-      }
-      setStories((prev) => prev.filter((story) => story.id !== storyId));
-    } catch (error) {
-      console.error('Error deleting story:', error);
-      window.alert('Something went wrong deleting that story. Please try again.');
+  try {
+    const authToken = localStorage.getItem('authToken');
+
+    const response = await fetch(`${API_BASE_URL}/stories/${storyId}`, {
+      method: 'DELETE',
+      headers: {
+        Authorization: `Bearer ${authToken}`,
+      },
+    });
+    if (!response.ok) {
+      throw new Error(`Failed to delete story (${response.status})`);
     }
-  };
+    setStories((prev) => prev.filter((story) => story.id !== storyId));
+  } catch (error) {
+    console.error('Error deleting story:', error);
+    window.alert('Something went wrong deleting that story. Please try again.');
+  }
+};
 
   return (
     <div className={`${styles.libraryPage} ${isDark ? styles.themeDark : ''}`}>
