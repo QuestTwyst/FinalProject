@@ -41,9 +41,9 @@ Complete the checklist below detailing each baseline, custom, and stretch featur
   - [X] At least one redirection, where users are able to navigate to a new page with a new URL within the app
   - [X] At least one interaction that the user can initiate and complete on the same page without navigating to a new page
   - [X] Dynamic frontend routes created with React Router
-  - [ ] Hierarchically designed React components
-    - [ ] Components broken down into categories, including Page and Component types
-    - [ ] Corresponding container components and presenter components as appropriate
+  - [X] Hierarchically designed React components
+    - [X] Components broken down into categories, including Page and Component types
+    - [X] Corresponding container components and presenter components as appropriate
 - [ ] The project includes dynamic routes for both frontend and backend apps
 - [ ] The project is deployed on Render with all pages and features that are visible to the user are working as intended
 
