@@ -1365,21 +1365,28 @@
 .themeHorror {
   background-image: linear-gradient(
       to bottom,
-      rgba(120, 45, 20, 0.55) 0%,
-      rgba(180, 90, 40, 0.35) 35%,
-      rgba(60, 20, 50, 0.5) 70%,
-      rgba(20, 10, 30, 0.65) 100%
+      rgba(255, 140, 40, 0.5) 0%,
+      rgba(255, 100, 50, 0.4) 30%,
+      rgba(200, 70, 40, 0.35) 60%,
+      rgba(120, 40, 30, 0.5) 100%
     ),
     url("/HH_1.png");
   background-size: cover;
-  background-position: center;
+  background-position: bottom center;
   background-blend-mode: overlay;
 }
 
 .themeHorror.themeDark {
-  background-image: url("/HH_1.png");
+  background-image: linear-gradient(
+      to bottom,
+      rgba(10, 15, 40, 0.6) 0%,
+      rgba(15, 25, 55, 0.45) 40%,
+      rgba(5, 10, 30, 0.65) 100%
+    ),
+    url("/HH_1.png");
   background-size: cover;
-  background-position: center;
+  background-position: bottom center;
+  background-blend-mode: overlay;
 }
 
 /* Hide the default drifting gradient — the night scene replaces it */
