@@ -9,7 +9,7 @@ import CreateAccount from "./components/CreateAccount.jsx";
 import Profile from "./components/Profile";
 import PasswordReset from "./components/PasswordReset.jsx";
 
-function AdminRoute({ children }) {
+function AuthenticatedRoute({ children }) {
   const authToken = localStorage.getItem("authToken");
 
   let currentUser = null;
@@ -22,17 +22,12 @@ function AdminRoute({ children }) {
     console.error("Unable to read the logged-in user:", error);
   }
 
-  // Not logged in
+  // Logged-out users must log in before creating a story.
   if (!authToken || !currentUser) {
     return <Navigate to="/login" replace />;
   }
 
-  // Logged in, but not an administrator
-  if (currentUser.role !== "admin") {
-    return <Navigate to="/library" replace />;
-  }
-
-  // Logged-in administrator
+  // Any logged-in user may create a story.
   return children;
 }
 
@@ -47,20 +42,23 @@ function App() {
       <Route
         path="/create"
         element={
-          <AdminRoute>
+          <AuthenticatedRoute>
             <StoryCreator />
-          </AdminRoute>
+          </AuthenticatedRoute>
         }
       />
 
       <Route path="/about" element={<About />} />
       <Route path="/login" element={<Login />} />
+
       <Route
         path="/create-account"
         element={<CreateAccount />}
       />
+
       <Route path="/register" element={<CreateAccount />} />
       <Route path="/profile" element={<Profile />} />
+
       <Route
         path="/password-reset"
         element={<PasswordReset />}
