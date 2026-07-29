@@ -22,6 +22,11 @@ export async function getStoryById(storyId) {
     if (genreRes.ok) {
       const genres = await genreRes.json();
       genre = genres[0]?.name || null;
+      // The theme/sound lookups elsewhere in the app expect "Sci-Fi",
+      // but the genres table stores the full "Science Fiction" name.
+      if (genre === "Science Fiction") {
+        genre = "Sci-Fi";
+      }
     }
   } catch {
     genre = null;

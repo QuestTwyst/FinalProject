@@ -3,6 +3,7 @@ import { useNavigate, useParams, useLocation } from "react-router-dom";
 import { getStoryById, getPassageById } from "../config/api"; // Story + passages from backend
 import { parseSaveFile } from "../utils/saveFile";
 import { useBackgroundAudio } from "../utils/useBackgroundAudio";
+import { usePersistedAudioSettings } from "../utils/usePersistedAudioSettings";
 import NavBar from "./NavBar";
 import StoryPassage from "./StoryPassage";
 import ChoiceButton from "./ChoiceButton";
@@ -40,8 +41,7 @@ function StoryReader() {
   const [choiceHistory, setChoiceHistory] = useState([]);
 
   const [isDark, setIsDark] = useState(false);
-  const [isMuted, setIsMuted] = useState(false);
-  const [volume, setVolume] = useState(0.5);
+  const { isMuted, setIsMuted, volume, setVolume } = usePersistedAudioSettings();
   const [importMessage, setImportMessage] = useState("");
   const audioRef = useRef(null);
 

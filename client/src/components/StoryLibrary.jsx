@@ -3,6 +3,7 @@ import { useNavigate, useSearchParams } from 'react-router-dom';
 import { API_BASE_URL } from '../config/api';
 import { parseSaveFile } from '../utils/saveFile';
 import { useBackgroundAudio } from '../utils/useBackgroundAudio';
+import { usePersistedAudioSettings } from '../utils/usePersistedAudioSettings';
 import NavBar from './NavBar';
 import StoryCard from './StoryCard';
 import styles from './StoryLibrary.module.css';
@@ -13,8 +14,7 @@ function StoryLibrary() {
   const genreFromUrl = searchParams.get('genre');
   const [selectedGenre, setSelectedGenre] = useState(genreFromUrl || 'All');
   const [isDark, setIsDark] = useState(false);
-  const [isMuted, setIsMuted] = useState(false);
-  const [volume, setVolume] = useState(0.5);
+  const { isMuted, setIsMuted, volume, setVolume } = usePersistedAudioSettings();
   const [importMessage, setImportMessage] = useState('');
   const [stories, setStories] = useState([]);
   const [availableGenres, setAvailableGenres] = useState([]);

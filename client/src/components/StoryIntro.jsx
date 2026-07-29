@@ -2,14 +2,14 @@ import { useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { parseSaveFile } from '../utils/saveFile';
 import { useBackgroundAudio } from '../utils/useBackgroundAudio';
+import { usePersistedAudioSettings } from '../utils/usePersistedAudioSettings';
 import NavBar from './NavBar';
 import styles from './StoryIntro.module.css';
 
 function StoryIntro() {
   const navigate = useNavigate();
   const [isDark, setIsDark] = useState(false);
-  const [isMuted, setIsMuted] = useState(false);
-  const [volume, setVolume] = useState(0.5);
+  const { isMuted, setIsMuted, volume, setVolume } = usePersistedAudioSettings();
   const [selectedStory, setSelectedStory] = useState(null);
   const [importMessage, setImportMessage] = useState('');
   const audioRef = useRef(null);
