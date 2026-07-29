@@ -340,12 +340,12 @@
 }
 
 .themeDark .choiceButton {
-  background: rgba(255, 255, 255, 0.12);
+  background: rgba(58, 22, 74, 0.75);
   color: #f4f4f8;
 }
 
 .themeDark .choiceButton:hover {
-  background: rgba(255, 255, 255, 0.22);
+  background: rgba(74, 30, 94, 0.9);
 }
 
 .themeDark .choiceLabel {
@@ -556,6 +556,17 @@
 .themeRomance .choiceButton:hover {
   background: #ffffff;
   border-color: rgba(232, 56, 94, 0.7);
+}
+
+.themeRomance.themeDark .choiceButton {
+  background: rgba(58, 22, 74, 0.88);
+  color: #f4f4f8;
+  border-color: rgba(199, 125, 255, 0.5);
+}
+
+.themeRomance.themeDark .choiceButton:hover {
+  background: rgba(74, 30, 94, 0.96);
+  border-color: rgba(199, 125, 255, 0.8);
 }
 
 .themeRomance .choiceLabel {
