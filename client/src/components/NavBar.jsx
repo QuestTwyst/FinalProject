@@ -196,10 +196,10 @@ function NavBar({ isDark, onThemeToggle, isMuted, onSoundToggle, volume, onVolum
         onClick={() => navigate('/create-account')}
       >
         <svg className={styles.icon} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-          <path d="M20 21v-2a4 4 0 0 0-3-3.87"></path>
-          <polyline points="4 15 4 21 8 21"></polyline>
-          <line x1="4" y1="12" x2="4" y2="12"></line>
-          <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+          <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+          <circle cx="8.5" cy="7" r="4"></circle>
+          <line x1="20" y1="8" x2="20" y2="14"></line>
+          <line x1="23" y1="11" x2="17" y2="11"></line>
         </svg>
       </button>
     </nav>
