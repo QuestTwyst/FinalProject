@@ -5,6 +5,7 @@ import { parseSaveFile } from '../utils/saveFile';
 import { useBackgroundAudio } from '../utils/useBackgroundAudio';
 import { usePersistedAudioSettings } from '../utils/usePersistedAudioSettings';
 import NavBar from './NavBar';
+import LoadingSpinner from './LoadingSpinner';
 import StoryCard from './StoryCard';
 import styles from './StoryLibrary.module.css';
 
@@ -236,7 +237,7 @@ function StoryLibrary() {
 
           <section className={styles.storyGrid}>
             {isLoading ? (
-              <p className={styles.noResults}>Loading stories...</p>
+              <LoadingSpinner label="Loading stories..." />
             ) : loadError ? (
               <p className={styles.noResults}>{loadError}</p>
             ) : filteredStories.length > 0 ? (

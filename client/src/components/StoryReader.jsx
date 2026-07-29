@@ -5,6 +5,8 @@ import { parseSaveFile } from "../utils/saveFile";
 import { useBackgroundAudio } from "../utils/useBackgroundAudio";
 import { usePersistedAudioSettings } from "../utils/usePersistedAudioSettings";
 import NavBar from "./NavBar";
+import LoadingSpinner from "./LoadingSpinner";
+import CustomCursor from "./CustomCursor";
 import StoryPassage from "./StoryPassage";
 import ChoiceButton from "./ChoiceButton";
 import styles from "./StoryReader.module.css";
@@ -43,6 +45,15 @@ function StoryReader() {
   const [isDark, setIsDark] = useState(false);
   const { isMuted, setIsMuted, volume, setVolume } = usePersistedAudioSettings();
   const [importMessage, setImportMessage] = useState("");
+  const [isProcessing, setIsProcessing] = useState(false);
+  const [processingLabel, setProcessingLabel] = useState("");
+
+  useEffect(() => {
+    document.body.classList.toggle("qtProcessingCursor", isProcessing);
+    return () => {
+      document.body.classList.remove("qtProcessingCursor");
+    };
+  }, [isProcessing]);
   const audioRef = useRef(null);
 
   console.log("StoryReader storyId param:", storyId);
@@ -143,6 +154,8 @@ function StoryReader() {
   // Save progress to file
   const handleSaveProgress = () => {
     if (!story) return;
+    setIsProcessing(true);
+    setProcessingLabel("Saving your progress...");
     const saveData = {
       app: "Questwyst",
       version: 1,
@@ -166,10 +179,13 @@ function StoryReader() {
     link.click();
     document.body.removeChild(link);
     URL.revokeObjectURL(url);
+    setTimeout(() => setIsProcessing(false), 30000);
   };
 
   // Import progress from saved file
   const handleImportProgress = (file) => {
+    setIsProcessing(true);
+    setProcessingLabel("Importing your progress...");
     parseSaveFile(
       file,
       (data) => {
@@ -188,6 +204,7 @@ function StoryReader() {
       () =>
         setImportMessage("That file doesn't look like a valid Questwyst save."),
     );
+    setTimeout(() => setIsProcessing(false), 30000);
   };
 
   const isRomance = story?.genre === "Romance";
@@ -239,6 +256,8 @@ function StoryReader() {
   // Main render
   return (
     <main className={pageClass}>
+      <CustomCursor active={isProcessing} />
+
       {soundSrc && <audio ref={audioRef} src={soundSrc} loop />}
 
       {/* Background layers */}
@@ -561,9 +580,7 @@ function StoryReader() {
               </>
             ) : (
               <div className={styles.storyCardScroll}>
-                <p className={styles.passageText}>
-                  Loading the first passage of this story...
-                </p>
+                <LoadingSpinner label="Loading the first passage of this story..." />
               </div>
             )}
           </article>

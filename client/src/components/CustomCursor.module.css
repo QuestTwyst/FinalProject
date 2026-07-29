@@ -1,0 +1,27 @@
+.customCursor {
+  position: fixed;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: conic-gradient(
+    from 0deg,
+    #ff6b6b,
+    #ffd93d,
+    #6bcf7f,
+    #4d96ff,
+    #a66bff,
+    #ff6b6b
+  );
+  -webkit-mask: radial-gradient(farthest-side, transparent calc(100% - 4px), #000 calc(100% - 4px));
+  mask: radial-gradient(farthest-side, transparent calc(100% - 4px), #000 calc(100% - 4px));
+  pointer-events: none;
+  z-index: 99999;
+  transform: translate(-50%, -50%);
+  animation: qtCursorSpin 0.7s linear infinite;
+}
+
+@keyframes qtCursorSpin {
+  to {
+    transform: translate(-50%, -50%) rotate(360deg);
+  }
+}

@@ -1,5 +1,3 @@
-import { storyGraph } from '../data/storyData';
-
 /**
  * Reads and validates a Questwyst save file, then hands the parsed
  * { storyId, passageId, ... } back via onValid. Used from Home,
@@ -10,8 +8,7 @@ export function parseSaveFile(file, onValid, onError) {
   reader.onload = (e) => {
     try {
       const data = JSON.parse(e.target.result);
-      const targetStory = storyGraph[data.storyId];
-      if (!targetStory || data.passageId == null || !targetStory.passages[data.passageId]) {
+      if (data.storyId == null || data.passageId == null) {
         throw new Error('Invalid save file');
       }
       onValid(data);

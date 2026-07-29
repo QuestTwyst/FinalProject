@@ -1582,3 +1582,14 @@
 .themeHorror .restartButton:hover {
   background: rgba(60, 15, 15, 0.9);
 }
+.processingOverlay {
+  position: fixed;
+  inset: 0;
+  z-index: 999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(10, 15, 25, 0.72);
+  backdrop-filter: blur(3px);
+  color: #ffffff;
+}
