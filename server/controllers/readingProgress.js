@@ -30,6 +30,32 @@ export const getReadingProgress = async (req, res) => {
   }
 };
 
+export const getAllReadingProgressForUser = async (req, res) => {
+  try {
+    const { userId } = req.params;
+    const result = await pool.query(
+      `
+        SELECT
+          rp.*,
+          s.title AS story_title,
+          g.name AS genre
+        FROM reading_progress rp
+        JOIN stories s ON s.id = rp.story_id
+        LEFT JOIN story_genres sg ON sg.story_id = s.id
+        LEFT JOIN genres g ON g.id = sg.genre_id
+        WHERE rp.user_id = $1
+        ORDER BY rp.updated_at DESC;
+      `,
+      [userId]
+    );
+    res.status(200).json(result.rows);
+  } catch (error) {
+    console.error("Error retrieving all reading progress:", error);
+    res.status(500).json({
+      error: "Unable to retrieve reading progress",
+    });
+  }
+};
 export const createReadingProgress = async (req, res) => {
   try {
     const { user_id, story_id, current_passage_id } = req.body;

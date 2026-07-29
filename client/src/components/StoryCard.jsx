@@ -1,14 +1,22 @@
 import styles from './StoryCard.module.css';
 
-function StoryCard({ story, onOpen, onDelete }) {
+function StoryCard({ story, onOpen, onDelete, onEdit }) {
   const { id, title, genre, description, creator_id } = story;
   const isCustomStory = creator_id != null;
+
+  const currentUser = JSON.parse(localStorage.getItem('currentUser') || 'null');
+  const isOwner = currentUser?.id != null && creator_id === currentUser.id;
 
   const handleDeleteClick = (event) => {
     event.stopPropagation();
     if (window.confirm(`Delete "${title}"? This cannot be undone.`)) {
       onDelete(id);
     }
+  };
+
+  const handleEditClick = (event) => {
+    event.stopPropagation();
+    onEdit(story);
   };
 
   return (
@@ -24,6 +32,17 @@ function StoryCard({ story, onOpen, onDelete }) {
         >
           Open story
         </button>
+        {isOwner && (
+          <button
+            type="button"
+            className={styles.editButton}
+            onClick={handleEditClick}
+            aria-label={`Edit ${title}`}
+            title="Edit this story"
+          >
+            Edit
+          </button>
+        )}
         {isCustomStory && (
           <button
             type="button"

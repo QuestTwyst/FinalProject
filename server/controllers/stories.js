@@ -79,13 +79,43 @@ export const updateStory = async (req, res) => {
     const id = parseInt(req.params.id);
     const { title, description, creator_id } = req.body;
 
+    // Only update fields that were actually sent -- the previous
+    // version always overwrote all three, which meant omitting
+    // creator_id from a request (like a simple title/description edit)
+    // would silently null out the story's ownership.
+    const fields = [];
+    const values = [];
+    let paramIndex = 1;
+
+    const maybeAdd = (column, value) => {
+      if (value !== undefined) {
+        fields.push(`${column} = $${paramIndex}`);
+        values.push(value);
+        paramIndex += 1;
+      }
+    };
+
+    maybeAdd("title", title);
+    maybeAdd("description", description);
+    maybeAdd("creator_id", creator_id);
+
+    if (fields.length === 0) {
+      return res.status(400).json({ error: "No fields provided to update" });
+    }
+
+    values.push(id);
+
     const result = await pool.query(
       `UPDATE stories
-       SET title = $1, description = $2, creator_id = $3
-       WHERE id = $4
+       SET ${fields.join(", ")}
+       WHERE id = $${paramIndex}
        RETURNING *`,
-      [title, description, creator_id, id],
+      values,
     );
+
+    if (result.rows.length === 0) {
+      return res.status(404).json({ error: "Story not found" });
+    }
 
     res.status(200).json(result.rows[0]);
   } catch (error) {

@@ -7,6 +7,7 @@ import { usePersistedAudioSettings } from '../utils/usePersistedAudioSettings';
 import NavBar from './NavBar';
 import LoadingSpinner from './LoadingSpinner';
 import StoryCard from './StoryCard';
+import EditStoryModal from './EditStoryModal';
 import styles from './StoryLibrary.module.css';
 
 function StoryLibrary() {
@@ -19,6 +20,9 @@ function StoryLibrary() {
   const [importMessage, setImportMessage] = useState('');
   const [stories, setStories] = useState([]);
   const [availableGenres, setAvailableGenres] = useState([]);
+  const [editingStory, setEditingStory] = useState(null);
+  const [isSavingEdit, setIsSavingEdit] = useState(false);
+  const [editError, setEditError] = useState('');
   const [isLoading, setIsLoading] = useState(true);
   const [loadError, setLoadError] = useState('');
   const audioRef = useRef(null);
@@ -183,7 +187,88 @@ function StoryLibrary() {
   }
 };
 
+  const handleEditClick = (story) => {
+    setEditingStory(story);
+    setEditError('');
+  };
+
+  const handleSaveEdit = async ({ title, description, genreId }) => {
+    if (!editingStory) return;
+    setEditError('');
+    setIsSavingEdit(true);
+    try {
+      const authToken = localStorage.getItem('authToken');
+
+      const patchResponse = await fetch(`${API_BASE_URL}/stories/${editingStory.id}`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${authToken}`,
+        },
+        body: JSON.stringify({
+          title,
+          description,
+          creator_id: editingStory.creator_id,
+        }),
+      });
+
+      if (!patchResponse.ok) {
+        throw new Error(`Failed to update story (${patchResponse.status})`);
+      }
+
+      let updatedGenres = editingStory.genres || [];
+      const oldGenreId = editingStory.genres?.[0]?.id;
+      const newGenreId = genreId ? Number(genreId) : null;
+
+      if (newGenreId && newGenreId !== oldGenreId) {
+        if (oldGenreId) {
+          await fetch(`${API_BASE_URL}/api/stories/${editingStory.id}/genres/${oldGenreId}`, {
+            method: 'DELETE',
+            headers: { Authorization: `Bearer ${authToken}` },
+          });
+        }
+        await fetch(`${API_BASE_URL}/api/stories/${editingStory.id}/genres`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${authToken}`,
+          },
+          body: JSON.stringify({ genre_id: newGenreId }),
+        });
+        const matchedGenre = availableGenres.find((g) => g.id === newGenreId);
+        updatedGenres = matchedGenre ? [matchedGenre] : updatedGenres;
+      }
+
+      setStories((prev) =>
+        prev.map((story) =>
+          story.id === editingStory.id
+            ? {
+                ...story,
+                title,
+                description,
+                genres: updatedGenres,
+                genre: updatedGenres.map((g) => g.name).join(', ') || 'Uncategorized',
+              }
+            : story
+        )
+      );
+
+      setEditingStory(null);
+    } catch (error) {
+      console.error('Error updating story:', error);
+      setEditError('Something went wrong saving your changes. Please try again.');
+    } finally {
+      setIsSavingEdit(false);
+    }
+  };
+
+  const handleCancelEdit = () => {
+    setEditingStory(null);
+    setEditError('');
+  };
+
   return (
+    <>
     <div className={`${styles.libraryPage} ${isDark ? styles.themeDark : ''}`}>
       <audio ref={audioRef} src="/sounds/main.wav" loop />
       <div className={`${styles.stage} ${isDark ? styles.themeDark : ''}`}>
@@ -252,6 +337,7 @@ function StoryLibrary() {
                   story={story}
                   onOpen={handleOpenStory}
                   onDelete={handleDeleteStory}
+                  onEdit={handleEditClick}
                 />
               ))
             ) : (
@@ -263,7 +349,18 @@ function StoryLibrary() {
         </div>
       </div>
     </div>
-  );
+      {editingStory && (
+        <EditStoryModal
+          story={editingStory}
+          genres={availableGenres}
+          onSave={handleSaveEdit}
+          onCancel={handleCancelEdit}
+          isSaving={isSavingEdit}
+          error={editError}
+        />
+      )}
+  </>
+);
 }
 
 export default StoryLibrary;

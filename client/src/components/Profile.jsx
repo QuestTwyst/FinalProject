@@ -47,11 +47,22 @@ function Profile() {
 
   useEffect(() => {
     const fetchReadingProgress = async () => {
+      const savedUser = localStorage.getItem("currentUser");
+      const currentUser = savedUser ? JSON.parse(savedUser) : null;
+
+      if (!currentUser?.id) {
+        setIsLoadingProgress(false);
+        return;
+      }
+
       try {
         setIsLoadingProgress(true);
         setProgressError("");
 
-        const response = await fetch(`${API_BASE_URL}/api/progress`);
+        const authToken = localStorage.getItem("authToken");
+        const response = await fetch(`${API_BASE_URL}/api/progress/${currentUser.id}`, {
+          headers: { Authorization: `Bearer ${authToken}` },
+        });
 
         if (!response.ok) {
           throw new Error("Could not load reading progress.");
@@ -94,9 +105,13 @@ function Profile() {
 
     setIsSaving(true);
     try {
+      const authToken = localStorage.getItem("authToken");
       const response = await fetch(`${API_BASE_URL}/users/${currentUser.id}`, {
         method: "PATCH",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${authToken}`,
+        },
         body: JSON.stringify({
           email: profile.email.trim(),
           first_name: profile.firstName.trim(),

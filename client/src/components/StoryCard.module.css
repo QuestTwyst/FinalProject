@@ -70,6 +70,24 @@
   transform: translateY(-1px);
 }
 
+.editButton {
+  padding: 0.65rem 1.4rem;
+  border: none;
+  border-radius: 999px;
+  background: #b8860b;
+  color: #ffffff;
+  font-family: inherit;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s ease, transform 0.15s ease;
+}
+
+.editButton:hover {
+  background: #9a6f09;
+  transform: translateY(-1px);
+}
+
 .deleteButton {
   padding: 0.65rem 1.4rem;
   border: none;

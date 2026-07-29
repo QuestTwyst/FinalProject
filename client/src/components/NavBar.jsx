@@ -20,6 +20,36 @@ function NavBar({ isDark, onThemeToggle, isMuted, onSoundToggle, volume, onVolum
   };
   const profileLabel = getProfileLabel();
 
+  const getInitials = () => {
+    try {
+      const saved = localStorage.getItem('currentUser');
+      if (!saved) return null;
+      const user = JSON.parse(saved);
+      const first = (user.first_name || user.firstName || '').charAt(0);
+      const last = (user.last_name || user.lastName || '').charAt(0);
+      const initials = `${first}${last}`.toUpperCase();
+      return initials || null;
+    } catch (error) {
+      return null;
+    }
+  };
+  const initials = getInitials();
+
+  const isLoggedIn = () => {
+    try {
+      return Boolean(localStorage.getItem('currentUser'));
+    } catch (error) {
+      return false;
+    }
+  };
+  const loggedIn = isLoggedIn();
+
+  const handleLogout = () => {
+    localStorage.removeItem('authToken');
+    localStorage.removeItem('currentUser');
+    navigate('/');
+  };
+
   const handleFileButtonClick = () => {
     if (hasProgressActions) {
       setShowFileMenu((prev) => !prev);
@@ -174,34 +204,50 @@ function NavBar({ isDark, onThemeToggle, isMuted, onSoundToggle, volume, onVolum
         Library
       </button>
 
-      <button
-        className={styles.navBtn}
-        type="button"
-        aria-label="Log In"
-        title="Log In"
-        onClick={() => navigate('/login')}
-      >
-        <svg className={styles.icon} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-          <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"></path>
-          <polyline points="10 17 15 12 10 7"></polyline>
-          <line x1="15" y1="12" x2="3" y2="12"></line>
-        </svg>
-      </button>
+      {!loggedIn && (
+        <>
+          <button
+            className={styles.navBtn}
+            type="button"
+            aria-label="Log In"
+            title="Log In"
+            onClick={() => navigate('/login')}
+          >
+            <svg className={styles.icon} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"></path>
+              <polyline points="10 17 15 12 10 7"></polyline>
+              <line x1="15" y1="12" x2="3" y2="12"></line>
+            </svg>
+          </button>
 
-      <button
-        className={styles.navBtn}
-        type="button"
-        aria-label="Create Account"
-        title="Create Account"
-        onClick={() => navigate('/create-account')}
-      >
-        <svg className={styles.icon} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-          <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
-          <circle cx="8.5" cy="7" r="4"></circle>
-          <line x1="20" y1="8" x2="20" y2="14"></line>
-          <line x1="23" y1="11" x2="17" y2="11"></line>
-        </svg>
-      </button>
+          <button
+            className={styles.navBtn}
+            type="button"
+            aria-label="Create Account"
+            title="Create Account"
+            onClick={() => navigate('/create-account')}
+          >
+            <svg className={styles.icon} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+              <circle cx="8.5" cy="7" r="4"></circle>
+              <line x1="20" y1="8" x2="20" y2="14"></line>
+              <line x1="23" y1="11" x2="17" y2="11"></line>
+            </svg>
+          </button>
+        </>
+      )}
+
+      {loggedIn && (
+        <button
+          className={`${styles.navBtn} ${styles.navTextBtn}`}
+          type="button"
+          aria-label="Log Out"
+          title="Log Out"
+          onClick={handleLogout}
+        >
+          Log Out
+        </button>
+      )}
     </nav>
 
     <button
@@ -211,10 +257,14 @@ function NavBar({ isDark, onThemeToggle, isMuted, onSoundToggle, volume, onVolum
       title={profileLabel}
       onClick={() => navigate('/profile')}
     >
-      <svg className={styles.icon} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-        <circle cx="12" cy="7" r="4"></circle>
-      </svg>
+      {initials ? (
+        <span className={styles.profileInitials}>{initials}</span>
+      ) : (
+        <svg className={styles.icon} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+          <circle cx="12" cy="7" r="4"></circle>
+        </svg>
+      )}
     </button>
     </>
   );
