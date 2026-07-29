@@ -456,6 +456,87 @@ function StoryReader() {
 
       {isHorror && (
         <>
+          <div className={styles.starField} aria-hidden="true">
+            <span className={`${styles.star} ${styles.star1}`}></span>
+            <span className={`${styles.star} ${styles.star2}`}></span>
+            <span className={`${styles.star} ${styles.star3}`}></span>
+            <span className={`${styles.star} ${styles.star4}`}></span>
+            <span className={`${styles.star} ${styles.star5}`}></span>
+            <span className={`${styles.star} ${styles.star6}`}></span>
+            <span className={`${styles.star} ${styles.star7}`}></span>
+            <span className={`${styles.star} ${styles.star8}`}></span>
+          </div>
+
+          <svg className={styles.moon} viewBox="0 0 100 100" aria-hidden="true">
+            <circle cx="50" cy="50" r="42" />
+            <circle cx="38" cy="36" r="7" opacity="0.18" />
+            <circle cx="60" cy="55" r="10" opacity="0.14" />
+            <circle cx="45" cy="65" r="5" opacity="0.16" />
+          </svg>
+
+          <svg
+            className={styles.hauntedMansion}
+            viewBox="0 0 1280 420"
+            preserveAspectRatio="none"
+            aria-hidden="true"
+          >
+            <path d="M0,420 L0,340 Q320,300 640,335 T1280,330 L1280,420 Z" className={styles.hillShape} />
+
+            <path
+              d="M70,420 L70,270 L45,235 M70,270 L100,225 M70,310 L30,290 M70,325 L110,300 M70,240 L55,200"
+              fill="none"
+              strokeWidth="6"
+              stroke="currentColor"
+              strokeLinecap="round"
+              className={styles.treeShape}
+            />
+            <path
+              d="M1195,420 L1195,255 L1230,210 M1195,255 L1160,195 M1195,300 L1240,280 M1195,320 L1150,295 M1195,225 L1215,180"
+              fill="none"
+              strokeWidth="6"
+              stroke="currentColor"
+              strokeLinecap="round"
+              className={styles.treeShape}
+            />
+
+            <g className={styles.fenceShape}>
+              <rect x="130" y="360" width="7" height="60" />
+              <rect x="180" y="355" width="7" height="65" />
+              <rect x="230" y="360" width="7" height="60" />
+              <rect x="1040" y="360" width="7" height="60" />
+              <rect x="1090" y="355" width="7" height="65" />
+              <rect x="1140" y="360" width="7" height="60" />
+              <line x1="130" y1="378" x2="237" y2="378" strokeWidth="4" stroke="currentColor" />
+              <line x1="1040" y1="378" x2="1147" y2="378" strokeWidth="4" stroke="currentColor" />
+            </g>
+
+            <g className={styles.mansionShape}>
+              <polygon points="360,420 360,220 430,220 430,420" />
+              <polygon points="352,220 395,150 438,220" />
+              <rect x="388" y="175" width="14" height="30" className={styles.towerWindowDark} />
+            </g>
+
+            <g className={styles.mansionShape}>
+              <polygon points="430,420 430,180 560,90 690,180 690,420" />
+              <polygon points="560,90 500,140 620,140" />
+              <rect x="600" y="60" width="26" height="70" />
+            </g>
+
+            <rect x="465" y="220" width="30" height="42" className={styles.windowLit} />
+            <rect x="625" y="220" width="30" height="42" className={styles.windowDark} />
+            <rect x="465" y="300" width="30" height="42" className={styles.windowDark} />
+            <rect x="625" y="300" width="30" height="42" className={styles.windowLit} />
+            <rect x="540" y="330" width="40" height="60" className={styles.doorShape} />
+
+            <polygon points="430,340 560,300 690,340 690,352 430,352" className={styles.mansionShape} />
+
+            <g className={styles.mansionShape}>
+              <polygon points="760,420 760,260 820,260 820,420" />
+              <polygon points="754,260 790,210 826,260" />
+              <rect x="783" y="290" width="14" height="26" className={styles.towerWindowDark} />
+            </g>
+          </svg>
+
           <div className={styles.fogField} aria-hidden="true">
             <div className={`${styles.fogLayer} ${styles.fogOne}`}></div>
             <div className={`${styles.fogLayer} ${styles.fogTwo}`}></div>
