@@ -1363,23 +1363,23 @@
    ============================================================ */
 
 .themeHorror {
-  background: linear-gradient(
-    to bottom,
-    #05070a 0%,
-    #0a0f16 35%,
-    #131a24 65%,
-    #1b2430 100%
-  );
+  background-image: linear-gradient(
+      to bottom,
+      rgba(120, 45, 20, 0.55) 0%,
+      rgba(180, 90, 40, 0.35) 35%,
+      rgba(60, 20, 50, 0.5) 70%,
+      rgba(20, 10, 30, 0.65) 100%
+    ),
+    url("/HH_1.png");
+  background-size: cover;
+  background-position: center;
+  background-blend-mode: overlay;
 }
 
 .themeHorror.themeDark {
-  background: linear-gradient(
-    to bottom,
-    #020304 0%,
-    #05070a 35%,
-    #0a0f14 65%,
-    #10151c 100%
-  );
+  background-image: url("/HH_1.png");
+  background-size: cover;
+  background-position: center;
 }
 
 /* Hide the default drifting gradient — the night scene replaces it */
