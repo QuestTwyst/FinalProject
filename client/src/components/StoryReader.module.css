@@ -1477,8 +1477,8 @@
 /* ---------- Moon ---------- */
 .themeHorror .moon {
   position: absolute;
-  top: 6%;
-  right: 12%;
+  top: 16%;
+  right: 10%;
   width: 90px;
   height: 90px;
   fill: #e8e6d8;
