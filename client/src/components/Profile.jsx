@@ -108,6 +108,7 @@ function Profile() {
       const authToken = localStorage.getItem("authToken");
       const response = await fetch(`${API_BASE_URL}/users/${currentUser.id}`, {
         method: "PATCH",
+        cache: "no-store",
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${authToken}`,
