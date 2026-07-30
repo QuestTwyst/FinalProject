@@ -36,7 +36,15 @@ function StoryCreator() {
 
   // ---------- Genres ----------
   const [genres, setGenres] = useState([]);
-  const [selectedGenreId, setSelectedGenreId] = useState("");
+  const [selectedGenreIds, setSelectedGenreIds] = useState([]);
+  const toggleGenre = (id) => {
+    const idStr = String(id);
+    setSelectedGenreIds((prev) =>
+      prev.includes(idStr)
+        ? prev.filter((existing) => existing !== idStr)
+        : [...prev, idStr]
+    );
+  };
 
   useEffect(() => {
     const loadGenres = async () => {
@@ -88,8 +96,8 @@ function StoryCreator() {
       return;
     }
 
-    if (!selectedGenreId) {
-      setStoryError("Please choose a genre.");
+    if (selectedGenreIds.length === 0) {
+      setStoryError("Please choose at least one genre.");
       return;
     }
 
@@ -125,27 +133,25 @@ function StoryCreator() {
       }
 
       const story = await response.json();
-
-      const genreResponse = await fetch(
-        `${API_BASE_URL}/api/stories/${story.id}/genres`,
-        {
-          method: "POST",
-          headers: authHeaders,
-          body: JSON.stringify({
-            genre_id: Number(selectedGenreId),
-          }),
-        },
-      );
-
-      if (!genreResponse.ok) {
-        const data = await genreResponse.json().catch(() => ({}));
-
-        throw new Error(
-          data.error ||
-            `Story created, but genre assignment failed (${genreResponse.status})`,
+      for (const genreId of selectedGenreIds) {
+        const genreResponse = await fetch(
+          `${API_BASE_URL}/api/stories/${story.id}/genres`,
+          {
+            method: "POST",
+            headers: authHeaders,
+            body: JSON.stringify({
+              genre_id: Number(genreId),
+            }),
+          },
         );
+        if (!genreResponse.ok) {
+          const data = await genreResponse.json().catch(() => ({}));
+          throw new Error(
+            data.error ||
+              `Story created, but genre assignment failed (${genreResponse.status})`,
+          );
+        }
       }
-
       setStoryId(story.id);
     } catch (error) {
       setStoryError(
@@ -439,22 +445,18 @@ function StoryCreator() {
               Genre
             </label>
 
-            <select
-              id="story-genre"
-              className={styles.textInput}
-              value={selectedGenreId}
-              onChange={(event) =>
-                setSelectedGenreId(event.target.value)
-              }
-            >
-              <option value="">Choose a genre...</option>
-
+            <div className={styles.genreCheckboxGroup}>
               {genres.map((genre) => (
-                <option key={genre.id} value={genre.id}>
+                <label key={genre.id} className={styles.genreCheckboxLabel}>
+                  <input
+                    type="checkbox"
+                    checked={selectedGenreIds.includes(String(genre.id))}
+                    onChange={() => toggleGenre(genre.id)}
+                  />
                   {genre.name}
-                </option>
+                </label>
               ))}
-            </select>
+            </div>
 
             {storyError && (
               <p className={styles.errorText}>{storyError}</p>

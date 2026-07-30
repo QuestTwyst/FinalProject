@@ -205,7 +205,7 @@ function StoryLibrary() {
     setEditError('');
   };
 
-  const handleSaveEdit = async ({ title, description, genreId }) => {
+  const handleSaveEdit = async ({ title, description, genreIds }) => {
     if (!editingStory) return;
     setEditError('');
     setIsSavingEdit(true);
@@ -229,39 +229,45 @@ function StoryLibrary() {
         throw new Error(`Failed to update story (${patchResponse.status})`);
       }
 
-      let updatedGenres = editingStory.genres || [];
-      const oldGenreId = editingStory.genres?.[0]?.id;
-      const newGenreId = genreId ? Number(genreId) : null;
+      // Diff the old genre list against the new selection -- remove
+      // whatever was dropped, add whatever is newly checked. Genre is
+      // a many-to-many relationship (story_genres), not a single field.
+      const oldGenreIds = (editingStory.genres || []).map((g) => g.id);
+      const newGenreIds = (genreIds || []).map(Number);
 
-      if (newGenreId && newGenreId !== oldGenreId) {
-        if (oldGenreId) {
-          await fetch(`${API_BASE_URL}/api/stories/${editingStory.id}/genres/${oldGenreId}`, {
-            method: 'DELETE',
-            headers: { Authorization: `Bearer ${authToken}` },
-          });
-        }
+      const toRemove = oldGenreIds.filter((id) => !newGenreIds.includes(id));
+      const toAdd = newGenreIds.filter((id) => !oldGenreIds.includes(id));
+
+      for (const genreId of toRemove) {
+        await fetch(`${API_BASE_URL}/api/stories/${editingStory.id}/genres/${genreId}`, {
+          method: 'DELETE',
+          headers: { Authorization: `Bearer ${authToken}` },
+        });
+      }
+
+      for (const genreId of toAdd) {
         await fetch(`${API_BASE_URL}/api/stories/${editingStory.id}/genres`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
             Authorization: `Bearer ${authToken}`,
           },
-          body: JSON.stringify({ genre_id: newGenreId }),
+          body: JSON.stringify({ genre_id: genreId }),
         });
-        const matchedGenre = availableGenres.find((g) => g.id === newGenreId);
-        updatedGenres = matchedGenre ? [matchedGenre] : updatedGenres;
       }
+
+      const updatedGenres = availableGenres.filter((g) => newGenreIds.includes(g.id));
 
       setStories((prev) =>
         prev.map((story) =>
           story.id === editingStory.id
             ? {
-              ...story,
-              title,
-              description,
-              genres: updatedGenres,
-              genre: updatedGenres.map((g) => g.name).join(', ') || 'Uncategorized',
-            }
+                ...story,
+                title,
+                description,
+                genres: updatedGenres,
+                genre: updatedGenres.map((g) => g.name).join(', ') || 'Uncategorized',
+              }
             : story
         )
       );
