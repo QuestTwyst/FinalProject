@@ -4,16 +4,25 @@ import styles from './EditStoryModal.module.css';
 function EditStoryModal({ story, genres, onSave, onCancel, isSaving, error }) {
   const [title, setTitle] = useState(story.title || '');
   const [description, setDescription] = useState(story.description || '');
-  const [selectedGenreId, setSelectedGenreId] = useState(
-    story.genres?.[0]?.id ? String(story.genres[0].id) : ''
+  const [selectedGenreIds, setSelectedGenreIds] = useState(
+    (story.genres || []).map((genre) => String(genre.id))
   );
+
+  const toggleGenre = (id) => {
+    const idStr = String(id);
+    setSelectedGenreIds((prev) =>
+      prev.includes(idStr)
+        ? prev.filter((existing) => existing !== idStr)
+        : [...prev, idStr]
+    );
+  };
 
   const handleSubmit = (event) => {
     event.preventDefault();
     onSave({
       title: title.trim(),
       description: description.trim(),
-      genreId: selectedGenreId,
+      genreIds: selectedGenreIds,
     });
   };
 
@@ -47,22 +56,19 @@ function EditStoryModal({ story, genres, onSave, onCancel, isSaving, error }) {
             required
           />
 
-          <label className={styles.fieldLabel} htmlFor="edit-genre">
-            Genre
-          </label>
-          <select
-            id="edit-genre"
-            className={styles.textInput}
-            value={selectedGenreId}
-            onChange={(e) => setSelectedGenreId(e.target.value)}
-          >
-            <option value="">Choose a genre...</option>
+          <span className={styles.fieldLabel}>Genres</span>
+          <div className={styles.genreCheckboxGroup}>
             {genres.map((genre) => (
-              <option key={genre.id} value={genre.id}>
+              <label key={genre.id} className={styles.genreCheckboxLabel}>
+                <input
+                  type="checkbox"
+                  checked={selectedGenreIds.includes(String(genre.id))}
+                  onChange={() => toggleGenre(genre.id)}
+                />
                 {genre.name}
-              </option>
+              </label>
             ))}
-          </select>
+          </div>
 
           {error && <p className={styles.errorText}>{error}</p>}
 

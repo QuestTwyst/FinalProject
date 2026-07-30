@@ -112,3 +112,25 @@
   opacity: 0.6;
   cursor: default;
 }
+
+.genreCheckboxGroup {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+}
+
+.genreCheckboxLabel {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.5rem 0.9rem;
+  border: 1.5px solid rgba(22, 50, 79, 0.2);
+  border-radius: 999px;
+  font-size: 0.9rem;
+  color: #16324f;
+  cursor: pointer;
+}
+
+.genreCheckboxLabel input {
+  cursor: pointer;
+}
