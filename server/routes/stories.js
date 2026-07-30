@@ -11,6 +11,8 @@ import {
   requireAdmin,
 } from "../middleware/auth.js";
 
+import { requireAuth, requireAdmin } from "../middleware/auth.js"; 
+
 const router = express.Router();
 
 // Public reading routes
@@ -20,7 +22,7 @@ router.get("/:id", getStoryById);
 
 
 // Admin-only management routes
-//removed: requireAdmin,
+
 router.post(
   "/",
   requireAuth,
@@ -30,14 +32,14 @@ router.post(
 router.patch(
   "/:id",
   requireAuth,
-  requireStoryOwnerOrAdmin,
+   requireAdmin,
   updateStory,
 );
 
 router.delete(
   "/:id",
   requireAuth,
-  requireStoryOwnerOrAdmin,
+   requireAdmin,
   deleteStory,
 );
 
