@@ -62,7 +62,7 @@ function StoryReader() {
   useEffect(() => {
     async function loadStory() {
       try {
-        const s = await getStoryById(storyId);
+        const s = await getStoryById(storyId, location.state?.genreContext);
         setStory(s);
       } catch (err) {
         console.error("Failed to load story", err);

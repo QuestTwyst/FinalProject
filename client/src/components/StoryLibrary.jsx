@@ -177,7 +177,9 @@ function StoryLibrary() {
       );
 
   const handleOpenStory = (storyId) => {
-    navigate(`/stories/${storyId}`);
+    navigate(`/stories/${storyId}`, {
+      state: { genreContext: selectedGenre !== 'All' ? selectedGenre : null },
+    });
   };
 
   const handleDeleteStory = async (storyId) => {

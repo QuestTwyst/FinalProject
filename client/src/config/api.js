@@ -7,7 +7,7 @@ export const API_BASE_URL = (configuredUrl || "http://localhost:3001").replace(
 
 // Fetch a single story from backend including its primary genre.
 // Replaces old storyGraph[storyId] lookup.
-export async function getStoryById(storyId) {
+export async function getStoryById(storyId, preferredGenre) {
   // Base story row
   const storyRes = await fetch(`${API_BASE_URL}/stories/${storyId}`);
   if (!storyRes.ok) throw new Error("Failed to load story");
@@ -21,7 +21,10 @@ export async function getStoryById(storyId) {
     );
     if (genreRes.ok) {
       const genres = await genreRes.json();
-      genre = genres[0]?.name || null;
+      const matched = preferredGenre
+        ? genres.find((g) => g.name === preferredGenre)
+        : null;
+      genre = matched?.name || genres[0]?.name || null;
       // The theme/sound lookups elsewhere in the app expect "Sci-Fi",
       // but the genres table stores the full "Science Fiction" name.
       if (genre === "Science Fiction") {
