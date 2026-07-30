@@ -36,15 +36,7 @@ function StoryCreator() {
 
   // ---------- Genres ----------
   const [genres, setGenres] = useState([]);
-  const [selectedGenreIds, setSelectedGenreIds] = useState([]);
-  const toggleGenre = (id) => {
-    const idStr = String(id);
-    setSelectedGenreIds((prev) =>
-      prev.includes(idStr)
-        ? prev.filter((existing) => existing !== idStr)
-        : [...prev, idStr]
-    );
-  };
+  const [selectedGenreId, setSelectedGenreId] = useState("");
 
   useEffect(() => {
     const loadGenres = async () => {
@@ -96,8 +88,8 @@ function StoryCreator() {
       return;
     }
 
-    if (selectedGenreIds.length === 0) {
-      setStoryError("Please choose at least one genre.");
+    if (!selectedGenreId) {
+      setStoryError("Please choose a genre.");
       return;
     }
 
@@ -133,25 +125,27 @@ function StoryCreator() {
       }
 
       const story = await response.json();
-      for (const genreId of selectedGenreIds) {
-        const genreResponse = await fetch(
-          `${API_BASE_URL}/api/stories/${story.id}/genres`,
-          {
-            method: "POST",
-            headers: authHeaders,
-            body: JSON.stringify({
-              genre_id: Number(genreId),
-            }),
-          },
+
+      const genreResponse = await fetch(
+        `${API_BASE_URL}/api/stories/${story.id}/genres`,
+        {
+          method: "POST",
+          headers: authHeaders,
+          body: JSON.stringify({
+            genre_id: Number(selectedGenreId),
+          }),
+        },
+      );
+
+      if (!genreResponse.ok) {
+        const data = await genreResponse.json().catch(() => ({}));
+
+        throw new Error(
+          data.error ||
+            `Story created, but genre assignment failed (${genreResponse.status})`,
         );
-        if (!genreResponse.ok) {
-          const data = await genreResponse.json().catch(() => ({}));
-          throw new Error(
-            data.error ||
-              `Story created, but genre assignment failed (${genreResponse.status})`,
-          );
-        }
       }
+
       setStoryId(story.id);
     } catch (error) {
       setStoryError(
@@ -201,6 +195,25 @@ function StoryCreator() {
       }
 
       const passage = await passageResponse.json();
+
+      // If this is the first passage written for this story, set it as
+      // the story's starting passage so the reader knows where to begin.
+      if (writtenPassages.length === 0) {
+        const startPassageResponse = await fetch(
+          `${API_BASE_URL}/stories/${storyId}`,
+          {
+            method: "PATCH",
+            headers: authHeaders,
+            body: JSON.stringify({
+              start_passage_id: passage.id,
+            }),
+          },
+        );
+
+        if (!startPassageResponse.ok) {
+          console.error("Failed to set starting passage for this story.");
+        }
+      }
 
       setWrittenPassages((previousPassages) => [
         ...previousPassages,
@@ -445,18 +458,22 @@ function StoryCreator() {
               Genre
             </label>
 
-            <div className={styles.genreCheckboxGroup}>
+            <select
+              id="story-genre"
+              className={styles.textInput}
+              value={selectedGenreId}
+              onChange={(event) =>
+                setSelectedGenreId(event.target.value)
+              }
+            >
+              <option value="">Choose a genre...</option>
+
               {genres.map((genre) => (
-                <label key={genre.id} className={styles.genreCheckboxLabel}>
-                  <input
-                    type="checkbox"
-                    checked={selectedGenreIds.includes(String(genre.id))}
-                    onChange={() => toggleGenre(genre.id)}
-                  />
+                <option key={genre.id} value={genre.id}>
                   {genre.name}
-                </label>
+                </option>
               ))}
-            </div>
+            </select>
 
             {storyError && (
               <p className={styles.errorText}>{storyError}</p>

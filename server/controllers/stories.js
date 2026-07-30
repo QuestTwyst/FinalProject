@@ -77,7 +77,7 @@ export const deleteStory = async (req, res) => {
 export const updateStory = async (req, res) => {
   try {
     const id = parseInt(req.params.id);
-    const { title, description, creator_id } = req.body;
+    const { title, description, creator_id, start_passage_id } = req.body;
 
     // Only update fields that were actually sent -- the previous
     // version always overwrote all three, which meant omitting
@@ -98,6 +98,7 @@ export const updateStory = async (req, res) => {
     maybeAdd("title", title);
     maybeAdd("description", description);
     maybeAdd("creator_id", creator_id);
+    maybeAdd("start_passage_id", start_passage_id);
 
     if (fields.length === 0) {
       return res.status(400).json({ error: "No fields provided to update" });
