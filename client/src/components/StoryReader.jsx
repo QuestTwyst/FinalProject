@@ -19,7 +19,7 @@ const GENRE_SOUND_MAP = {
   Romance: "/sounds/romantic.wav",
   Western: "/sounds/western.wav",
   Horror: "/sounds/horror.wav",
-  Adventure: "/sounds/main.wav",
+  Adventure: "/sounds/adventure.mp3",
 };
 
 function StoryReader() {
