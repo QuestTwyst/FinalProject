@@ -53,7 +53,7 @@ export const updateUser = async (req, res) => {
       name,
       email,
       password_hash,
-      username,
+      //username,
       first_name,
       middle_name,
       last_name,
@@ -85,7 +85,7 @@ export const updateUser = async (req, res) => {
       const hashedPassword = await bcrypt.hash(password_hash, SALT_ROUNDS);
       maybeAdd("password_hash", hashedPassword);
     }
-    maybeAdd("username", username);
+    //maybeAdd("username", username);
     maybeAdd("first_name", first_name);
     maybeAdd("middle_name", middle_name);
     maybeAdd("last_name", last_name);
@@ -98,11 +98,12 @@ export const updateUser = async (req, res) => {
 
     values.push(userId);
 
+    //took out username
     const result = await pool.query(
       `UPDATE users
        SET ${fields.join(", ")}
        WHERE id = $${paramIndex}
-       RETURNING id, name, email, username, first_name, middle_name, last_name, favorite_genre, bio, created_at`,
+       RETURNING id, name, email,first_name, middle_name, last_name, favorite_genre, bio, created_at`,
       values,
     );
 
@@ -114,7 +115,9 @@ export const updateUser = async (req, res) => {
     if (error.code === "23505") {
       return res.status(409).json({ error: "That username is already taken" });
     }
-    res.status(500).json({ error: "Failed to update user" });
+    res
+      .status(500)
+      .json({ error: "Failed to update user", detasils: error.message });
   }
 };
 export const deleteUser = async (req, res) => {

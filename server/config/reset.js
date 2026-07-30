@@ -28,9 +28,30 @@ const createUsersTable = async () => {
       email TEXT NOT NULL UNIQUE,
       password_hash TEXT NOT NULL,
       role TEXT NOT NULL DEFAULT 'user',
-      created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+      created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+      first_name TEXT,
+      middle_name TEXT,
+      last_name TEXT,
+      favorite_genre TEXT,
+      bio TEXT
     );
   `);
+
+  // ADD MISSING COLUMNS IF THEY DON'T EXIST
+  await pool.query(
+    `ALTER TABLE users ADD COLUMN IF NOT EXISTS first_name TEXT;`,
+  );
+  await pool.query(
+    `ALTER TABLE users ADD COLUMN IF NOT EXISTS middle_name TEXT;`,
+  );
+  await pool.query(
+    `ALTER TABLE users ADD COLUMN IF NOT EXISTS last_name TEXT;`,
+  );
+  await pool.query(
+    `ALTER TABLE users ADD COLUMN IF NOT EXISTS favorite_genre TEXT;`,
+  );
+  await pool.query(`ALTER TABLE users ADD COLUMN IF NOT EXISTS bio TEXT;`);
 
   console.log("✔️ Users table created.");
 };

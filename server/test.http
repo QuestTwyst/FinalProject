@@ -89,14 +89,14 @@
 //}
 
 ###Update user
-//PATCH http://localhost:3001/users/3
-//Content-Type: application/json
+PATCH http://localhost:3001/users/58
+Content-Type: application/json
 
-//{
-//  "name": "Ethan R.",
-//  "email": "ethan.r@example.com",
-//  "password_hash": "hashed_pw_3_updated"
-//}
+{
+  "name": "Ethan R.",
+  "email": "ethan.r@example.com",
+  "password_hash": "hashed_pw_3_updated"
+}
 
 ###Delete user
 //DELETE http://localhost:3001/users/3

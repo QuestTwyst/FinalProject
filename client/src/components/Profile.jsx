@@ -34,9 +34,7 @@ function Profile() {
     };
   });
 
-  const [originalEmail, setOriginalEmail] = useState(
-    profile.email
-  );
+  const [originalEmail, setOriginalEmail] = useState(profile.email);
 
   const [isEditing, setIsEditing] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
@@ -60,18 +58,19 @@ function Profile() {
         setProgressError("");
 
         const authToken = localStorage.getItem("authToken");
-        const response = await fetch(`${API_BASE_URL}/api/progress/${currentUser.id}`, {
-          headers: { Authorization: `Bearer ${authToken}` },
-        });
+        const response = await fetch(
+          `${API_BASE_URL}/api/progress/${currentUser.id}`,
+          {
+            headers: { Authorization: `Bearer ${authToken}` },
+          },
+        );
 
         if (!response.ok) {
           throw new Error("Could not load reading progress.");
         }
         const data = await response.json();
 
-        const progressList = Array.isArray(data)
-          ? data
-          : data.progress || [];
+        const progressList = Array.isArray(data) ? data : data.progress || [];
 
         setReadingProgress(progressList);
       } catch (error) {
@@ -126,7 +125,9 @@ function Profile() {
       const data = await response.json();
 
       if (!response.ok) {
-        setSaveError(data.error || "Something went wrong updating your profile.");
+        setSaveError(
+          data.error || "Something went wrong updating your profile.",
+        );
         return;
       }
 
@@ -152,17 +153,12 @@ function Profile() {
   };
 
   const fullName =
-    `${profile.firstName} ${profile.lastName}`.trim() ||
-    "Reader";
+    `${profile.firstName} ${profile.lastName}`.trim() || "Reader";
 
   return (
     <main className="profile-page">
       <nav className="profile-nav">
-        <Link
-          to="/"
-          className="library-btn"
-          aria-label="Back to home"
-        >
+        <Link to="/" className="library-btn" aria-label="Back to home">
           Home
         </Link>
 
@@ -215,9 +211,7 @@ function Profile() {
 
             <div className="profile-field">
               <span>Favorite genre</span>
-              <p>
-                {profile.favoriteGenre || "Not selected"}
-              </p>
+              <p>{profile.favoriteGenre || "Not selected"}</p>
             </div>
 
             <div className="profile-field">
@@ -234,10 +228,7 @@ function Profile() {
             </button>
           </div>
         ) : (
-          <form
-            className="profile-form"
-            onSubmit={handleSubmit}
-          >
+          <form className="profile-form" onSubmit={handleSubmit}>
             <label>
               Email
               <input
@@ -311,11 +302,7 @@ function Profile() {
                 Cancel
               </button>
 
-              <button
-                type="submit"
-                className="save-button"
-                disabled={isSaving}
-              >
+              <button type="submit" className="save-button" disabled={isSaving}>
                 {isSaving ? "Saving..." : "Save Changes"}
               </button>
             </div>
@@ -327,15 +314,11 @@ function Profile() {
         <h2>Continue Reading</h2>
 
         {isLoadingProgress && (
-          <p className="progress-message">
-            Loading your saved stories...
-          </p>
+          <p className="progress-message">Loading your saved stories...</p>
         )}
 
         {!isLoadingProgress && progressError && (
-          <p className="progress-error">
-            {progressError}
-          </p>
+          <p className="progress-error">{progressError}</p>
         )}
 
         {!isLoadingProgress &&
@@ -344,65 +327,49 @@ function Profile() {
             <div className="empty-progress-card">
               <h3>No saved stories yet</h3>
 
-              <p>
-                Start reading a story and your progress will
-                appear here.
-              </p>
-              <Link
-                to="/library"
-                className="browse-stories-button"
-              >
+              <p>Start reading a story and your progress will appear here.</p>
+              <Link to="/library" className="browse-stories-button">
                 Browse Stories
               </Link>
             </div>
           )}
 
-        {!isLoadingProgress &&
-          !progressError &&
-          readingProgress.length > 0 && (
-            <div className="progress-grid">
-              {readingProgress.map((item) => {
-                const storyId =
-                  item.storyId || item.story_id;
+        {!isLoadingProgress && !progressError && readingProgress.length > 0 && (
+          <div className="progress-grid">
+            {readingProgress.map((item) => {
+              const storyId = item.storyId || item.story_id;
 
-                const storyTitle =
-                  item.storyTitle ||
-                  item.story_title ||
-                  item.title ||
-                  "Untitled Story";
+              const storyTitle =
+                item.storyTitle ||
+                item.story_title ||
+                item.title ||
+                "Untitled Story";
 
-                const currentPassage =
-                  item.currentPassage ||
-                  item.current_passage ||
-                  item.passageId ||
-                  item.passage_id;
-                return (
-                  <article
-                    className="progress-card"
-                    key={
-                      item.id ||
-                      `${storyId}-${currentPassage}`
-                    }
+              const currentPassage =
+                item.currentPassage ||
+                item.current_passage ||
+                item.passageId ||
+                item.passage_id;
+              return (
+                <article
+                  className="progress-card"
+                  key={item.id || `${storyId}-${currentPassage}`}
+                >
+                  <h3>{storyTitle}</h3>
+
+                  {item.genre && <p className="story-genre">{item.genre}</p>}
+                  <Link
+                    to={`/stories/${storyId}`}
+                    state={{ resumePassageId: currentPassage }}
+                    className="continue-button"
                   >
-                    <h3>{storyTitle}</h3>
-
-                    {item.genre && (
-                      <p className="story-genre">
-                        {item.genre}
-                      </p>
-                    )}
-                    <Link
-                      to={`/stories/${storyId}`}
-                      state={{ resumePassageId: currentPassage }}
-                      className="continue-button"
-                    >
-                      Continue Reading
-                    </Link>
-                  </article>
-                );
-              })}
-            </div>
-          )}
+                    Continue Reading
+                  </Link>
+                </article>
+              );
+            })}
+          </div>
+        )}
       </section>
     </main>
   );
