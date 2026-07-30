@@ -36,7 +36,7 @@ Complete the checklist below detailing each baseline, custom, and stretch featur
       - [X] the user can **update** an existing item by changing some or all of its values, such as changing the title of task
       - [X] the user can **delete** an existing item, such as a task
     - [X] Routes follow proper naming conventions
-  - [ ] The web app includes the ability to reset the database to its default state
+  - [X] The web app includes the ability to reset the database to its default state
 - [x] The project includes these frontend-specific features:
   - [X] At least one redirection, where users are able to navigate to a new page with a new URL within the app
   - [X] At least one interaction that the user can initiate and complete on the same page without navigating to a new page
