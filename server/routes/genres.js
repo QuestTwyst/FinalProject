@@ -12,6 +12,7 @@ import {
 const router = express.Router();
 
 router.get("/", getGenres);
+
 router.post(
   "/",
   requireAuth,

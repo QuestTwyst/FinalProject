@@ -12,10 +12,10 @@ const router = express.Router();
 router.get("/:storyId/genres", getGenresForStory);
 
 // Admin only: add a genre to a story
+//changed to all
 router.post(
   "/:storyId/genres",
   requireAuth,
-  requireAdmin,
   addGenreToStory,
 );
 
