@@ -131,7 +131,7 @@ function Login() {
             autoComplete="email"
           />
 
-          {errors.username && (
+          {errors.email && (
             <p className="field-error">{errors.email}</p>
           )}
 
