@@ -150,6 +150,12 @@ function Login() {
           {errors.password && (
             <p className="field-error">{errors.password}</p>
           )}
+          
+          <div className="forgot-password">
+            <Link to="/password-reset">
+            Forgot your password?
+            </Link>
+          </div>
 
           <div className="auth-actions">
             <button type="submit" disabled={isSubmitting}>

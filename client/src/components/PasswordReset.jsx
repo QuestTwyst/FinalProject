@@ -1,78 +1,150 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { API_BASE_URL } from "../config/api.js";
 
 function PasswordReset() {
-  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [message, setMessage] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+
+    if (!email.trim()) {
+      setMessage("Email is required.");
+      return;
+    }
+
+    if (newPassword.length < 6) {
+      setMessage("Password must be at least 6 characters.");
+      return;
+    }
 
     if (newPassword !== confirmPassword) {
       setMessage("Passwords do not match.");
       return;
     }
 
-    setMessage("Password reset successful! You can now log in with your new password.");
+    setIsSubmitting(true);
+    setMessage("");
 
-    setTimeout(() => {
-      navigate("/login");
-    }, 1500);
+    try {
+      const response = await fetch(
+        `${API_BASE_URL}/auth/reset-password`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            email: email.trim().toLowerCase(),
+            newPassword,
+          }),
+        },
+      );
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        setMessage(
+          data.error || "Could not reset your password.",
+        );
+        return;
+      }
+
+      setMessage(
+        "Password reset successful! Redirecting to login...",
+      );
+
+      setTimeout(() => {
+        navigate("/login");
+      }, 1500);
+    } catch (error) {
+      console.error("Password reset failed:", error);
+
+      setMessage(
+        "Could not reach the server. Please try again.",
+      );
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
-    <main className="container">
-      <article>
-        <h2 style={{ textAlign: "center" }}>Reset Password</h2>
+    <main className="auth-page">
+      <article className="auth-card">
+        <h2>Reset Password</h2>
+
+        {message && (
+          <p className="form-note">{message}</p>
+        )}
 
         <form onSubmit={handleSubmit}>
-          <label htmlFor="username">Username:</label>
+          <label htmlFor="email">Email:</label>
+
           <input
-            type="text"
-            id="username"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
+            type="email"
+            id="email"
+            placeholder="Enter your email"
+            value={email}
+            onChange={(event) => setEmail(event.target.value)}
+            autoComplete="email"
             required
           />
 
-          <label htmlFor="newPassword">New Password:</label>
+          <label htmlFor="newPassword">
+            New Password:
+          </label>
+
           <input
             type="password"
             id="newPassword"
+            placeholder="Enter your new password"
             value={newPassword}
-            onChange={(e) => setNewPassword(e.target.value)}
+            onChange={(event) =>
+              setNewPassword(event.target.value)
+            }
+            autoComplete="new-password"
+            minLength="6"
             required
           />
 
-          <label htmlFor="confirmPassword">Confirm Password:</label>
+          <label htmlFor="confirmPassword">
+            Confirm Password:
+          </label>
+
           <input
             type="password"
             id="confirmPassword"
+            placeholder="Confirm your new password"
             value={confirmPassword}
-            onChange={(e) => setConfirmPassword(e.target.value)}
+            onChange={(event) =>
+              setConfirmPassword(event.target.value)
+            }
+            autoComplete="new-password"
+            minLength="6"
             required
           />
 
-          {message && <p>{message}</p>}
-
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "center",
-              gap: "1rem",
-              marginTop: "1rem",
-            }}
-          >
-            <button type="submit">Reset Password</button>
+          <div className="auth-actions">
+            <button
+              type="submit"
+              disabled={isSubmitting}
+            >
+              {isSubmitting
+                ? "Resetting..."
+                : "Reset Password"}
+            </button>
 
             <button
               type="button"
               className="secondary"
               onClick={() => navigate("/login")}
+              disabled={isSubmitting}
             >
               Cancel
             </button>
