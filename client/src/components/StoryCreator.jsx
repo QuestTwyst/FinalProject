@@ -93,17 +93,12 @@ function StoryCreator() {
       return;
     }
 
-    if (!authToken || !currentUser) {
-      setStoryError("You must log in as an administrator first.");
-      return;
-    }
+   if (!authToken || !currentUser) {
+  setStoryError("You must log in before creating a story.");
+  return;
+}
 
-    if (currentUser.role !== "admin") {
-      setStoryError("Administrator access is required.");
-      return;
-    }
-
-    setIsSavingStory(true);
+    setIsSavingStory(true); 
 
     try {
       const response = await fetch(`${API_BASE_URL}/stories`, {
@@ -112,7 +107,7 @@ function StoryCreator() {
         body: JSON.stringify({
           title: storyTitle.trim(),
           description: storyDescription.trim(),
-          creator_id: currentUser.id,
+          
         }),
       });
 

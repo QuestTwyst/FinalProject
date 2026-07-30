@@ -22,14 +22,15 @@ function AuthenticatedRoute({ children }) {
     console.error("Unable to read the logged-in user:", error);
   }
 
-  // Logged-out users must log in before creating a story.
+  // Anyone must be logged in before creating a story.
   if (!authToken || !currentUser) {
     return <Navigate to="/login" replace />;
   }
 
-  // Any logged-in user may create a story.
+  // Both regular users and administrators may create stories.
   return children;
 }
+
 
 function App() {
   return (

@@ -32,6 +32,7 @@ export const getStoryById = async (req, res) => {
 export const createStory = async (req, res) => {
   try {
     const { title, description, creator_id } = req.body;
+    const creatorId = req.user.id;
 
     if (!title || !description) {
       return res

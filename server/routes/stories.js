@@ -17,25 +17,27 @@ const router = express.Router();
 router.get("/", getStories);
 router.get("/:id", getStoryById);
 
+
+
 // Admin-only management routes
+//removed: requireAdmin,
 router.post(
   "/",
   requireAuth,
-  requireAdmin,
   createStory,
 );
 
 router.patch(
   "/:id",
   requireAuth,
-  requireAdmin,
+  requireStoryOwnerOrAdmin,
   updateStory,
 );
 
 router.delete(
   "/:id",
   requireAuth,
-  requireAdmin,
+  requireStoryOwnerOrAdmin,
   deleteStory,
 );
 
