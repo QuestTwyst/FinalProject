@@ -52,8 +52,8 @@ Complete the checklist below detailing each baseline, custom, and stretch featur
 👉🏾👉🏾👉🏾 Check off each completed feature below.
 
 - [X] The project gracefully handles errors
-- [ ] The project includes a one-to-one database relationship
-- [ ] The project includes a slide-out pane or modal as appropriate for your use case that pops up and covers the page content without navigating away from the current page
+- [X] The project includes a one-to-one database relationship
+- [X] The project includes a slide-out pane or modal as appropriate for your use case that pops up and covers the page content without navigating away from the current page
 - [X] The project includes a unique field within the join table
 - [ ] The project includes a custom non-RESTful route with corresponding controller actions
 - [X] The user can filter or sort items based on particular criteria as appropriate for your use case
