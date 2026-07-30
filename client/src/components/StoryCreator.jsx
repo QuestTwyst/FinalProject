@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { API_BASE_URL } from "../config/api";
 import { useBackgroundAudio } from "../utils/useBackgroundAudio";
+import { usePersistedAudioSettings } from "../utils/usePersistedAudioSettings";
 import NavBar from "./NavBar";
 import styles from "./StoryCreator.module.css";
 
@@ -9,8 +10,7 @@ function StoryCreator() {
   const navigate = useNavigate();
 
   const [isDark, setIsDark] = useState(false);
-  const [isMuted, setIsMuted] = useState(false);
-  const [volume, setVolume] = useState(0.5);
+  const { isMuted, setIsMuted, volume, setVolume } = usePersistedAudioSettings();
   const audioRef = useRef(null);
 
   const currentUser = JSON.parse(
