@@ -1,6 +1,14 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useNavigate, useParams, useLocation } from "react-router-dom";
-import { getStoryById, getPassageById } from "../config/api"; // Story + passages from backend
+
+import {
+  getStoryById,
+  getPassageById,
+  getReadingProgress,
+  createReadingProgress,
+  updateReadingProgress,
+} from "../config/api";
+
 import { parseSaveFile } from "../utils/saveFile";
 import { useBackgroundAudio } from "../utils/useBackgroundAudio";
 import { usePersistedAudioSettings } from "../utils/usePersistedAudioSettings";
@@ -94,6 +102,39 @@ function StoryReader() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [storyId, story?.start_passage_id]);
 
+  // Auto-generate reading progress the first time a logged-in user
+  // opens this story -- see issue #72 (auto-generated data on a user
+  // action). If no progress exists yet for this user + story, create
+  // one automatically; the user never has to ask for this separately.
+  useEffect(() => {
+    if (!story || !currentPassageId) return;
+
+    const currentUser = JSON.parse(
+      localStorage.getItem("currentUser") || "null",
+    );
+
+    if (!currentUser) return; // only track progress for logged-in users
+
+    async function ensureReadingProgress() {
+      try {
+        const existing = await getReadingProgress(currentUser.id, story.id);
+
+        if (!existing) {
+          await createReadingProgress(
+            currentUser.id,
+            story.id,
+            currentPassageId,
+          );
+        }
+      } catch (err) {
+        console.error("Failed to set up reading progress", err);
+      }
+    }
+
+    ensureReadingProgress();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [story?.id, currentPassageId]);
+
   // Load passage + choices from backend whenever currentPassageId changes
   useEffect(() => {
     if (!currentPassageId) return;
@@ -140,14 +181,37 @@ function StoryReader() {
     if (!choice?.next_passage_id) return;
     setChoiceHistory((prev) => [...prev, choice.choice_text]);
     setCurrentPassageId(choice.next_passage_id);
+
+    const currentUser = JSON.parse(
+      localStorage.getItem("currentUser") || "null",
+    );
+
+    if (currentUser && story) {
+      updateReadingProgress(currentUser.id, story.id, choice.next_passage_id).catch(
+        (err) => console.error("Failed to update reading progress", err),
+      );
+    }
   };
 
   // Restart story
   const handleRestart = () => {
     if (story) {
       setChoiceHistory([]);
-      // restart to story.start_passage_id
       setCurrentPassageId(story.start_passage_id);
+
+      const currentUser = JSON.parse(
+        localStorage.getItem("currentUser") || "null",
+      );
+
+      if (currentUser) {
+        updateReadingProgress(
+          currentUser.id,
+          story.id,
+          story.start_passage_id,
+        ).catch((err) =>
+          console.error("Failed to reset reading progress", err),
+        );
+      }
     }
   };
 

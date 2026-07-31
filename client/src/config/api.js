@@ -54,3 +54,38 @@ export async function getChoicesForPassage(passageId) {
   if (!res.ok) throw new Error("Failed to load choices");
   return res.json(); // backend returns array of choices
 }
+
+export async function getReadingProgress(userId, storyId) {
+  const res = await fetch(
+    `${API_BASE_URL}/api/progress/${userId}/${storyId}`,
+  );
+  if (res.status === 404) return null; // no progress yet, not an error
+  if (!res.ok) throw new Error("Failed to check reading progress");
+  return res.json();
+}
+
+export async function createReadingProgress(userId, storyId, passageId) {
+  const res = await fetch(`${API_BASE_URL}/api/progress`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      user_id: userId,
+      story_id: storyId,
+      current_passage_id: passageId,
+    }),
+  });
+  if (!res.ok) throw new Error("Failed to create reading progress");
+  return res.json();
+}
+
+export async function updateReadingProgress(userId, storyId, passageId) {
+  const res = await fetch(`${API_BASE_URL}/api/progress/${userId}/${storyId}`, {
+    method: "PUT",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      current_passage_id: passageId,
+    }),
+  });
+  if (!res.ok) throw new Error("Failed to update reading progress");
+  return res.json();
+}
