@@ -44,7 +44,7 @@ export const createStory = async (req, res) => {
       `INSERT INTO stories (title, description, creator_id)
        VALUES ($1, $2, $3)
        RETURNING *;`,
-      [title, description, creator_id || null],
+      [title, description, creator_id],
     );
 
     res.status(201).json(result.rows[0]);
