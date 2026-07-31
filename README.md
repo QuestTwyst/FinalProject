@@ -52,8 +52,7 @@ Account creation and login are now backed by real authentication instead of brow
 
 The frontend will display all available stories as browsable cards showing a title, genre, and short description. Readers can filter the library by genre using a dropdown menu, and clicking a story card opens it directly in the Story Reader Interface.
 
-✅ For example, exploring the site as a whole, Romance genre selection and branching story
- For example, exploring the site as a whole, Romance genre selection and branching story
+For example, exploring the site as a whole, Romance genre selection and branching story
 
 ![Romance feature demo](planning/gifs/QuestTwyst_websire_milestone3.gif)
 
@@ -83,7 +82,6 @@ The backend will support admin-managed story content. Admins or developers will 
 (![Admin Tory Management (in progress)](planning/gifs/adminfeature_progress.gif))
 
 ### Milestone 5 GIFS:
-
 
 
 ### ✅ User Reading Progress
@@ -122,10 +120,14 @@ Added a foreign key constraint linking `stories.creator_id` to `users(id)`, so e
 
 <img src='https://github.com/QuestTwyst/FinalProject/blob/3ea670622cd3eaf1488c663ad031b24c75a30239/planning/gifs/ForeignKey.gif' width='' alt='Video Walkthrough' />
 
-### Story Creator Interface
+### Milestone 5 Additional Features 
 
-The frontend will provide a form-based editor where users can write a story title, add passages, and fill in the two choices that branch off each passage. Validation will prevent saving a passage until the title and both choices are filled in, and users can mark any passage as an ending.
-[gif goes here] (COMING SOON)
+
+### ✅ Spinner while loading 
+
+Confirm a visual spinner shows during loading states. The app displays a visual spinner component while a page or page element is loading, rather than plain "Loading..." text.
+
+<img src='https://github.com/QuestTwyst/FinalProject/blob/e5dee0e8c72d592653e2bb6caa22302f271baab0/planning/gifs/spin.gif?raw=true' title='Video Walkthrough' width='' alt='Video Walkthrough' />
 
 ## Installation Instructions
 
