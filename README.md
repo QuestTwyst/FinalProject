@@ -107,6 +107,7 @@ Confirm at least one interaction the user can complete without navigating away. 
 ### ✅ Password Reset
 
 Users who forget their password can reset it from the Password Reset page by entering their email and a new password. The backend verifies the account exists and updates the password with a fresh bcrypt hash.
+
 <img src='https://github.com/QuestTwyst/FinalProject/blob/827ec686c60aa12ccfef01015736a5534327ead5/planning/gifs/Issue78.gif' title='Video Walkthrough' width='' alt='Video Walkthrough' />
 
 
@@ -137,6 +138,7 @@ Confirm a visual spinner shows during loading states. The app displays a visual 
 ### ✅ Disable buttons/inputs during form submission 
 
 Confirm buttons and inputs are disabled during the form submission process. Added disabled state to every input, select, and textarea across all four forms (Login, Create Account, Profile, Password Reset) — previously only the submit button was disabled, not the fields themselves.
+
 <img src='https://github.com/QuestTwyst/FinalProject/blob/827ec686c60aa12ccfef01015736a5534327ead5/planning/gifs/Issue78.gif' title='Video Walkthrough' width='' alt='Video Walkthrough' />
 
 
