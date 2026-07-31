@@ -1,5 +1,6 @@
 import { Navigate, Route, Routes } from "react-router-dom";
 import { useGlobalClickSound } from "./utils/useGlobalClickSound";
+import ToastContainer from "./components/ToastContainer";
 import StoryIntro from "./components/StoryIntro";
 import StoryLibrary from "./components/StoryLibrary";
 import StoryReader from "./components/StoryReader";
@@ -37,6 +38,8 @@ function App() {
   useGlobalClickSound();
 
   return (
+    <>
+      <ToastContainer />
     <Routes>
       <Route path="/" element={<StoryIntro />} />
       <Route path="/intro" element={<StoryIntro />} />
@@ -68,6 +71,7 @@ function App() {
         element={<PasswordReset />}
       />
     </Routes>
+    </>
   );
 }
 

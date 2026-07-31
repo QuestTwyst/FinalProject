@@ -8,6 +8,7 @@ import NavBar from './NavBar';
 import LoadingSpinner from './LoadingSpinner';
 import StoryCard from './StoryCard';
 import EditStoryModal from './EditStoryModal';
+import { showToast } from '../utils/toast';
 import styles from './StoryLibrary.module.css';
 
 function StoryLibrary() {
@@ -190,15 +191,16 @@ function StoryLibrary() {
         method: 'DELETE',
         headers: {
           Authorization: `Bearer ${authToken}`,
-        },
+      },
       });
       if (!response.ok) {
         throw new Error(`Failed to delete story (${response.status})`);
       }
       setStories((prev) => prev.filter((story) => story.id !== storyId));
+      showToast('Story deleted.', 'success');
     } catch (error) {
       console.error('Error deleting story:', error);
-      window.alert('Something went wrong deleting that story. Please try again.');
+      showToast('Something went wrong deleting that story. Please try again.', 'error');
     }
   };
 
