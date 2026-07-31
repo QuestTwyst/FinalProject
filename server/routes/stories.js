@@ -32,7 +32,6 @@ router.post(
 router.patch(
   "/:id",
   requireAuth,
-   requireAdmin,
   updateStory,
 );
 

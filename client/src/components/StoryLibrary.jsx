@@ -225,7 +225,6 @@ function StoryLibrary() {
         body: JSON.stringify({
           title,
           description,
-          creator_id: editingStory.creator_id,
         }),
       });
 
@@ -384,7 +383,7 @@ function StoryLibrary() {
           </div>
         </div>
       </div>
-      {isAdmin && editingStory && (
+      {editingStory && (
         <EditStoryModal
           story={editingStory}
           genres={availableGenres}
