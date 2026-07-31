@@ -24,6 +24,36 @@ export const createPassage = async (req, res) => {
     const { id } = req.params; // story_id
     const { content, is_ending } = req.body;
 
+    // Find the story so we can check who owns it.
+    const storyResult = await pool.query(
+      `SELECT id, creator_id
+       FROM stories
+       WHERE id = $1;`,
+      [id],
+    );
+
+    if (storyResult.rows.length === 0) {
+      return res.status(404).json({
+        error: "Story not found",
+      });
+    }
+
+    const story = storyResult.rows[0];
+
+    // Admins can add passages to any story.
+    const isAdmin = req.user.role === "admin";
+
+    // Regular users can add passages only to stories they created.
+    const isOwner =
+      story.creator_id !== null &&
+      Number(story.creator_id) === Number(req.user.id);
+
+    if (!isAdmin && !isOwner) {
+      return res.status(403).json({
+        error: "You may only add passages to your own stories",
+      });
+    }
+
     if (!content) {
       return res.status(400).json({ error: "Content is required" });
     }
@@ -46,14 +76,47 @@ export const deletePassage = async (req, res) => {
   try {
     const { passageId } = req.params;
 
-    const result = await pool.query(
-      "DELETE FROM passages WHERE id = $1 RETURNING *;",
+    // Find the passage and the owner of its story.
+    const passageResult = await pool.query(
+      `SELECT
+         passages.id,
+         passages.story_id,
+         stories.creator_id
+       FROM passages
+       JOIN stories
+         ON stories.id = passages.story_id
+       WHERE passages.id = $1;`,
       [passageId],
     );
 
-    if (result.rows.length === 0) {
-      return res.status(404).json({ error: "Passage not found" });
+    if (passageResult.rows.length === 0) {
+      return res.status(404).json({
+        error: "Passage not found",
+      });
     }
+
+    const passage = passageResult.rows[0];
+
+    // Admins can delete passages from any story.
+    const isAdmin = req.user.role === "admin";
+
+    // Regular users can delete passages only from their own stories.
+    const isOwner =
+      passage.creator_id !== null &&
+      Number(passage.creator_id) === Number(req.user.id);
+
+    if (!isAdmin && !isOwner) {
+      return res.status(403).json({
+        error: "You may only delete passages from your own stories",
+      });
+    }
+
+    const result = await pool.query(
+      `DELETE FROM passages
+       WHERE id = $1
+       RETURNING *;`,
+      [passageId],
+    );
 
     res.status(200).json({
       message: "Passage deleted",
@@ -61,7 +124,10 @@ export const deletePassage = async (req, res) => {
     });
   } catch (error) {
     console.error("Error deleting passage:", error);
-    res.status(500).json({ error: "Failed to delete passage" });
+
+    res.status(500).json({
+      error: "Failed to delete passage",
+    });
   }
 };
 
@@ -70,17 +136,56 @@ export const updatePassage = async (req, res) => {
     const { passageId } = req.params;
     const { content, is_ending } = req.body;
 
+    // Find the passage and the owner of its story.
+    const passageResult = await pool.query(
+      `SELECT
+         passages.id,
+         passages.story_id,
+         stories.creator_id
+       FROM passages
+       JOIN stories
+         ON stories.id = passages.story_id
+       WHERE passages.id = $1;`,
+      [passageId],
+    );
+
+    if (passageResult.rows.length === 0) {
+      return res.status(404).json({
+        error: "Passage not found",
+      });
+    }
+
+    const passage = passageResult.rows[0];
+
+    // Admins can edit passages from any story.
+    const isAdmin = req.user.role === "admin";
+
+    // Regular users can edit passages only from their own stories.
+    const isOwner =
+      passage.creator_id !== null &&
+      Number(passage.creator_id) === Number(req.user.id);
+
+    if (!isAdmin && !isOwner) {
+      return res.status(403).json({
+        error: "You may only edit passages from your own stories",
+      });
+    }
+
     const result = await pool.query(
       `UPDATE passages
        SET content = $1, is_ending = $2
        WHERE id = $3
-       RETURNING *`,
+       RETURNING *;`,
       [content, is_ending, passageId],
     );
 
     res.status(200).json(result.rows[0]);
   } catch (error) {
-    res.status(409).json({ error: error.message });
+    console.error("Error updating passage:", error);
+
+    res.status(500).json({
+      error: "Failed to update passage",
+    });
   }
 };
 

@@ -8,7 +8,6 @@ import {
 } from "../controllers/passages.js";
 import {
   requireAuth,
-  requireAdmin,
 } from "../middleware/auth.js";
 
 const router = express.Router();
@@ -21,21 +20,18 @@ router.get("/passages/:passageId", getPassageById);
 router.post(
   "/:id/passages",
   requireAuth,
-  requireAdmin,
   createPassage,
 );
 
 router.delete(
   "/passages/:passageId",
   requireAuth,
-  requireAdmin,
   deletePassage,
 );
 
 router.patch(
   "/passages/:passageId",
   requireAuth,
-  requireAdmin,
   updatePassage,
 );
 
