@@ -1,4 +1,5 @@
 import { Navigate, Route, Routes } from "react-router-dom";
+import { useGlobalClickSound } from "./utils/useGlobalClickSound";
 import StoryIntro from "./components/StoryIntro";
 import StoryLibrary from "./components/StoryLibrary";
 import StoryReader from "./components/StoryReader";
@@ -33,6 +34,8 @@ function AuthenticatedRoute({ children }) {
 
 
 function App() {
+  useGlobalClickSound();
+
   return (
     <Routes>
       <Route path="/" element={<StoryIntro />} />
