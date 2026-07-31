@@ -104,6 +104,11 @@ Confirm at least one interaction the user can complete without navigating away. 
 
 <img src='https://github.com/QuestTwyst/FinalProject/blob/2368aa661c100491aeb3708ccb88b90c758f1ac5/planning/gifs/Issue57.gif?raw=true' title='Video Walkthrough' width='' alt='Video Walkthrough' />
 
+### ✅ Password Reset
+
+Users who forget their password can reset it from the Password Reset page by entering their email and a new password. The backend verifies the account exists and updates the password with a fresh bcrypt hash.
+<img src='https://github.com/QuestTwyst/FinalProject/blob/827ec686c60aa12ccfef01015736a5534327ead5/planning/gifs/Issue78.gif' title='Video Walkthrough' width='' alt='Video Walkthrough' />
+
 
 ### [ADDITIONAL FEATURES GO HERE - ADD ALL FEATURES HERE IN THE FORMAT ABOVE; you will check these off and add gifs as you complete them]
 
@@ -128,6 +133,12 @@ Added a foreign key constraint linking `stories.creator_id` to `users(id)`, so e
 Confirm a visual spinner shows during loading states. The app displays a visual spinner component while a page or page element is loading, rather than plain "Loading..." text.
 
 <img src='https://github.com/QuestTwyst/FinalProject/blob/e5dee0e8c72d592653e2bb6caa22302f271baab0/planning/gifs/spin.gif?raw=true' title='Video Walkthrough' width='' alt='Video Walkthrough' />
+
+### ✅ Disable buttons/inputs during form submission 
+
+Confirm buttons and inputs are disabled during the form submission process. Added disabled state to every input, select, and textarea across all four forms (Login, Create Account, Profile, Password Reset) — previously only the submit button was disabled, not the fields themselves.
+<img src='https://github.com/QuestTwyst/FinalProject/blob/827ec686c60aa12ccfef01015736a5534327ead5/planning/gifs/Issue78.gif' title='Video Walkthrough' width='' alt='Video Walkthrough' />
+
 
 ## Installation Instructions
 
