@@ -41,10 +41,10 @@ export const createStory = async (req, res) => {
     }
 
     const result = await pool.query(
-      `INSERT INTO stories (title, description, creator_id)
+      `INSERT INTO stories (title, description, creatorId)
        VALUES ($1, $2, $3)
        RETURNING *;`,
-      [title, description, creator_id],
+      [title, description, creatorId],
     );
 
     res.status(201).json(result.rows[0]);
