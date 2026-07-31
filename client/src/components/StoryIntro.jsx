@@ -35,11 +35,12 @@ function StoryIntro() {
     );
   };
 
-  const stories = ['adventure', 'comedy', 'horror', 'romance', 'scifi', 'western'];
+  const stories = ['adventure', 'comedy', 'horror', 'mystery', 'romance', 'scifi', 'western'];
   const storyLabels = {
     adventure: 'Adventure',
     comedy: 'Comedy',
     horror: 'Horror',
+    mystery: 'Mystery',
     romance: 'Romance',
     scifi: 'Sci-Fi',
     western: 'Western',
