@@ -264,12 +264,12 @@ function StoryLibrary() {
         prev.map((story) =>
           story.id === editingStory.id
             ? {
-                ...story,
-                title,
-                description,
-                genres: updatedGenres,
-                genre: updatedGenres.map((g) => g.name).join(', ') || 'Uncategorized',
-              }
+              ...story,
+              title,
+              description,
+              genres: updatedGenres,
+              genre: updatedGenres.map((g) => g.name).join(', ') || 'Uncategorized',
+            }
             : story
         )
       );
@@ -352,15 +352,27 @@ function StoryLibrary() {
               ) : loadError ? (
                 <p className={styles.noResults}>{loadError}</p>
               ) : filteredStories.length > 0 ? (
-                filteredStories.map((story) => (
-                  <StoryCard
-                    key={story.id}
-                    story={story}
-                    onOpen={handleOpenStory}
-                    onDelete={isAdmin ? handleDeleteStory : undefined}
-                    onEdit={isAdmin ? handleEditClick : undefined}
-                  />
-                ))
+                filteredStories.map((story) => {
+                  const isOwner =
+                    story.creator_id !== null &&
+                    Number(story.creator_id) === Number(currentUser?.id);
+
+                  const canDeleteStory = isAdmin || isOwner;
+
+                  return (
+                    <StoryCard
+                      key={story.id}
+                      story={story}
+                      onOpen={handleOpenStory}
+                      onDelete={
+                        canDeleteStory
+                          ? handleDeleteStory
+                          : undefined
+                      }
+                      onEdit={isAdmin ? handleEditClick : undefined}
+                    />
+                  );
+                })
               ) : (
                 <p className={styles.noResults}>
                   No stories match the selected genre.
