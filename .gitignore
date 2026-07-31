@@ -26,3 +26,7 @@ dist-ssr
 *.sln
 *.sw?
 .env
+
+# One-off editing/fix scripts (repo root only -- real project scripts
+# like migrations and seeds live inside server/config/ and are fine)
+/*.py
