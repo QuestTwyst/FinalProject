@@ -9,8 +9,8 @@ This unit, be sure to complete all tasks listed below. To complete a task, place
 - [ ] Deploy your project on Render
   - [ ] In `readme.md`, add the link to your deployed project
 - [ ] Update the status of issues in your project board as you complete them
-- [ ] In `readme.md`, check off the features you have completed in this unit by adding a ✅ emoji in front of their title
-  - [ ] Under each feature you have completed, **include a GIF** showing feature functionality
+- [X] In `readme.md`, check off the features you have completed in this unit by adding a ✅ emoji in front of their title
+  - [X] Under each feature you have completed, **include a GIF** showing feature functionality
 - [ ] In this document, complete the **Reflection** section below
 - [ ] 🚩🚩🚩**Complete the Final Project Feature Checklist section below**, detailing each feature you completed in the project (ONLY include features you implemented, not features you planned)
 - [ ] 🚩🚩🚩**Record a GIF showing a complete run-through of your app** that displays all the components included in the **Final Project Feature Checklist** below
