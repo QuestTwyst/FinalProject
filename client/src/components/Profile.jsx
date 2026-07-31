@@ -237,6 +237,7 @@ function Profile() {
                 value={profile.email}
                 onChange={handleChange}
                 required
+                disabled={isSaving}
               />
             </label>
 
@@ -249,6 +250,7 @@ function Profile() {
                   value={profile.firstName}
                   onChange={handleChange}
                   required
+                  disabled={isSaving}
                 />
               </label>
 
@@ -260,6 +262,7 @@ function Profile() {
                   value={profile.lastName}
                   onChange={handleChange}
                   required
+                  disabled={isSaving}
                 />
               </label>
             </div>
@@ -271,6 +274,7 @@ function Profile() {
                 value={profile.favoriteGenre}
                 onChange={handleChange}
                 required
+                disabled={isSaving}
               >
                 <option value="">Select a genre</option>
                 <option value="Adventure">Adventure</option>
@@ -290,6 +294,7 @@ function Profile() {
                 onChange={handleChange}
                 rows="4"
                 placeholder="Tell readers about yourself"
+                disabled={isSaving}
               />
             </label>
 

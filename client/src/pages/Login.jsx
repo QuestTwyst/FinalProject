@@ -129,6 +129,7 @@ function Login() {
             value={formData.email}
             onChange={handleChange}
             autoComplete="email"
+            disabled={isSubmitting}
           />
 
           {errors.email && (
@@ -145,6 +146,7 @@ function Login() {
             value={formData.password}
             onChange={handleChange}
             autoComplete="current-password"
+            disabled={isSubmitting}
           />
 
           {errors.password && (

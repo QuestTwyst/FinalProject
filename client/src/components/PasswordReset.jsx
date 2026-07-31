@@ -94,6 +94,7 @@ function PasswordReset() {
             onChange={(event) => setEmail(event.target.value)}
             autoComplete="email"
             required
+            disabled={isSubmitting}
           />
 
           <label htmlFor="newPassword">
@@ -111,6 +112,7 @@ function PasswordReset() {
             autoComplete="new-password"
             minLength="6"
             required
+            disabled={isSubmitting}
           />
 
           <label htmlFor="confirmPassword">
@@ -128,6 +130,7 @@ function PasswordReset() {
             autoComplete="new-password"
             minLength="6"
             required
+            disabled={isSubmitting}
           />
 
           <div className="auth-actions">

@@ -105,3 +105,49 @@ export const login = async (req, res) => {
     });
   }
 };
+
+export const resetPassword = async (req, res) => {
+  try {
+    const { email, newPassword } = req.body;
+
+    if (!email?.trim() || !newPassword) {
+      return res.status(400).json({
+        error: "Email and new password are required",
+      });
+    }
+
+    if (newPassword.length < 6) {
+      return res.status(400).json({
+        error: "Password must be at least 6 characters",
+      });
+    }
+
+    const userResult = await pool.query(
+      "SELECT id FROM users WHERE LOWER(email) = LOWER($1)",
+      [email.trim()],
+    );
+
+    if (userResult.rows.length === 0) {
+      return res.status(404).json({
+        error: "No account found with that email",
+      });
+    }
+
+    const newPasswordHash = await bcrypt.hash(newPassword, 10);
+
+    await pool.query(
+      "UPDATE users SET password_hash = $1 WHERE LOWER(email) = LOWER($2)",
+      [newPasswordHash, email.trim()],
+    );
+
+    return res.status(200).json({
+      message: "Password reset successful",
+    });
+  } catch (error) {
+    console.error("Password reset error:", error);
+
+    return res.status(500).json({
+      error: "Failed to reset password",
+    });
+  }
+};

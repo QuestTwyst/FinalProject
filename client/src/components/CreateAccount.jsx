@@ -180,6 +180,7 @@ function CreateAccount() {
                 value={formData.firstName}
                 onChange={handleChange}
                 autoComplete="given-name"
+                disabled={isSubmitting}
               />
 
               {errors.firstName && (
@@ -201,6 +202,7 @@ function CreateAccount() {
                 value={formData.middleName}
                 onChange={handleChange}
                 autoComplete="additional-name"
+                disabled={isSubmitting}
               />
             </div>
 
@@ -216,6 +218,7 @@ function CreateAccount() {
                 value={formData.lastName}
                 onChange={handleChange}
                 autoComplete="family-name"
+                disabled={isSubmitting}
               />
 
               {errors.lastName && (
@@ -236,6 +239,7 @@ function CreateAccount() {
             value={formData.email}
             onChange={handleChange}
             autoComplete="email"
+            disabled={isSubmitting}
           />
 
           {errors.email && (
@@ -251,6 +255,7 @@ function CreateAccount() {
             value={formData.password}
             onChange={handleChange}
             autoComplete="new-password"
+            disabled={isSubmitting}
           />
 
           {errors.password && (
@@ -270,6 +275,7 @@ function CreateAccount() {
             value={formData.confirmPassword}
             onChange={handleChange}
             autoComplete="new-password"
+            disabled={isSubmitting}
           />
 
           {errors.confirmPassword && (
