@@ -31,7 +31,7 @@ export const getStoryById = async (req, res) => {
 
 export const createStory = async (req, res) => {
   try {
-    const { title, description, creator_id } = req.body;
+    const { title, description } = req.body;
     const creatorId = req.user.id;
 
     if (!title || !description) {
@@ -58,19 +58,49 @@ export const deleteStory = async (req, res) => {
   try {
     const { id } = req.params;
 
-    const result = await pool.query(
-      "DELETE FROM stories WHERE id = $1 RETURNING *;",
+    const storyResult = await pool.query(
+      `SELECT id, creator_id
+       FROM stories
+       WHERE id = $1;`,
       [id],
     );
 
-    if (result.rows.length === 0) {
-      return res.status(404).json({ error: "Story not found" });
+    if (storyResult.rows.length === 0) {
+      return res.status(404).json({
+        error: "Story not found",
+      });
     }
 
-    res.status(200).json({ message: "Story deleted", story: result.rows[0] });
+    const story = storyResult.rows[0];
+
+    const isAdmin = req.user.role === "admin";
+
+    const isOwner =
+      story.creator_id !== null &&
+      Number(story.creator_id) === Number(req.user.id);
+
+    if (!isAdmin && !isOwner) {
+      return res.status(403).json({
+        error: "You may only delete your own stories",
+      });
+    }
+
+    const result = await pool.query(
+      `DELETE FROM stories
+       WHERE id = $1
+       RETURNING *;`,
+      [id],
+    );
+
+    res.status(200).json({
+      message: "Story deleted",
+      story: result.rows[0],
+    });
   } catch (error) {
     console.error("Error deleting story:", error);
-    res.status(500).json({ error: "Failed to delete story" });
+    res.status(500).json({
+      error: "Failed to delete story",
+    });
   }
 };
 

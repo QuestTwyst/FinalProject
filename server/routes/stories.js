@@ -39,7 +39,6 @@ router.patch(
 router.delete(
   "/:id",
   requireAuth,
-   requireAdmin,
   deleteStory,
 );
 
