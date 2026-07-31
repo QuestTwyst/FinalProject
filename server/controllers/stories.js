@@ -108,12 +108,41 @@ export const deleteStory = async (req, res) => {
 export const updateStory = async (req, res) => {
   try {
     const id = parseInt(req.params.id);
-    const { title, description, creator_id, start_passage_id } = req.body;
+    // Find the story before updating it so we can verify ownership.
+    const storyResult = await pool.query(
+      `SELECT id, creator_id
+       FROM stories
+       WHERE id = $1;`,
+      [id],
+    );
+
+    if (storyResult.rows.length === 0) {
+      return res.status(404).json({ error: "Story not found" });
+    }
+
+    const story = storyResult.rows[0];
+
+    // Admins can edit any story.
+    const isAdmin = req.user.role === "admin";
+
+    // Regular users can edit only stories they created.
+    const isOwner =
+      story.creator_id !== null &&
+      Number(story.creator_id) === Number(req.user.id);
+
+    if (!isAdmin && !isOwner) {
+      return res.status(403).json({
+        error: "You may only edit your own stories",
+      });
+    }
+
+    // creator_id is intentionally excluded so users cannot change
+    // the ownership of a story through an update request.
+    const { title, description, start_passage_id } = req.body;
 
     // Only update fields that were actually sent -- the previous
     // version always overwrote all three, which meant omitting
-    // creator_id from a request (like a simple title/description edit)
-    // would silently null out the story's ownership.
+    // Story ownership is handled separately and cannot be changed here.
     const fields = [];
     const values = [];
     let paramIndex = 1;
@@ -128,11 +157,12 @@ export const updateStory = async (req, res) => {
 
     maybeAdd("title", title);
     maybeAdd("description", description);
-    maybeAdd("creator_id", creator_id);
     maybeAdd("start_passage_id", start_passage_id);
 
     if (fields.length === 0) {
-      return res.status(400).json({ error: "No fields provided to update" });
+      return res.status(400).json({
+        error: "No fields provided to update",
+      });
     }
 
     values.push(id);
@@ -141,7 +171,7 @@ export const updateStory = async (req, res) => {
       `UPDATE stories
        SET ${fields.join(", ")}
        WHERE id = $${paramIndex}
-       RETURNING *`,
+       RETURNING *;`,
       values,
     );
 
@@ -151,6 +181,7 @@ export const updateStory = async (req, res) => {
 
     res.status(200).json(result.rows[0]);
   } catch (error) {
-    res.status(409).json({ error: error.message });
+    console.error("Error updating story:", error);
+    res.status(500).json({ error: "Failed to update story" });
   }
 };

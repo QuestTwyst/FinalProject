@@ -357,7 +357,7 @@ function StoryLibrary() {
                     story.creator_id !== null &&
                     Number(story.creator_id) === Number(currentUser?.id);
 
-                  const canDeleteStory = isAdmin || isOwner;
+                  const canManageStory = isAdmin || isOwner;
 
                   return (
                     <StoryCard
@@ -365,11 +365,11 @@ function StoryLibrary() {
                       story={story}
                       onOpen={handleOpenStory}
                       onDelete={
-                        canDeleteStory
+                        canManageStory
                           ? handleDeleteStory
                           : undefined
                       }
-                      onEdit={isAdmin ? handleEditClick : undefined}
+                      onEdit={canManageStory ? handleEditClick : undefined}
                     />
                   );
                 })
