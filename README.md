@@ -75,18 +75,6 @@ The frontend lets readers browse genres through a scrollable list and select one
 
 <img src='https://github.com/QuestTwyst/FinalProject/blob/45f62c340dc8d0fb26d2d27db73032c58a78401c/planning/gifs/GenreFilterOption.gif' title='Video Walkthrough' width='' alt='Video Walkthrough' />
 
-
-
-### User Reading Progress
-
-The frontend will let signed-in readers pick up exactly where they left off in a story, showing a "Continue Reading" option on their profile or the library page instead of restarting from the beginning.
-
-[gif goes here] (COMING SOON)
-
-The backend will track a reader’s current location within a story. This allows users to leave a story and later return to the passage where they stopped reading.
-
-[gif goes here]
-
 ### ✅ Story Path History
 
 After a reader finishes a story, the frontend displays a recap of every choice they made along the way, in order, under "Your path through this story." A "Restart with different choices" button on the recap screen resets the story and clears the tracked history, letting the reader try a different path and see an accurate recap of that new playthrough.
@@ -100,6 +88,16 @@ The backend will support admin-managed story content. Admins or developers will 
     protected routes including admin/user implementations.)
 
 (![Admin Tory Management (in progress)](planning/gifs/adminfeature_progress.gif))
+
+### Milestone 5 GIFS:
+
+### ✅ User Reading Progress
+
+The frontend automatically tracks a signed-in reader's progress through a story. When a user opens a story for the first time, a reading progress record is created for them automatically, with no separate action required. As they make choices or restart the story, their current passage updates in the background, so their progress always reflects exactly where they are.
+
+<img src='https://github.com/QuestTwyst/FinalProject/blob/410c7c7d566e0fb2e03c1322574510c3822a2ef1/planning/gifs/Issue72.gif?raw=true' title='Video Walkthrough' width='' alt='Video Walkthrough' />
+
+The backend tracks a reader's current location within a story via the `reading_progress` table (`GET`, `POST`, and `PUT` routes at `/api/progress`). This allows users to leave a story and later return to the passage where they stopped reading.
 
 
 ### [ADDITIONAL FEATURES GO HERE - ADD ALL FEATURES HERE IN THE FORMAT ABOVE; you will check these off and add gifs as you complete them]
