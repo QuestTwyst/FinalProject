@@ -9,8 +9,8 @@ This unit, be sure to complete all tasks listed below. To complete a task, place
 - [ ] Deploy your project on Render
   - [ ] In `readme.md`, add the link to your deployed project
 - [ ] Update the status of issues in your project board as you complete them
-- [ ] In `readme.md`, check off the features you have completed in this unit by adding a ✅ emoji in front of their title
-  - [ ] Under each feature you have completed, **include a GIF** showing feature functionality
+- [X] In `readme.md`, check off the features you have completed in this unit by adding a ✅ emoji in front of their title
+  - [X] Under each feature you have completed, **include a GIF** showing feature functionality
 - [ ] In this document, complete the **Reflection** section below
 - [ ] 🚩🚩🚩**Complete the Final Project Feature Checklist section below**, detailing each feature you completed in the project (ONLY include features you implemented, not features you planned)
 - [ ] 🚩🚩🚩**Record a GIF showing a complete run-through of your app** that displays all the components included in the **Final Project Feature Checklist** below
@@ -57,7 +57,7 @@ Complete the checklist below detailing each baseline, custom, and stretch featur
 - [X] The project includes a unique field within the join table
 - [ ] The project includes a custom non-RESTful route with corresponding controller actions
 - [X] The user can filter or sort items based on particular criteria as appropriate for your use case
-- [ ] Data is automatically generated in response to a certain event or user action. Examples include generating a default inventory for a new user starting a game or creating a starter set of tasks for a user creating a new task app account
+- [X] Data is automatically generated in response to a certain event or user action. Examples include generating a default inventory for a new user starting a game or creating a starter set of tasks for a user creating a new task app account
 - [X] Data submitted via a POST or PATCH request is validated before the database is updated (e.g. validating that an event is in the future before allowing a new event to be created)
   - [ ] *To receive full credit, please be sure to demonstrate in your walkthrough that for certain inputs, the item will NOT be successfully created or updated.*
 
