@@ -15,6 +15,8 @@ List each issue you completed this unit and the main file or folder where that w
 - Issue #41: Fix Broken Legacy routes/progress.js File — server/routes/progress.js (removed)
 - Issue #42: Audit /stories Route Mounting for Collisions — server/server.js, server/test.http
 - Issue #44: Complete Milestone 4 Reflection Questions — milestones/milestone4.md
+- Issue #38: Add Admin Authentication and Story Management Controls — server/middleware/auth.js, server/routes/, client/src/components/StoryLibrary.jsx, client/src/components/StoryCreator.jsx
+- Issue #83: Allow Logged-In Users to Create and Manage Their Own Stories — server/controllers/stories.js, server/controllers/passages.js, server/controllers/choices.js, server/routes/stories.js, server/routes/passages.js, server/routes/choices.js, client/src/components/StoryLibrary.jsx, client/src/components/StoryCreator.jsx
 
 ## Features Completed This Unit
 List each feature you completed and checked off in readme.md this unit, one per line:

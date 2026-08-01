@@ -27,6 +27,41 @@ export const createChoice = async (req, res) => {
     const { passageId } = req.params;
     const { choice_text, next_passage_id } = req.body;
 
+    // Find the passage and the owner of its story.
+    const passageResult = await pool.query(
+      `SELECT
+         passages.id,
+         passages.story_id,
+         stories.creator_id
+       FROM passages
+       JOIN stories
+         ON stories.id = passages.story_id
+       WHERE passages.id = $1;`,
+      [passageId],
+    );
+
+    if (passageResult.rows.length === 0) {
+      return res.status(404).json({
+        error: "Passage not found",
+      });
+    }
+
+    const passage = passageResult.rows[0];
+
+    // Admins can add choices to any story.
+    const isAdmin = req.user.role === "admin";
+
+    // Regular users can add choices only to stories they created.
+    const isOwner =
+      passage.creator_id !== null &&
+      Number(passage.creator_id) === Number(req.user.id);
+
+    if (!isAdmin && !isOwner) {
+      return res.status(403).json({
+        error: "You may only add choices to your own stories",
+      });
+    }
+
     if (!choice_text?.trim()) {
       return res.status(400).json({
         error: "choice_text is required",
@@ -63,6 +98,44 @@ export const updateChoice = async (req, res) => {
     const { choiceId } = req.params;
     const { choice_text, next_passage_id } = req.body;
 
+    // Find the choice and the owner of its story.
+    const choiceResult = await pool.query(
+      `SELECT
+         choices.id,
+         choices.passage_id,
+         passages.story_id,
+         stories.creator_id
+       FROM choices
+       JOIN passages
+         ON passages.id = choices.passage_id
+       JOIN stories
+         ON stories.id = passages.story_id
+       WHERE choices.id = $1;`,
+      [choiceId],
+    );
+
+    if (choiceResult.rows.length === 0) {
+      return res.status(404).json({
+        error: "Choice not found",
+      });
+    }
+
+    const choice = choiceResult.rows[0];
+
+    // Admins can edit choices in any story.
+    const isAdmin = req.user.role === "admin";
+
+    // Regular users can edit choices only in stories they created.
+    const isOwner =
+      choice.creator_id !== null &&
+      Number(choice.creator_id) === Number(req.user.id);
+
+    if (!isAdmin && !isOwner) {
+      return res.status(403).json({
+        error: "You may only edit choices in your own stories",
+      });
+    }
+
     if (!choice_text?.trim()) {
       return res.status(400).json({
         error: "choice_text is required",
@@ -83,12 +156,6 @@ export const updateChoice = async (req, res) => {
       ],
     );
 
-    if (result.rows.length === 0) {
-      return res.status(404).json({
-        error: "Choice not found",
-      });
-    }
-
     res.status(200).json(result.rows[0]);
   } catch (error) {
     console.error("Error updating choice:", error);
@@ -103,18 +170,50 @@ export const deleteChoice = async (req, res) => {
   try {
     const { choiceId } = req.params;
 
+    // Find the choice and the owner of its story.
+    const choiceResult = await pool.query(
+      `SELECT
+         choices.id,
+         choices.passage_id,
+         passages.story_id,
+         stories.creator_id
+       FROM choices
+       JOIN passages
+         ON passages.id = choices.passage_id
+       JOIN stories
+         ON stories.id = passages.story_id
+       WHERE choices.id = $1;`,
+      [choiceId],
+    );
+
+    if (choiceResult.rows.length === 0) {
+      return res.status(404).json({
+        error: "Choice not found",
+      });
+    }
+
+    const choice = choiceResult.rows[0];
+
+    // Admins can delete choices from any story.
+    const isAdmin = req.user.role === "admin";
+
+    // Regular users can delete choices only from stories they created.
+    const isOwner =
+      choice.creator_id !== null &&
+      Number(choice.creator_id) === Number(req.user.id);
+
+    if (!isAdmin && !isOwner) {
+      return res.status(403).json({
+        error: "You may only delete choices from your own stories",
+      });
+    }
+
     const result = await pool.query(
       `DELETE FROM choices
        WHERE id = $1
        RETURNING *`,
       [choiceId],
     );
-
-    if (result.rows.length === 0) {
-      return res.status(404).json({
-        error: "Choice not found",
-      });
-    }
 
     res.status(200).json({
       message: "Choice deleted",
