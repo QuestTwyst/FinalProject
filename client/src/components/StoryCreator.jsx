@@ -93,12 +93,12 @@ function StoryCreator() {
       return;
     }
 
-   if (!authToken || !currentUser) {
-  setStoryError("You must log in before creating a story.");
-  return;
-}
+    if (!authToken || !currentUser) {
+      setStoryError("You must log in before creating a story.");
+      return;
+    }
 
-    setIsSavingStory(true); 
+    setIsSavingStory(true);
 
     try {
       const response = await fetch(`${API_BASE_URL}/stories`, {
@@ -107,7 +107,7 @@ function StoryCreator() {
         body: JSON.stringify({
           title: storyTitle.trim(),
           description: storyDescription.trim(),
-          
+
         }),
       });
 
@@ -137,7 +137,7 @@ function StoryCreator() {
 
         throw new Error(
           data.error ||
-            `Story created, but genre assignment failed (${genreResponse.status})`,
+          `Story created, but genre assignment failed (${genreResponse.status})`,
         );
       }
 
@@ -185,7 +185,7 @@ function StoryCreator() {
 
         throw new Error(
           data.error ||
-            `Failed to create passage (${passageResponse.status})`,
+          `Failed to create passage (${passageResponse.status})`,
         );
       }
 
@@ -335,9 +335,8 @@ function StoryCreator() {
 
   return (
     <div
-      className={`${styles.creatorPage} ${
-        isDark ? styles.themeDark : ""
-      }`}
+      className={`${styles.creatorPage} ${isDark ? styles.themeDark : ""
+        }`}
     >
       <audio ref={audioRef} src="/sounds/main.wav" loop />
 
@@ -573,6 +572,17 @@ function StoryCreator() {
           </>
         ) : (
           <>
+            <button
+              type="button"
+              className={styles.backButton}
+              onClick={() => {
+                setLinkError("");
+                setPhase("writing");
+              }}
+            >
+              ← Back to add more passages
+            </button>
+            
             <section className={styles.card}>
               <h2 className={styles.cardTitle}>
                 Step 3 &middot; Connect the choices

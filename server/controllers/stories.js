@@ -188,7 +188,9 @@ export const updateStory = async (req, res) => {
 const canModifyStory = (story, user) => {
   // Permission check: admin OR owner
   const isAdmin = user.role === "admin";
-  const isOwner = story.creator_id === user.id;
+  const isOwner =
+    story.creator_id !== null &&
+    Number(story.creator_id) === Number(user.id);
   return isAdmin || isOwner;
 };
 
