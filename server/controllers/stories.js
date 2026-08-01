@@ -104,7 +104,6 @@ export const deleteStory = async (req, res) => {
   }
 };
 
-
 export const updateStory = async (req, res) => {
   try {
     const id = parseInt(req.params.id);
@@ -183,5 +182,94 @@ export const updateStory = async (req, res) => {
   } catch (error) {
     console.error("Error updating story:", error);
     res.status(500).json({ error: "Failed to update story" });
+  }
+};
+
+const canModifyStory = (story, user) => {
+  // Permission check: admin OR owner
+  const isAdmin = user.role === "admin";
+  const isOwner = story.creator_id === user.id;
+  return isAdmin || isOwner;
+};
+
+export const publishStory = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    // Fetch story first
+    const storyResult = await pool.query(
+      `SELECT * FROM stories WHERE id = $1`,
+      [id],
+    );
+
+    if (storyResult.rows.length === 0) {
+      return res.status(404).json({ error: "Story not found" });
+    }
+
+    const story = storyResult.rows[0];
+
+    // Permission check
+    if (!canModifyStory(story, req.user)) {
+      return res
+        .status(403)
+        .json({ error: "Not authorized to publish this story" });
+    }
+
+    const result = await pool.query(
+      `UPDATE stories
+       SET published = TRUE
+       WHERE id = $1
+       RETURNING *`,
+      [id],
+    );
+
+    res.status(200).json({
+      message: "Story published",
+      story: result.rows[0],
+    });
+  } catch (error) {
+    console.error("Error publishing story:", error);
+    res.status(500).json({ error: "Failed to publish story" });
+  }
+};
+
+export const unpublishStory = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    // Fetch story first
+    const storyResult = await pool.query(
+      `SELECT * FROM stories WHERE id = $1`,
+      [id],
+    );
+
+    if (storyResult.rows.length === 0) {
+      return res.status(404).json({ error: "Story not found" });
+    }
+
+    const story = storyResult.rows[0];
+
+    if (!canModifyStory(story, req.user)) {
+      return res.status(403).json({
+        error: "Not authorized to unpublish this story",
+      });
+    }
+
+    // Update published state
+    const result = await pool.query(
+      `UPDATE stories
+       SET published = FALSE
+       WHERE id = $1
+       RETURNING *`,
+      [id],
+    );
+
+    res.status(200).json({
+      message: "Story unpublished",
+      story: result.rows[0],
+    });
+  } catch (error) {
+    console.error("Error unpublishing story:", error);
+    res.status(500).json({ error: "Failed to unpublish story" });
   }
 };

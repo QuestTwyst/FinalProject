@@ -2,7 +2,7 @@
 //GET http://localhost:3001/stories
 
 ###Get one story
-//GET http://localhost:3001/stories/1
+//GET http://localhost:3001/stories/2
 
 ###Get a story that does not exist
 //GET http://localhost:3001/stories/1111
@@ -89,17 +89,32 @@
 //}
 
 ###Update user
-PATCH http://localhost:3001/users/58
-Content-Type: application/json
+//PATCH http://localhost:3001/users/58
+//Content-Type: application/json
 
-{
-  "name": "Ethan R.",
-  "email": "ethan.r@example.com",
-  "password_hash": "hashed_pw_3_updated"
-}
+//{
+//  "name": "Ethan R.",
+//  "email": "ethan.r@example.com",
+//  "password_hash": "hashed_pw_3_updated"
+//}
 
 ###Delete user
 //DELETE http://localhost:3001/users/3
 
 ###Get reading progress for a specific user and story
 //GET http://localhost:3001/api/progress/1/1
+
+###Test publish/unpublish
+
+###Publish story 1
+POST http://localhost:3001/stories/1/publish
+Authorization: Bearer <token>
+
+###Unpublish story 1
+POST http://localhost:3001/stories/1/unpublish
+Authorization: Bearer <token>
+
+###Check story state
+GET http://localhost:3001/stories/1
+
+

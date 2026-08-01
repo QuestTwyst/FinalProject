@@ -13,7 +13,7 @@ const dropAssignedTables = async () => {
     DROP TABLE IF EXISTS choices CASCADE;
     DROP TABLE IF EXISTS passages CASCADE;
     DROP TABLE IF EXISTS stories CASCADE;
-
+    
   `);
 
   console.log("✔️ Assigned tables dropped.");
@@ -65,6 +65,7 @@ const createStoriesTable = async () => {
       creator_id INTEGER,
       start_passage_id INTEGER,
       created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+      published BOOLEAN NOT NULL DEFAULT FALSE,
 
       CONSTRAINT fk_stories_creator
         FOREIGN KEY (creator_id)
@@ -73,6 +74,9 @@ const createStoriesTable = async () => {
     );
   `);
 
+  await pool.query(
+    `ALTER TABLE stories ADD COLUMN IF NOT EXISTS published BOOLEAN DEFAULT FALSE;`,
+  );
   console.log("✔️ Stories table created.");
 };
 
