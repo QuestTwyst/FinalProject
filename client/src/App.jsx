@@ -29,8 +29,8 @@ function AuthenticatedRoute({ children }) {
   if (!authToken || !currentUser) {
     return <Navigate to="/login" replace />;
   }
-
-  // Both regular users and administrators may create stories.
+  // Any logged-in user may create a story -- they become its owner,
+  // and only they (or an admin) can edit/delete it afterward.
   return children;
 }
 

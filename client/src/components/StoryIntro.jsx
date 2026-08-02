@@ -7,6 +7,14 @@ import NavBar from './NavBar';
 import styles from './StoryIntro.module.css';
 
 function StoryIntro() {
+  let currentUser = null;
+  try {
+    currentUser = JSON.parse(localStorage.getItem('currentUser') || 'null');
+  } catch (error) {
+    currentUser = null;
+  }
+  const isLoggedIn = Boolean(currentUser);
+
   const navigate = useNavigate();
   const [isDark, setIsDark] = useState(false);
   const { isMuted, setIsMuted, volume, setVolume } = usePersistedAudioSettings();
@@ -92,13 +100,15 @@ function StoryIntro() {
                 {storyLabels[story]}
               </button>
             ))}
-            <button
-              type="button"
-              className={`${styles.storyBtn} ${styles.createStoryBtn}`}
-              onClick={() => navigate('/create')}
-            >
-              + Create your own story
-            </button>
+            {isLoggedIn && (
+              <button
+                type="button"
+                className={`${styles.storyBtn} ${styles.createStoryBtn}`}
+                onClick={() => navigate('/create')}
+              >
+                + Create your own story
+              </button>
+            )}
           </div>
         </div>
       </div>
