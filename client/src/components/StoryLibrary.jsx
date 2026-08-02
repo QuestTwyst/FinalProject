@@ -216,7 +216,7 @@ function StoryLibrary() {
 
 
 
-  const handleSaveEdit = async ({ title, description, genreIds }) => {
+  const handleSaveEdit = async ({ title, description, genreIds, coverImageUrl }) => {
     if (!editingStory) return;
     setEditError('');
     setIsSavingEdit(true);
@@ -232,6 +232,7 @@ function StoryLibrary() {
         body: JSON.stringify({
           title,
           description,
+          cover_image_url: coverImageUrl || null,
         }),
       });
 
@@ -275,6 +276,7 @@ function StoryLibrary() {
               ...story,
               title,
               description,
+              cover_image_url: coverImageUrl || story.cover_image_url,
               genres: updatedGenres,
               genre: updatedGenres.map((g) => g.name).join(', ') || 'Uncategorized',
             }

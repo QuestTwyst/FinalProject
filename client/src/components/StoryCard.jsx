@@ -1,7 +1,7 @@
 import styles from './StoryCard.module.css';
 
 function StoryCard({ story, onOpen, onDelete, onEdit,}) {
-  const { id, title, genre, description } = story;
+  const { id, title, genre, description, cover_image_url } = story;
 
   const canEdit = typeof onEdit === 'function';
   const canDelete = typeof onDelete === 'function';
@@ -30,6 +30,13 @@ function StoryCard({ story, onOpen, onDelete, onEdit,}) {
 
   return (
     <article className={styles.storyCard}>
+      {cover_image_url && (
+        <img
+          src={cover_image_url}
+          alt=""
+          className={styles.coverImage}
+        />
+      )}
       <span className={styles.genreTag}>{genre}</span>
       <h2 className={styles.storyTitle}>{title}</h2>
       <p className={styles.storyDescription}>{description}</p>

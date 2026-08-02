@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import styles from './EditStoryModal.module.css';
+import { uploadImageToCloudinary } from '../utils/cloudinary';
 
 function EditStoryModal({ story, genres, onSave, onCancel, onContinue, isSaving, error }) {
   const [title, setTitle] = useState(story.title || '');
@@ -7,6 +8,25 @@ function EditStoryModal({ story, genres, onSave, onCancel, onContinue, isSaving,
   const [selectedGenreIds, setSelectedGenreIds] = useState(
     (story.genres || []).map((genre) => String(genre.id))
   );
+
+  const [coverImageUrl, setCoverImageUrl] = useState(story.cover_image_url || '');
+  const [isUploadingImage, setIsUploadingImage] = useState(false);
+  const [imageUploadError, setImageUploadError] = useState('');
+
+  const handleCoverImageChange = async (event) => {
+    const file = event.target.files[0];
+    if (!file) return;
+    setImageUploadError('');
+    setIsUploadingImage(true);
+    try {
+      const url = await uploadImageToCloudinary(file);
+      setCoverImageUrl(url);
+    } catch (err) {
+      setImageUploadError(err.message || 'Something went wrong uploading that image.');
+    } finally {
+      setIsUploadingImage(false);
+    }
+  };
 
   const toggleGenre = (id) => {
     const idStr = String(id);
@@ -23,6 +43,7 @@ function EditStoryModal({ story, genres, onSave, onCancel, onContinue, isSaving,
       title: title.trim(),
       description: description.trim(),
       genreIds: selectedGenreIds,
+      coverImageUrl,
     });
   };
 
@@ -69,6 +90,28 @@ function EditStoryModal({ story, genres, onSave, onCancel, onContinue, isSaving,
               </label>
             ))}
           </div>
+
+          <label className={styles.fieldLabel} htmlFor="edit-cover-image">
+            Cover image
+          </label>
+          <input
+            id="edit-cover-image"
+            type="file"
+            accept="image/*"
+            onChange={handleCoverImageChange}
+            disabled={isUploadingImage}
+          />
+          {isUploadingImage && <p>Uploading image...</p>}
+          {imageUploadError && (
+            <p className={styles.errorText}>{imageUploadError}</p>
+          )}
+          {coverImageUrl && !isUploadingImage && (
+            <img
+              src={coverImageUrl}
+              alt="Cover preview"
+              style={{ maxWidth: "150px", borderRadius: "10px", marginTop: "0.5rem" }}
+            />
+          )}
 
           {error && <p className={styles.errorText}>{error}</p>}
 

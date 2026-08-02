@@ -31,7 +31,7 @@ export const getStoryById = async (req, res) => {
 
 export const createStory = async (req, res) => {
   try {
-    const { title, description } = req.body;
+    const { title, description, cover_image_url } = req.body;
     const creatorId = req.user.id;
 
     if (!title || !description) {
@@ -41,10 +41,10 @@ export const createStory = async (req, res) => {
     }
 
     const result = await pool.query(
-      `INSERT INTO stories (title, description, creator_id)
-       VALUES ($1, $2, $3)
+      `INSERT INTO stories (title, description, creator_id, cover_image_url)
+       VALUES ($1, $2, $3, $4)
        RETURNING *;`,
-      [title, description, creatorId],
+      [title, description, creatorId, cover_image_url || null],
     );
 
     res.status(201).json(result.rows[0]);
@@ -137,7 +137,7 @@ export const updateStory = async (req, res) => {
 
     // creator_id is intentionally excluded so users cannot change
     // the ownership of a story through an update request.
-    const { title, description, start_passage_id } = req.body;
+    const { title, description, start_passage_id, cover_image_url } = req.body;
 
     // Only update fields that were actually sent -- the previous
     // version always overwrote all three, which meant omitting
@@ -157,6 +157,7 @@ export const updateStory = async (req, res) => {
     maybeAdd("title", title);
     maybeAdd("description", description);
     maybeAdd("start_passage_id", start_passage_id);
+    maybeAdd("cover_image_url", cover_image_url);
 
     if (fields.length === 0) {
       return res.status(400).json({

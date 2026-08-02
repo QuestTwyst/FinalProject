@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { API_BASE_URL } from "../config/api";
+import { uploadImageToCloudinary } from "../utils/cloudinary";
 import { useBackgroundAudio } from "../utils/useBackgroundAudio";
 import { usePersistedAudioSettings } from "../utils/usePersistedAudioSettings";
 import NavBar from "./NavBar";
@@ -65,6 +66,26 @@ function StoryCreator() {
   );
   const [storyTitle, setStoryTitle] = useState("");
   const [storyDescription, setStoryDescription] = useState("");
+  const [coverImageUrl, setCoverImageUrl] = useState("");
+  const [isUploadingImage, setIsUploadingImage] = useState(false);
+  const [imageUploadError, setImageUploadError] = useState("");
+
+  const handleCoverImageChange = async (event) => {
+    const file = event.target.files[0];
+    if (!file) return;
+    setImageUploadError("");
+    setIsUploadingImage(true);
+    try {
+      const url = await uploadImageToCloudinary(file);
+      setCoverImageUrl(url);
+    } catch (error) {
+      setImageUploadError(
+        error.message || "Something went wrong uploading that image.",
+      );
+    } finally {
+      setIsUploadingImage(false);
+    }
+  };
   const [storyError, setStoryError] = useState("");
   const [isSavingStory, setIsSavingStory] = useState(false);
   const [isLoadingExistingStory, setIsLoadingExistingStory] =
@@ -121,7 +142,7 @@ function StoryCreator() {
         body: JSON.stringify({
           title: storyTitle.trim(),
           description: storyDescription.trim(),
-
+          cover_image_url: coverImageUrl || null,
         }),
       });
 
@@ -674,6 +695,28 @@ function StoryCreator() {
               placeholder="One or two sentences describing the story."
               rows={3}
             />
+
+            <label className={styles.fieldLabel} htmlFor="story-cover-image">
+              Cover image (optional)
+            </label>
+            <input
+              id="story-cover-image"
+              type="file"
+              accept="image/*"
+              onChange={handleCoverImageChange}
+              disabled={isUploadingImage}
+            />
+            {isUploadingImage && <p>Uploading image...</p>}
+            {imageUploadError && (
+              <p className={styles.errorText}>{imageUploadError}</p>
+            )}
+            {coverImageUrl && !isUploadingImage && (
+              <img
+                src={coverImageUrl}
+                alt="Cover preview"
+                style={{ maxWidth: "200px", borderRadius: "12px", marginTop: "0.5rem" }}
+              />
+            )}
 
             <label
               className={styles.fieldLabel}
