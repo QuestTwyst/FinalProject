@@ -475,44 +475,19 @@ function StoryReader() {
 
           <div className={styles.tumbleweedField} aria-hidden="true">
             <svg className={styles.tumbleweed} viewBox="0 0 60 60">
-              <circle
-                cx="30"
-                cy="30"
-                r="24"
-                fill="none"
-                strokeWidth="3.5"
-                stroke="currentColor"
-              />
-              <path
-                d="M8,20 Q30,5 52,20"
-                fill="none"
-                strokeWidth="2.8"
-                stroke="currentColor"
-              />
-              <path
-                d="M8,40 Q30,55 52,40"
-                fill="none"
-                strokeWidth="2.8"
-                stroke="currentColor"
-              />
-              <path
-                d="M10,10 Q35,30 10,50"
-                fill="none"
-                strokeWidth="2.8"
-                stroke="currentColor"
-              />
-              <path
-                d="M50,10 Q25,30 50,50"
-                fill="none"
-                strokeWidth="2.8"
-                stroke="currentColor"
-              />
-              <path
-                d="M6,30 Q30,15 54,30 Q30,45 6,30 Z"
-                fill="none"
-                strokeWidth="2.2"
-                stroke="currentColor"
-              />
+              <path d="M8,30 Q20,10 32,28 Q44,46 52,28 Q44,14 30,20 Q16,26 22,40 Q30,52 40,36" fill="none" strokeWidth="1.4" stroke="currentColor" strokeLinecap="round" />
+              <path d="M15,14 Q32,26 46,13 Q34,30 47,44 Q30,34 14,46 Q26,30 15,14" fill="none" strokeWidth="1.4" stroke="currentColor" strokeLinecap="round" />
+              <path d="M10,20 Q26,7 41,19 Q53,29 42,42 Q29,53 16,42 Q5,31 10,20" fill="none" strokeWidth="1.5" stroke="currentColor" strokeLinecap="round" />
+              <path d="M12,12 Q30,30 48,48" fill="none" strokeWidth="1.2" stroke="currentColor" strokeLinecap="round" opacity="0.7" />
+              <path d="M48,12 Q30,30 12,48" fill="none" strokeWidth="1.2" stroke="currentColor" strokeLinecap="round" opacity="0.7" />
+              <path d="M5,30 Q30,20 55,30 Q30,40 5,30" fill="none" strokeWidth="1.3" stroke="currentColor" strokeLinecap="round" opacity="0.75" />
+              <path d="M30,5 Q40,30 30,55 Q20,30 30,5" fill="none" strokeWidth="1.3" stroke="currentColor" strokeLinecap="round" opacity="0.75" />
+              <path d="M20,9 Q27,17 21,25 Q14,20 20,9" fill="none" strokeWidth="1.2" stroke="currentColor" strokeLinecap="round" />
+              <path d="M44,11 Q51,19 45,27 Q38,21 44,11" fill="none" strokeWidth="1.2" stroke="currentColor" strokeLinecap="round" />
+              <path d="M9,44 Q17,51 25,44 Q17,39 9,44" fill="none" strokeWidth="1.2" stroke="currentColor" strokeLinecap="round" />
+              <path d="M38,44 Q46,50 51,42 Q44,38 38,44" fill="none" strokeWidth="1.2" stroke="currentColor" strokeLinecap="round" />
+              <path d="M25,22 Q30,17 35,22 Q40,27 35,32 Q30,37 25,32 Q20,27 25,22" fill="none" strokeWidth="1.1" stroke="currentColor" strokeLinecap="round" opacity="0.85" />
+              <path d="M4,25 Q9,29 4,33 M56,25 Q51,29 56,33 M25,4 Q29,9 33,4 M25,56 Q29,51 33,56" fill="none" strokeWidth="1.1" stroke="currentColor" strokeLinecap="round" opacity="0.6" />
             </svg>
           </div>
         </>
