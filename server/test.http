@@ -113,13 +113,60 @@
 
 ###Publish story 1
 //POST http://localhost:3001/stories/1/publish
-//Authorization: Bearer <Token>
+//Authorization: Bearer <token>
 
 ###Unpublish story 1
 //POST http://localhost:3001/stories/1/unpublish
-//Authorization: Bearer <Token>
+//Authorization: Bearer <token>
 
 ###Check story state
 //GET http://localhost:3001/stories/1
 
+
+###User routes authentication
+
+###Test user routes without token
+
+### Get all users without token
+//GET http://localhost:3001/users
+
+### Update user without token
+//PATCH http://localhost:3001/users/2
+//Content-Type: application/json
+
+//{
+//  "first_name": "Hacker"
+//}
+
+### Delete user without token
+//DELETE http://localhost:3001/users/1
+
+###Test user routes with token
+
+### Login
+POST http://localhost:3001/auth/login
+Content-Type: application/json
+
+{
+  "email": "",
+  "password": ""
+}
+
+### Get all users with token
+GET http://localhost:3001/users
+Authorization: Bearer <token>
+
+### Update user with token
+//PATCH http://localhost:3001/users/79
+//Authorization: Bearer <token>
+//Content-Type: application/json
+
+//{
+//   "email" : "hailey9@gmail.com" ,
+//  "last_name": "Johnson"
+//}
+
+### Delete your own user with token
+//DELETE http://localhost:3001/users/79
+//Authorization: Bearer <token>
 
