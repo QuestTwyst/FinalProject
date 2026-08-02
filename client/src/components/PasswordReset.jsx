@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { API_BASE_URL } from "../config/api.js";
+import "../styles/Auth.css";
 
 function PasswordReset() {
   const [email, setEmail] = useState("");
@@ -76,7 +77,8 @@ function PasswordReset() {
 
   return (
     <main className="auth-page">
-      <article className="auth-card">
+      <div className="auth-stage">
+        <article className="auth-card">
         <h2>Reset Password</h2>
 
         {message && (
@@ -154,6 +156,7 @@ function PasswordReset() {
           </div>
         </form>
       </article>
+      </div>
     </main>
   );
 }

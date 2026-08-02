@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { API_BASE_URL } from "../config/api.js";
+import "../styles/Auth.css";
 
 function Login() {
   const [formData, setFormData] = useState({
@@ -111,7 +112,8 @@ function Login() {
 
   return (
     <main className="auth-page">
-      <article className="auth-card">
+      <div className="auth-stage">
+        <article className="auth-card">
         <h2>Log In</h2>
 
         {submitMessage && (
@@ -180,6 +182,7 @@ function Login() {
           <Link to="/register">Create one here</Link>.
         </p>
       </article>
+      </div>
     </main>
   );
 }
