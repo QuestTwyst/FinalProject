@@ -42,37 +42,51 @@ function App() {
   return (
     <>
       <ToastContainer />
-    <Routes>
-      <Route path="/" element={<StoryIntro />} />
-      <Route path="/intro" element={<StoryIntro />} />
-      <Route path="/library" element={<StoryLibrary />} />
-      <Route path="/stories/:storyId" element={<StoryReader />} />
+      <Routes>
+        <Route path="/" element={<StoryIntro />} />
+        <Route path="/intro" element={<StoryIntro />} />
+        <Route path="/library" element={<StoryLibrary />} />
 
-      <Route
-        path="/create"
-        element={
-          <AuthenticatedRoute>
-            <StoryCreator />
-          </AuthenticatedRoute>
-        }
-      />
+        <Route
+          path="/stories/:storyId/edit"
+          element={
+            <AuthenticatedRoute>
+              <StoryCreator />
+            </AuthenticatedRoute>
+          }
+        />
 
-      <Route path="/about" element={<About />} />
-      <Route path="/login" element={<Login />} />
+        <Route
+          path="/stories/:storyId"
+          element={<StoryReader />}
+        />
+        <Route path="/stories/:storyId" element={<StoryReader />} />
 
-      <Route
-        path="/create-account"
-        element={<CreateAccount />}
-      />
+        <Route
+          path="/create"
+          element={
+            <AuthenticatedRoute>
+              <StoryCreator />
+            </AuthenticatedRoute>
+          }
+        />
 
-      <Route path="/register" element={<CreateAccount />} />
-      <Route path="/profile" element={<Profile />} />
+        <Route path="/about" element={<About />} />
+        <Route path="/login" element={<Login />} />
 
-      <Route
-        path="/password-reset"
-        element={<PasswordReset />}
-      />
-    </Routes>
+        <Route
+          path="/create-account"
+          element={<CreateAccount />}
+        />
+
+        <Route path="/register" element={<CreateAccount />} />
+        <Route path="/profile" element={<Profile />} />
+
+        <Route
+          path="/password-reset"
+          element={<PasswordReset />}
+        />
+      </Routes>
     </>
   );
 }

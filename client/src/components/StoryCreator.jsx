@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { API_BASE_URL } from "../config/api";
 import { useBackgroundAudio } from "../utils/useBackgroundAudio";
 import { usePersistedAudioSettings } from "../utils/usePersistedAudioSettings";
@@ -8,6 +8,10 @@ import styles from "./StoryCreator.module.css";
 
 function StoryCreator() {
   const navigate = useNavigate();
+
+  const { storyId: routeStoryId } = useParams();
+
+  const isEditingExistingStory = Boolean(routeStoryId);
 
   const [isDark, setIsDark] = useState(false);
   const { isMuted, setIsMuted, volume, setVolume } = usePersistedAudioSettings();
@@ -56,11 +60,18 @@ function StoryCreator() {
   }, []);
 
   // ---------- Story-level state ----------
-  const [storyId, setStoryId] = useState(null);
+  const [storyId, setStoryId] = useState(
+    routeStoryId ? Number(routeStoryId) : null,
+  );
   const [storyTitle, setStoryTitle] = useState("");
   const [storyDescription, setStoryDescription] = useState("");
   const [storyError, setStoryError] = useState("");
   const [isSavingStory, setIsSavingStory] = useState(false);
+  const [isLoadingExistingStory, setIsLoadingExistingStory] =
+    useState(isEditingExistingStory);
+
+  const [existingStoryError, setExistingStoryError] =
+    useState("");
 
   // ---------- Phase control ----------
   // "writing" -> add all passages first
@@ -210,9 +221,16 @@ function StoryCreator() {
         }
       }
 
+      const normalizedPassage = {
+        ...passage,
+        is_ending:
+          passage.is_ending === true ||
+          passage.is_ending === "true",
+      };
+
       setWrittenPassages((previousPassages) => [
         ...previousPassages,
-        passage,
+        normalizedPassage,
       ]);
 
       setPassageContent("");
@@ -227,7 +245,9 @@ function StoryCreator() {
   };
 
   const nonEndingPassages = writtenPassages.filter(
-    (passage) => !passage.is_ending,
+    (passage) =>
+      passage.is_ending !== true &&
+      passage.is_ending !== "true",
   );
 
   // ---------- Phase 2: connecting choices ----------
@@ -235,12 +255,170 @@ function StoryCreator() {
   const [linkError, setLinkError] = useState("");
   const [savingPassageId, setSavingPassageId] = useState(null);
 
+  useEffect(() => {
+    if (!isEditingExistingStory || !routeStoryId) {
+      return;
+    }
+
+    let isCancelled = false;
+
+    const loadExistingStory = async () => {
+      setIsLoadingExistingStory(true);
+      setExistingStoryError("");
+
+      try {
+        const [storyResponse, passagesResponse, genresResponse] =
+          await Promise.all([
+            fetch(`${API_BASE_URL}/stories/${routeStoryId}`),
+            fetch(`${API_BASE_URL}/stories/${routeStoryId}/passages`),
+            fetch(`${API_BASE_URL}/api/stories/${routeStoryId}/genres`),
+          ]);
+
+        if (!storyResponse.ok) {
+          throw new Error(
+            `Unable to load story (${storyResponse.status})`,
+          );
+        }
+
+        if (!passagesResponse.ok) {
+          throw new Error(
+            `Unable to load passages (${passagesResponse.status})`,
+          );
+        }
+
+        if (!genresResponse.ok) {
+          throw new Error(
+            `Unable to load story genres (${genresResponse.status})`,
+          );
+        }
+
+        const story = await storyResponse.json();
+        const passages = await passagesResponse.json();
+        const storyGenres = await genresResponse.json();
+
+
+
+        const normalizedPassages = Array.isArray(passages)
+          ? passages
+          : [];
+
+        const choiceResults = await Promise.all(
+          normalizedPassages
+            .filter(
+              (passage) =>
+                passage.is_ending !== true &&
+                passage.is_ending !== "true",
+            )
+            .map(async (passage) => {
+              const response = await fetch(
+                `${API_BASE_URL}/passages/${passage.id}/choices`,
+              );
+
+              if (!response.ok) {
+                throw new Error(
+                  `Unable to load choices for passage ${passage.id}`,
+                );
+              }
+
+              const choices = await response.json();
+
+              return {
+                passageId: passage.id,
+                choices: Array.isArray(choices) ? choices : [],
+              };
+            }),
+        );
+
+        const loadedChoiceDrafts = {};
+
+        choiceResults.forEach(({ passageId, choices }) => {
+          const choiceA = choices[0];
+          const choiceB = choices[1];
+
+          loadedChoiceDrafts[passageId] = {
+            choiceAId: choiceA?.id || null,
+            choiceAText: choiceA?.choice_text || "",
+            choiceANext:
+              choiceA?.next_passage_id !== null &&
+                choiceA?.next_passage_id !== undefined
+                ? String(choiceA.next_passage_id)
+                : "",
+
+            choiceBId: choiceB?.id || null,
+            choiceBText: choiceB?.choice_text || "",
+            choiceBNext:
+              choiceB?.next_passage_id !== null &&
+                choiceB?.next_passage_id !== undefined
+                ? String(choiceB.next_passage_id)
+                : "",
+
+            isSaved: Boolean(choiceA && choiceB),
+            isEditing: false,
+          };
+        });
+
+        const isAdmin = currentUser?.role === "admin";
+
+        const isOwner =
+          story.creator_id !== null &&
+          Number(story.creator_id) === Number(currentUser?.id);
+
+        if (!isAdmin && !isOwner) {
+          throw new Error(
+            "You are not authorized to continue editing this story.",
+          );
+        }
+
+        if (!isCancelled) {
+          setStoryId(Number(story.id));
+          setStoryTitle(story.title || "");
+          setStoryDescription(story.description || "");
+
+          setWrittenPassages(normalizedPassages);
+          setChoiceDrafts(loadedChoiceDrafts);
+
+          if (Array.isArray(storyGenres) && storyGenres.length > 0) {
+            setSelectedGenreId(String(storyGenres[0].id));
+          }
+        }
+      } catch (error) {
+        console.error("Unable to load existing story:", error);
+
+        if (!isCancelled) {
+          setExistingStoryError(
+            error.message ||
+            "Something went wrong loading this story.",
+          );
+        }
+      } finally {
+        if (!isCancelled) {
+          setIsLoadingExistingStory(false);
+        }
+      }
+    };
+
+    loadExistingStory();
+
+    return () => {
+      isCancelled = true;
+    };
+  }, [
+    isEditingExistingStory,
+    routeStoryId,
+    currentUser?.id,
+    currentUser?.role,
+  ]);
+
   const getDraft = (passageId) =>
     choiceDrafts[passageId] || {
+      choiceAId: null,
       choiceAText: "",
       choiceANext: "",
+      choiceBId: null,
       choiceBText: "",
       choiceBNext: "",
+      isSaved: false,
+      isEditing: false,
     };
 
   const updateDraft = (passageId, field, value) => {
@@ -249,6 +427,16 @@ function StoryCreator() {
       [passageId]: {
         ...getDraft(passageId),
         [field]: value,
+      },
+    }));
+  };
+
+  const handleEditConnections = (passageId) => {
+    setChoiceDrafts((previousDrafts) => ({
+      ...previousDrafts,
+      [passageId]: {
+        ...getDraft(passageId),
+        isEditing: true,
       },
     }));
   };
@@ -280,52 +468,71 @@ function StoryCreator() {
     try {
       const choicePairs = [
         {
+          id: draft.choiceAId,
           text: draft.choiceAText.trim(),
           next: draft.choiceANext,
         },
         {
+          id: draft.choiceBId,
           text: draft.choiceBText.trim(),
           next: draft.choiceBNext,
         },
       ];
 
-      for (const { text, next } of choicePairs) {
-        const response = await fetch(
-          `${API_BASE_URL}/passages/${passage.id}/choices`,
-          {
-            method: "POST",
-            headers: authHeaders,
-            body: JSON.stringify({
-              choice_text: text,
-              next_passage_id: Number(next),
-            }),
-          },
-        );
+      const savedChoices = [];
+
+      for (const { id, text, next } of choicePairs) {
+        const isExistingChoice = Boolean(id);
+
+        const url = isExistingChoice
+          ? `${API_BASE_URL}/passages/choices/${id}`
+          : `${API_BASE_URL}/passages/${passage.id}/choices`;
+
+        const response = await fetch(url, {
+          method: isExistingChoice ? "PATCH" : "POST",
+          headers: authHeaders,
+          body: JSON.stringify({
+            choice_text: text,
+            next_passage_id: Number(next),
+          }),
+        });
 
         if (!response.ok) {
           const data = await response.json().catch(() => ({}));
 
           throw new Error(
-            data.error || `Failed to save choice (${response.status})`,
+            data.error ||
+            `Failed to save choice (${response.status})`,
           );
         }
+
+        const savedChoice = await response.json();
+        savedChoices.push(savedChoice);
       }
 
       setChoiceDrafts((previousDrafts) => ({
         ...previousDrafts,
         [passage.id]: {
-          ...getDraft(passage.id),
+          ...draft,
+          choiceAId:
+            savedChoices[0]?.id || draft.choiceAId,
+          choiceBId:
+            savedChoices[1]?.id || draft.choiceBId,
           isSaved: true,
+          isEditing: false,
         },
       }));
     } catch (error) {
       setLinkError(
-        error.message || "Something went wrong connecting that passage.",
+        error.message ||
+        "Something went wrong connecting that passage.",
       );
     } finally {
       setSavingPassageId(null);
     }
   };
+
+
 
   const allLinked =
     nonEndingPassages.length > 0 &&
@@ -402,7 +609,27 @@ function StoryCreator() {
           </ol>
         </section>
 
-        {!storyId ? (
+        {isLoadingExistingStory ? (
+          <section className={styles.card}>
+            <p className={styles.helperText}>
+              Loading existing story...
+            </p>
+          </section>
+        ) : existingStoryError ? (
+          <section className={styles.card}>
+            <p className={styles.errorText}>
+              {existingStoryError}
+            </p>
+
+            <button
+              type="button"
+              className={styles.backButton}
+              onClick={() => navigate("/library")}
+            >
+              Back to Story Library
+            </button>
+          </section>
+        ) : !storyId ? (
           <form
             className={styles.card}
             onSubmit={handleCreateStory}
@@ -582,7 +809,7 @@ function StoryCreator() {
             >
               ← Back to add more passages
             </button>
-            
+
             <section className={styles.card}>
               <h2 className={styles.cardTitle}>
                 Step 3 &middot; Connect the choices
@@ -614,7 +841,7 @@ function StoryCreator() {
                       {passage.content}
                     </p>
 
-                    {!draft.isSaved && (
+                    {(!draft.isSaved || draft.isEditing) && (
                       <>
                         <input
                           className={styles.textInput}
@@ -734,9 +961,22 @@ function StoryCreator() {
                         >
                           {savingPassageId === passage.id
                             ? "Connecting..."
-                            : "Connect this passage"}
+                            : draft.isEditing
+                              ? "Save connections"
+                              : "Connect this passage"}
                         </button>
                       </>
+                    )}
+                    {draft.isSaved && !draft.isEditing && (
+                      <button
+                        type="button"
+                        className={styles.backButton}
+                        onClick={() =>
+                          handleEditConnections(passage.id)
+                        }
+                      >
+                        Edit connections
+                      </button>
                     )}
                   </div>
                 );

@@ -191,7 +191,7 @@ function StoryLibrary() {
         method: 'DELETE',
         headers: {
           Authorization: `Bearer ${authToken}`,
-      },
+        },
       });
       if (!response.ok) {
         throw new Error(`Failed to delete story (${response.status})`);
@@ -208,6 +208,13 @@ function StoryLibrary() {
     setEditingStory(story);
     setEditError('');
   };
+
+  const handleContinueStory = (storyId) => {
+    setEditingStory(null);
+    navigate(`/stories/${storyId}/edit`);
+  };
+
+
 
   const handleSaveEdit = async ({ title, description, genreIds }) => {
     if (!editingStory) return;
@@ -370,7 +377,11 @@ function StoryLibrary() {
                           ? handleDeleteStory
                           : undefined
                       }
-                      onEdit={canManageStory ? handleEditClick : undefined}
+                      onEdit={
+                        canManageStory
+                          ? handleEditClick
+                          : undefined
+                      }
                     />
                   );
                 })
@@ -389,6 +400,9 @@ function StoryLibrary() {
           genres={availableGenres}
           onSave={handleSaveEdit}
           onCancel={handleCancelEdit}
+          onContinue={() =>
+            handleContinueStory(editingStory.id)
+          }
           isSaving={isSavingEdit}
           error={editError}
         />

@@ -1,10 +1,11 @@
 import styles from './StoryCard.module.css';
 
-function StoryCard({ story, onOpen, onDelete, onEdit }) {
+function StoryCard({ story, onOpen, onDelete, onEdit,}) {
   const { id, title, genre, description } = story;
 
   const canEdit = typeof onEdit === 'function';
   const canDelete = typeof onDelete === 'function';
+
 
   const handleDeleteClick = (event) => {
     event.stopPropagation();
@@ -25,6 +26,8 @@ function StoryCard({ story, onOpen, onDelete, onEdit }) {
     }
   };
 
+
+
   return (
     <article className={styles.storyCard}>
       <span className={styles.genreTag}>{genre}</span>
@@ -40,6 +43,8 @@ function StoryCard({ story, onOpen, onDelete, onEdit }) {
           Open story
         </button>
 
+
+
         {canEdit && (
           <button
             type="button"
@@ -48,7 +53,7 @@ function StoryCard({ story, onOpen, onDelete, onEdit }) {
             aria-label={`Edit ${title}`}
             title="Edit this story"
           >
-            Edit
+            Edit Details
           </button>
         )}
 
