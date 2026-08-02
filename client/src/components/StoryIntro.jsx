@@ -13,7 +13,7 @@ function StoryIntro() {
   } catch (error) {
     currentUser = null;
   }
-  const isAdmin = currentUser?.role === 'admin';
+  const isLoggedIn = Boolean(currentUser);
 
   const navigate = useNavigate();
   const [isDark, setIsDark] = useState(false);
@@ -100,7 +100,7 @@ function StoryIntro() {
                 {storyLabels[story]}
               </button>
             ))}
-            {isAdmin && (
+            {isLoggedIn && (
               <button
                 type="button"
                 className={`${styles.storyBtn} ${styles.createStoryBtn}`}

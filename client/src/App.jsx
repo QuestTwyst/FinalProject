@@ -25,17 +25,12 @@ function AuthenticatedRoute({ children }) {
     console.error("Unable to read the logged-in user:", error);
   }
 
-  // Anyone must be logged in before reaching this route at all.
+  // Anyone must be logged in before creating a story.
   if (!authToken || !currentUser) {
     return <Navigate to="/login" replace />;
   }
-
-  // Only administrators may actually create stories -- redirect
-  // everyone else away instead of letting them fill out the whole
-  // form and get rejected only at submission time.
-  if (currentUser.role !== "admin") {
-    return <Navigate to="/library" replace />;
-  }
+  // Any logged-in user may create a story -- they become its owner,
+  // and only they (or an admin) can edit/delete it afterward.
   return children;
 }
 
