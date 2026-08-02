@@ -24,7 +24,7 @@ const createUsersTable = async () => {
   await pool.query(`
     CREATE TABLE IF NOT EXISTS users (
       id SERIAL PRIMARY KEY,
-      name TEXT NOT NULL,
+      name TEXT,
       email TEXT NOT NULL UNIQUE,
       password_hash TEXT NOT NULL,
       role TEXT NOT NULL DEFAULT 'user',
@@ -37,21 +37,6 @@ const createUsersTable = async () => {
       bio TEXT
     );
   `);
-
-  // ADD MISSING COLUMNS IF THEY DON'T EXIST
-  await pool.query(
-    `ALTER TABLE users ADD COLUMN IF NOT EXISTS first_name TEXT;`,
-  );
-  await pool.query(
-    `ALTER TABLE users ADD COLUMN IF NOT EXISTS middle_name TEXT;`,
-  );
-  await pool.query(
-    `ALTER TABLE users ADD COLUMN IF NOT EXISTS last_name TEXT;`,
-  );
-  await pool.query(
-    `ALTER TABLE users ADD COLUMN IF NOT EXISTS favorite_genre TEXT;`,
-  );
-  await pool.query(`ALTER TABLE users ADD COLUMN IF NOT EXISTS bio TEXT;`);
 
   console.log("✔️ Users table created.");
 };
@@ -247,10 +232,10 @@ const createStoryHistoryTable = async () => {
 
 const seedUsers = async () => {
   await pool.query(`
-    INSERT INTO users (name, email, password_hash)
+    INSERT INTO users (first_name, last_name, email, password_hash)
     VALUES
-      ('Hailey', 'hailey@example.com', 'hashed_pw_1'),
-      ('Declan', 'declan@example.com', 'hashed_pw_2')
+      ('Hailey', 'Brooks','hailey@example.com', 'hashed_pw_1'),
+      ('Declan', 'Sinclair', declan@example.com', 'hashed_pw_2')
     ON CONFLICT (email) DO NOTHING;
   `);
 

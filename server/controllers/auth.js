@@ -21,9 +21,9 @@ export const login = async (req, res) => {
       });
     }
 
-    //jsonb is used just encase the instance from the data does not have 
-    // certain values which will be placed as null at this time but will 
-    // be allowed to be used such as the admin and user email. 
+    //jsonb is used just encase the instance from the data does not have
+    // certain values which will be placed as null at this time but will
+    // be allowed to be used such as the admin and user email.
     const result = await pool.query(
       `
         SELECT
