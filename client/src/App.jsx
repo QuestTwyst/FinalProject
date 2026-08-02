@@ -1,6 +1,7 @@
 import { Navigate, Route, Routes } from "react-router-dom";
 import { useGlobalClickSound } from "./utils/useGlobalClickSound";
 import ToastContainer from "./components/ToastContainer";
+import TransitionOverlay from "./components/TransitionOverlay";
 import { usePersistentDisableOnSubmit } from "./utils/usePersistentDisableOnSubmit";
 import StoryIntro from "./components/StoryIntro";
 import StoryLibrary from "./components/StoryLibrary";
@@ -42,6 +43,7 @@ function App() {
   return (
     <>
       <ToastContainer />
+      <TransitionOverlay />
       <Routes>
         <Route path="/" element={<StoryIntro />} />
         <Route path="/intro" element={<StoryIntro />} />

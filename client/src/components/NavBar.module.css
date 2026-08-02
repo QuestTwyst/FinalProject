@@ -197,3 +197,8 @@
 .themeDark .volumeSlider {
   accent-color: #f4f4f8;
 }
+.profileLogo {
+  width: 70%;
+  height: 70%;
+  object-fit: contain;
+}
