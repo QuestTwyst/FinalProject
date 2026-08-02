@@ -76,25 +76,30 @@
 //GET http://localhost:3001/users
 
 ###Get user by ID
-//GET http://localhost:3001/users/1
+//GET http://localhost:3001/users/78
 
 ###Create a user
 //POST http://localhost:3001/users
 //Content-Type: application/json
 
 //{
-// "name": "Marisol Vega",
-//  "email": "marisol.vega@example.com",
-//  "password_hash": "hashed_pw_3"
+// "first_name": "Marisol",
+// "middle_name": "Rose",
+// "last_name": "Vega",
+// "email": "marisol.vega@example.com",
+// "password_hash": "password123"
 //}
 
 ###Update user
-//PATCH http://localhost:3001/users/58
+//PATCH http://localhost:3001/users/78
 //Content-Type: application/json
 
 //{
-//  "name": "Ethan R.",
-//  "email": "ethan.r@example.com",
+//  "first_name": "Marie",
+//  "middle_name": "Hazel",
+//  "last_name": "Johnson",
+//  "favorite_genre": "Fantasy",
+//  "email": "marie@example.com",
 //  "password_hash": "hashed_pw_3_updated"
 //}
 
@@ -107,14 +112,14 @@
 ###Test publish/unpublish
 
 ###Publish story 1
-POST http://localhost:3001/stories/1/publish
-Authorization: Bearer <token>
+//POST http://localhost:3001/stories/1/publish
+//Authorization: Bearer <Token>
 
 ###Unpublish story 1
-POST http://localhost:3001/stories/1/unpublish
-Authorization: Bearer <token>
+//POST http://localhost:3001/stories/1/unpublish
+//Authorization: Bearer <Token>
 
 ###Check story state
-GET http://localhost:3001/stories/1
+//GET http://localhost:3001/stories/1
 
 

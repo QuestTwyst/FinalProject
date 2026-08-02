@@ -45,18 +45,13 @@ function CreateAccount() {
     if (!formData.password) {
       nextErrors.password = "Password is required.";
     } else if (formData.password.length < 6) {
-      nextErrors.password =
-        "Password must be at least 6 characters.";
+      nextErrors.password = "Password must be at least 6 characters.";
     }
 
     if (!formData.confirmPassword) {
-      nextErrors.confirmPassword =
-        "Please confirm your password.";
-    } else if (
-      formData.password !== formData.confirmPassword
-    ) {
-      nextErrors.confirmPassword =
-        "Passwords do not match.";
+      nextErrors.confirmPassword = "Please confirm your password.";
+    } else if (formData.password !== formData.confirmPassword) {
+      nextErrors.confirmPassword = "Passwords do not match.";
     }
 
     setErrors(nextErrors);
@@ -84,9 +79,7 @@ function CreateAccount() {
     event.preventDefault();
 
     if (!validate()) {
-      setSubmitMessage(
-        "Please fix the highlighted fields before continuing.",
-      );
+      setSubmitMessage("Please fix the highlighted fields before continuing.");
       return;
     }
 
@@ -98,9 +91,7 @@ function CreateAccount() {
       .filter(Boolean)
       .join(" ");
 
-    const normalizedEmail = formData.email
-      .trim()
-      .toLowerCase();
+    const normalizedEmail = formData.email.trim().toLowerCase();
 
     setIsSubmitting(true);
     setSubmitMessage("");
@@ -111,8 +102,12 @@ function CreateAccount() {
         headers: {
           "Content-Type": "application/json",
         },
+
         body: JSON.stringify({
           name: fullName,
+          first_name: formData.firstName.trim(),
+          middle_name: formData.middleName.trim(),
+          last_name: formData.lastName.trim(),
           email: normalizedEmail,
           password_hash: formData.password,
         }),
@@ -132,17 +127,14 @@ function CreateAccount() {
           );
         } else {
           setSubmitMessage(
-            data.error ||
-              "Something went wrong. Please try again.",
+            data.error || "Something went wrong. Please try again.",
           );
         }
 
         return;
       }
 
-      setSubmitMessage(
-        "Registration successful! Redirecting to login...",
-      );
+      setSubmitMessage("Registration successful! Redirecting to login...");
 
       setTimeout(() => {
         navigate("/login");
@@ -150,9 +142,7 @@ function CreateAccount() {
     } catch (error) {
       console.error("Account creation failed:", error);
 
-      setSubmitMessage(
-        "Could not reach the server. Please try again.",
-      );
+      setSubmitMessage("Could not reach the server. Please try again.");
     } finally {
       setIsSubmitting(false);
     }
@@ -164,16 +154,12 @@ function CreateAccount() {
         <article className="auth-card">
         <h2>Create Account</h2>
 
-        {submitMessage && (
-          <p className="form-note">{submitMessage}</p>
-        )}
+        {submitMessage && <p className="form-note">{submitMessage}</p>}
 
         <form onSubmit={handleSubmit} noValidate>
           <div className="grid-3">
             <div>
-              <label htmlFor="firstName">
-                First Name
-              </label>
+              <label htmlFor="firstName">First Name</label>
 
               <input
                 type="text"
@@ -186,16 +172,12 @@ function CreateAccount() {
               />
 
               {errors.firstName && (
-                <p className="field-error">
-                  {errors.firstName}
-                </p>
+                <p className="field-error">{errors.firstName}</p>
               )}
             </div>
 
             <div>
-              <label htmlFor="middleName">
-                Middle Name
-              </label>
+              <label htmlFor="middleName">Middle Name</label>
 
               <input
                 type="text"
@@ -209,9 +191,7 @@ function CreateAccount() {
             </div>
 
             <div>
-              <label htmlFor="lastName">
-                Last Name
-              </label>
+              <label htmlFor="lastName">Last Name</label>
 
               <input
                 type="text"
@@ -224,9 +204,7 @@ function CreateAccount() {
               />
 
               {errors.lastName && (
-                <p className="field-error">
-                  {errors.lastName}
-                </p>
+                <p className="field-error">{errors.lastName}</p>
               )}
             </div>
           </div>
@@ -244,9 +222,7 @@ function CreateAccount() {
             disabled={isSubmitting}
           />
 
-          {errors.email && (
-            <p className="field-error">{errors.email}</p>
-          )}
+          {errors.email && <p className="field-error">{errors.email}</p>}
 
           <label htmlFor="password">Password</label>
 
@@ -260,15 +236,9 @@ function CreateAccount() {
             disabled={isSubmitting}
           />
 
-          {errors.password && (
-            <p className="field-error">
-              {errors.password}
-            </p>
-          )}
+          {errors.password && <p className="field-error">{errors.password}</p>}
 
-          <label htmlFor="confirmPassword">
-            Confirm Password
-          </label>
+          <label htmlFor="confirmPassword">Confirm Password</label>
 
           <input
             type="password"
@@ -281,19 +251,12 @@ function CreateAccount() {
           />
 
           {errors.confirmPassword && (
-            <p className="field-error">
-              {errors.confirmPassword}
-            </p>
+            <p className="field-error">{errors.confirmPassword}</p>
           )}
 
           <div className="auth-actions">
-            <button
-              type="submit"
-              disabled={isSubmitting}
-            >
-              {isSubmitting
-                ? "Creating..."
-                : "Create Account"}
+            <button type="submit" disabled={isSubmitting}>
+              {isSubmitting ? "Creating..." : "Create Account"}
             </button>
 
             <button

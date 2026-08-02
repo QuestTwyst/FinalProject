@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import styles from './EditStoryModal.module.css';
 
-function EditStoryModal({ story, genres, onSave, onCancel, isSaving, error }) {
+function EditStoryModal({ story, genres, onSave, onCancel, onContinue, isSaving, error }) {
   const [title, setTitle] = useState(story.title || '');
   const [description, setDescription] = useState(story.description || '');
   const [selectedGenreIds, setSelectedGenreIds] = useState(
@@ -80,6 +80,14 @@ function EditStoryModal({ story, genres, onSave, onCancel, isSaving, error }) {
               disabled={isSaving}
             >
               Cancel
+            </button>
+            <button
+              type="button"
+              className={styles.cancelButton}
+              onClick={onContinue}
+              disabled={isSaving}
+            >
+              Continue Story
             </button>
             <button
               type="submit"

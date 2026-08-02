@@ -1,6 +1,7 @@
 import pool from "../config/database.js";
 import bcrypt from "bcrypt";
 const SALT_ROUNDS = 10;
+
 export const getUsers = async (req, res) => {
   try {
     const result = await pool.query(`SELECT * FROM users ORDER BY id ASC`);
@@ -9,6 +10,7 @@ export const getUsers = async (req, res) => {
     res.status(500).json({ error: "Failed to fetch users" });
   }
 };
+
 export const getUserById = async (req, res) => {
   try {
     const { userId } = req.params;
@@ -23,21 +25,35 @@ export const getUserById = async (req, res) => {
     res.status(500).json({ error: "Failed to fetch user" });
   }
 };
+
 export const createUser = async (req, res) => {
   try {
-    const { name, email, password_hash } = req.body;
-    if (!name || !email || !password_hash) {
-      return res
-        .status(400)
-        .json({ error: "name, email, and password_hash are required" });
+    const { first_name, middle_name, last_name, email, password_hash } =
+      req.body;
+
+    const fullName = [
+      first_name?.trim(),
+      middle_name?.trim(),
+      last_name?.trim(),
+    ]
+      .filter(Boolean)
+      .join(" ");
+
+    if (!first_name || !last_name || !email || !password_hash) {
+      return res.status(400).json({
+        error: "first_name, last_name, email, and password_hash are required",
+      });
     }
+
     const hashedPassword = await bcrypt.hash(password_hash, SALT_ROUNDS);
+
     const result = await pool.query(
-      `INSERT INTO users (name, email, password_hash)
-       VALUES ($1, $2, $3)
-       RETURNING id, name, email, created_at`,
-      [name, email, hashedPassword],
+      `INSERT INTO users (name, first_name, middle_name, last_name, email, password_hash)
+       VALUES ($1, $2, $3, $4, $5, $6)
+       RETURNING id, name, first_name, middle_name, last_name, email, created_at`,
+      [fullName, first_name, middle_name, last_name, email, hashedPassword],
     );
+
     res.status(201).json(result.rows[0]);
   } catch (error) {
     if (error.code === "23505") {
@@ -46,11 +62,12 @@ export const createUser = async (req, res) => {
     res.status(500).json({ error: "Failed to create user" });
   }
 };
+
 export const updateUser = async (req, res) => {
   try {
     const { userId } = req.params;
     const {
-      name,
+      //name,
       email,
       password_hash,
       //username,
@@ -79,12 +96,30 @@ export const updateUser = async (req, res) => {
       }
     };
 
-    maybeAdd("name", name);
+    // Auto-update name if any name fields were provided
+    if (
+      first_name !== undefined ||
+      middle_name !== undefined ||
+      last_name !== undefined
+    ) {
+      const fullName = [
+        first_name?.trim(),
+        middle_name?.trim(),
+        last_name?.trim(),
+      ]
+        .filter(Boolean)
+        .join(" ");
+
+      maybeAdd("name", fullName);
+    }
+
     maybeAdd("email", email);
+
     if (password_hash !== undefined) {
       const hashedPassword = await bcrypt.hash(password_hash, SALT_ROUNDS);
       maybeAdd("password_hash", hashedPassword);
     }
+
     //maybeAdd("username", username);
     maybeAdd("first_name", first_name);
     maybeAdd("middle_name", middle_name);
@@ -103,7 +138,7 @@ export const updateUser = async (req, res) => {
       `UPDATE users
        SET ${fields.join(", ")}
        WHERE id = $${paramIndex}
-       RETURNING id, name, email,first_name, middle_name, last_name, favorite_genre, bio, created_at`,
+       RETURNING id, email, first_name, middle_name, last_name, favorite_genre, bio, created_at`,
       values,
     );
 
@@ -117,9 +152,10 @@ export const updateUser = async (req, res) => {
     }
     res
       .status(500)
-      .json({ error: "Failed to update user", detasils: error.message });
+      .json({ error: "Failed to update user", details: error.message });
   }
 };
+
 export const deleteUser = async (req, res) => {
   try {
     const { userId } = req.params;
