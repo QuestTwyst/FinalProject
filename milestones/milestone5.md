@@ -86,20 +86,23 @@ Complete the checklist below detailing each baseline, custom, and stretch featur
 
 ### 1. What went well during this unit?
 
-[👉🏾👉🏾👉🏾 your answer here]
+Teamwork was a real strength this unit. We stayed connected through regular, for example Slack calls, which made it much easier to divide up work, catch each other up on progress, and troubleshoot issues together in real time instead of getting stuck alone. Being able to quickly loop a teammate in whether to flag a bug, coordinate before touching shared resources like our database, or just talk through an approach, kept the project moving forward even when individual pieces got complicated.
 
 ### 2. What were some challenges your group faced in this unit?
 
-[👉🏾👉🏾👉🏾 your answer here]
+One of the biggest challenges was dealing with git merge conflicts, especially around our database connection settings — a fix I made kept getting accidentally reverted every time we merged, which took a few rounds to actually track down and understand why. We also ran into some tricky database issues, like our ID sequences getting out of sync after seeding, which caused confusing "duplicate key" errors that weren't obvious at first. Since we're all working off the same shared database, we had to be extra careful about running things like a full database reset, since it could wipe out another teammate's work in progress. Debugging felt like detective work a lot of the time — errors in the browser often didn't tell the real story, and we'd have to dig into the actual server logs to find what was really going on underneath.
 
 ### 3. What were some of the highlights or achievements that you are most proud of in this project?
 
-[👉🏾👉🏾👉🏾 your answer here]
+We are really proud of how much debugging we pushed through this unit. We found and fixed several real bugs that could've easily slipped through unnoticed, like the story creator not setting a starting passage, which 
+made new stories completely unplayable, and a security gap where our users API had no authentication at all. Building the auto-generated reading progress feature was a highlight too, since it wasn't just about writing new code but actually understanding why the data model was set up the way it was and connecting it properly. Beyond the code itself, We are very happy of how methodically we worked through our checklist, testing each feature for real instead of just assuming it worked, which caught several issues we wouldn't have found otherwise.
 
 ### 4. Reflecting on your web development journey so far, how have you grown since the beginning of the course?
 
-[👉🏾👉🏾👉🏾 your answer here]
+Looking back at where we started this course, we've grown a lot in how we actually approach debugging. Early on, an error message would feel like a dead end and now we know to check the server terminal, use tools like Thunder Client or DBeaver to test things directly, and trace a bug back to its actual root cause instead of just patching the symptom. We've also gotten a lot more comfortable with git. For example resolving conflicts, 
+being careful about what we push, and coordinating with teammates before touching shared resources like our database. Concepts that felt abstract at the beginning, like authentication, request/response cycles, and how 
+the frontend and backend actually talk to each other, feel much more concrete now that we've had to troubleshoot them for real.
 
 ### 5. Looking ahead, what are your goals related to web development, and what steps do you plan to take to achieve them?
 
-[👉🏾👉🏾👉🏾 your answer here]
+Looking ahead, we want to keep building on the debugging and collaboration skills we developed this unit, especially around writing more secure, well-tested code from the start rather than catching issues after the fact. Some concrete next steps: finishing the remaining security and permissions work on this project (like properly scoping what regular users vs. admins can do), and getting more comfortable with authentication patterns like OAuth. Beyond this course, we're interested in deepening our skills with full-stack projects, understanding not just how to build a feature, but how to build it in a way that scales and stays maintainable as a codebase grows and more people work on it together.
