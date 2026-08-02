@@ -7,6 +7,7 @@ import {
 } from "../controllers/choices.js";
 import {
   requireAuth,
+  requireStoryOwnerOrAdmin,
 } from "../middleware/auth.js";
 
 const router = express.Router();
@@ -18,18 +19,21 @@ router.get("/:passageId/choices", getChoicesByPassage);
 router.post(
   "/:passageId/choices",
   requireAuth,
+  requireStoryOwnerOrAdmin,
   createChoice,
 );
 
 router.patch(
   "/choices/:choiceId",
   requireAuth,
+  requireStoryOwnerOrAdmin,
   updateChoice,
 );
 
 router.delete(
   "/choices/:choiceId",
   requireAuth,
+  requireStoryOwnerOrAdmin,
   deleteChoice,
 );
 

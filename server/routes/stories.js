@@ -8,7 +8,7 @@ import {
   publishStory,
   unpublishStory,
 } from "../controllers/stories.js";
-import { requireAuth, requireAdmin } from "../middleware/auth.js";
+import { requireAuth, requireAdmin, requireStoryOwnerOrAdmin } from "../middleware/auth.js";
 
 const router = express.Router();
 
@@ -20,9 +20,9 @@ router.get("/:id", getStoryById);
 
 router.post("/", requireAuth, createStory);
 
-router.patch("/:id", requireAuth, updateStory);
+router.patch("/:id", requireAuth, requireStoryOwnerOrAdmin, updateStory);
 
-router.delete("/:id", requireAuth, deleteStory);
+router.delete("/:id", requireAuth, requireStoryOwnerOrAdmin, deleteStory);
 
 // Custom action routes
 router.post("/:id/publish", requireAuth, publishStory);

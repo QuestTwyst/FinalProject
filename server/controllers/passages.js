@@ -171,12 +171,35 @@ export const updatePassage = async (req, res) => {
       });
     }
 
+    const fields = [];
+    const values = [];
+    let paramIndex = 1;
+
+    if (content !== undefined) {
+      fields.push(`content = $${paramIndex}`);
+      values.push(content);
+      paramIndex += 1;
+    }
+    if (is_ending !== undefined) {
+      fields.push(`is_ending = $${paramIndex}`);
+      values.push(is_ending);
+      paramIndex += 1;
+    }
+
+    if (fields.length === 0) {
+      return res.status(400).json({
+        error: "No fields provided to update",
+      });
+    }
+
+    values.push(passageId);
+
     const result = await pool.query(
       `UPDATE passages
-       SET content = $1, is_ending = $2
-       WHERE id = $3
+       SET ${fields.join(", ")}
+       WHERE id = $${paramIndex}
        RETURNING *;`,
-      [content, is_ending, passageId],
+      values,
     );
 
     res.status(200).json(result.rows[0]);

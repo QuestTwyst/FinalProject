@@ -84,6 +84,9 @@ function StoryCreator() {
   const [passageError, setPassageError] = useState("");
   const [isSavingPassage, setIsSavingPassage] = useState(false);
   const [writtenPassages, setWrittenPassages] = useState([]);
+  const [editingPassageId, setEditingPassageId] = useState(null);
+  const [editedPassageContent, setEditedPassageContent] = useState("");
+  const [passageActionError, setPassageActionError] = useState("");
 
   const handleCreateStory = async (event) => {
     event.preventDefault();
@@ -769,21 +772,152 @@ function StoryCreator() {
                   Passages written so far
                 </h2>
 
-                {writtenPassages.map((passage, index) => (
-                  <article
-                    key={passage.id}
-                    className={styles.previewCard}
-                  >
-                    <p className={styles.previewLabel}>
-                      Passage #{index + 1}
-                      {passage.is_ending && " · ENDING"}
-                    </p>
-
-                    <p className={styles.previewContent}>
-                      {passage.content}
-                    </p>
-                  </article>
-                ))}
+                {passageActionError && (
+                  <p className={styles.errorText}>{passageActionError}</p>
+                )}
+                {writtenPassages.map((passage, index) => {
+                  const isEditingThis = editingPassageId === passage.id;
+                  const handleStartEdit = () => {
+                    setEditingPassageId(passage.id);
+                    setEditedPassageContent(passage.content);
+                    setPassageActionError("");
+                  };
+                  const handleCancelEdit = () => {
+                    setEditingPassageId(null);
+                    setEditedPassageContent("");
+                  };
+                  const handleSaveEdit = async () => {
+                    setPassageActionError("");
+                    try {
+                      const response = await fetch(
+                        `${API_BASE_URL}/stories/passages/${passage.id}`,
+                        {
+                          method: "PATCH",
+                          headers: authHeaders,
+                          body: JSON.stringify({
+                            content: editedPassageContent,
+                          }),
+                        },
+                      );
+                      if (!response.ok) {
+                        const data = await response.json().catch(() => ({}));
+                        throw new Error(
+                          data.error ||
+                            `Failed to update passage (${response.status})`,
+                        );
+                      }
+                      setWrittenPassages((prev) =>
+                        prev.map((p) =>
+                          p.id === passage.id
+                            ? { ...p, content: editedPassageContent }
+                            : p,
+                        ),
+                      );
+                      setEditingPassageId(null);
+                      setEditedPassageContent("");
+                    } catch (error) {
+                      setPassageActionError(
+                        error.message ||
+                          "Something went wrong updating that passage.",
+                      );
+                    }
+                  };
+                  const handleDeletePassage = async () => {
+                    if (
+                      !window.confirm(
+                        `Delete Passage #${index + 1}? This cannot be undone.`,
+                      )
+                    ) {
+                      return;
+                    }
+                    setPassageActionError("");
+                    try {
+                      const response = await fetch(
+                        `${API_BASE_URL}/stories/passages/${passage.id}`,
+                        {
+                          method: "DELETE",
+                          headers: authHeaders,
+                        },
+                      );
+                      if (!response.ok) {
+                        const data = await response.json().catch(() => ({}));
+                        throw new Error(
+                          data.error ||
+                            `Failed to delete passage (${response.status})`,
+                        );
+                      }
+                      setWrittenPassages((prev) =>
+                        prev.filter((p) => p.id !== passage.id),
+                      );
+                    } catch (error) {
+                      setPassageActionError(
+                        error.message ||
+                          "Something went wrong deleting that passage.",
+                      );
+                    }
+                  };
+                  return (
+                    <article
+                      key={passage.id}
+                      className={styles.previewCard}
+                    >
+                      <p className={styles.previewLabel}>
+                        Passage #{index + 1}
+                        {passage.is_ending && " \u00b7 ENDING"}
+                      </p>
+                      {isEditingThis ? (
+                        <>
+                          <textarea
+                            className={styles.textArea}
+                            value={editedPassageContent}
+                            onChange={(event) =>
+                              setEditedPassageContent(event.target.value)
+                            }
+                            rows={4}
+                          />
+                          <div className={styles.previewActions}>
+                            <button
+                              type="button"
+                              className={styles.secondaryButton}
+                              onClick={handleCancelEdit}
+                            >
+                              Cancel
+                            </button>
+                            <button
+                              type="button"
+                              className={styles.primaryButton}
+                              onClick={handleSaveEdit}
+                            >
+                              Save changes
+                            </button>
+                          </div>
+                        </>
+                      ) : (
+                        <>
+                          <p className={styles.previewContent}>
+                            {passage.content}
+                          </p>
+                          <div className={styles.previewActions}>
+                            <button
+                              type="button"
+                              className={styles.secondaryButton}
+                              onClick={handleStartEdit}
+                            >
+                              Edit
+                            </button>
+                            <button
+                              type="button"
+                              className={styles.dangerButton}
+                              onClick={handleDeletePassage}
+                            >
+                              Delete
+                            </button>
+                          </div>
+                        </>
+                      )}
+                    </article>
+                  );
+                })}
               </section>
             )}
 

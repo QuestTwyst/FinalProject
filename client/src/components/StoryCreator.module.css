@@ -348,3 +348,43 @@
 .genreCheckboxLabel input {
   cursor: pointer;
 }
+
+.previewActions {
+  display: flex;
+  gap: 0.6rem;
+  margin-top: 0.75rem;
+}
+
+.secondaryButton {
+  padding: 0.6rem 1.3rem;
+  border: 1.5px solid rgba(22, 50, 79, 0.3);
+  border-radius: 999px;
+  background: transparent;
+  color: #16324f;
+  font-family: inherit;
+  font-size: 0.88rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.secondaryButton:hover {
+  background: rgba(22, 50, 79, 0.06);
+}
+
+.dangerButton {
+  padding: 0.6rem 1.3rem;
+  border: none;
+  border-radius: 999px;
+  background: #c0392b;
+  color: #ffffff;
+  font-family: inherit;
+  font-size: 0.88rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.dangerButton:hover {
+  background: #a93226;
+}
