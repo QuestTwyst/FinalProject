@@ -74,11 +74,14 @@ export const updateUser = async (req, res) => {
   try {
     const { userId } = req.params;
 
-    if (Number(req.user.id) !== Number(req.params.userId)) {
-      return res.status(403).json({
-        error: "You can only update your own account",
-      });
-    }
+    const isOwner = Number(req.user.id) === Number(req.params.userId);
+        const isAdmin = req.user.role === "admin";
+
+        if (!isOwner && !isAdmin) {
+          return res.status(403).json({
+            error: "You can only update your own account",
+          });
+        }
 
     const {
       //name,
@@ -174,11 +177,14 @@ export const deleteUser = async (req, res) => {
   try {
     const { userId } = req.params;
 
-    if (Number(req.user.id) !== Number(req.params.userId)) {
-      return res.status(403).json({
-        error: "You can only delete your own account",
-      });
-    }
+    const isOwner = Number(req.user.id) === Number(req.params.userId);
+        const isAdmin = req.user.role === "admin";
+
+        if (!isOwner && !isAdmin) {
+          return res.status(403).json({
+            error: "You can only delete your own account",
+          });
+        }
 
     const result = await pool.query(
       `DELETE FROM users WHERE id = $1 RETURNING *`,
