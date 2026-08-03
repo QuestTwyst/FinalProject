@@ -79,7 +79,7 @@ The backend will support admin-managed story content. Admins or developers will 
     (Currently in progress through multiple testing towards frontend interface and 
     protected routes including admin/user implementations.)
 
-![Admin Story Management Demo](planning/gifs/AdminStory_Management2.gif)
+<img src='https://github.com/QuestTwyst/FinalProject/blob/main/planning/gifs/AdminStory_Management2.gif?raw=true' title='Admin Story Management Demo' width='' alt='Admin Story Management Demo' />
 
 ### Milestone 5 GIFS:
 
