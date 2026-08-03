@@ -162,7 +162,7 @@ Authorization: Bearer <token>
 //Content-Type: application/json
 
 //{
-//   "email" : "hailey9@gmail.com" ,
+//  "email" : "hailey9@gmail.com" ,
 //  "last_name": "Johnson"
 //}
 

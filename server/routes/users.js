@@ -11,7 +11,7 @@ import { requireAuth, requireAdmin } from "../middleware/auth.js";
 const router = express.Router();
 
 // Only admins should list all users
-router.get("/", requireAdmin, getUsers);
+router.get("/", requireAuth, requireAdmin, getUsers);
 
 // Any logged-in user can view their own profile
 router.get("/:userId", requireAuth, getUserById);

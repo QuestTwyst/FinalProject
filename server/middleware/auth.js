@@ -21,10 +21,7 @@ export const requireAuth = async (req, res, next) => {
 
     const token = authorizationHeader.slice(7);
 
-    const payload = jwt.verify(
-      token,
-      process.env.JWT_SECRET,
-    );
+    const payload = jwt.verify(token, process.env.JWT_SECRET);
 
     const result = await pool.query(
       `
