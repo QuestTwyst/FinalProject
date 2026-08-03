@@ -79,9 +79,7 @@ The backend will support admin-managed story content. Admins or developers will 
     (Currently in progress through multiple testing towards frontend interface and 
     protected routes including admin/user implementations.)
 
-[![Admin Story Management Video](https://i.imgur.com/XKW6ySy.gif)](https://imgur.com/a/FQCRciC)
-
-![Admin Story Management Demo](https://i.imgur.com/XKW6ySy.gif)
+![Admin Story Management Demo](planning/gifs/AdminStory_Management2.gif) 
 
 ### Milestone 5 GIFS:
 
