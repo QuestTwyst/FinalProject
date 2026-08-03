@@ -82,7 +82,14 @@ function App() {
         />
 
         <Route path="/register" element={<CreateAccount />} />
-        <Route path="/profile" element={<Profile />} />
+        <Route
+          path="/profile"
+          element={
+            <AuthenticatedRoute>
+              <Profile />
+            </AuthenticatedRoute>
+          }
+        />
 
         <Route
           path="/password-reset"
