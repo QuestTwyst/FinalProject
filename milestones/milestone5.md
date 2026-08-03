@@ -45,7 +45,7 @@ Complete the checklist below detailing each baseline, custom, and stretch featur
     - [X] Components broken down into categories, including Page and Component types
     - [X] Corresponding container components and presenter components as appropriate
 - [X] The project includes dynamic routes for both frontend and backend apps
-- [ ] The project is deployed on Render with all pages and features that are visible to the user are working as intended
+- [X] The project is deployed on Render with all pages and features that are visible to the user are working as intended
 
 ### Custom Features
 
@@ -59,13 +59,13 @@ Complete the checklist below detailing each baseline, custom, and stretch featur
 - [X] The user can filter or sort items based on particular criteria as appropriate for your use case
 - [X] Data is automatically generated in response to a certain event or user action. Examples include generating a default inventory for a new user starting a game or creating a starter set of tasks for a user creating a new task app account
 - [X] Data submitted via a POST or PATCH request is validated before the database is updated (e.g. validating that an event is in the future before allowing a new event to be created)
-  - [ ] *To receive full credit, please be sure to demonstrate in your walkthrough that for certain inputs, the item will NOT be successfully created or updated.*
+  - [X] *To receive full credit, please be sure to demonstrate in your walkthrough that for certain inputs, the item will NOT be successfully created or updated.*
 
 ### Stretch Features
 
 👉🏾👉🏾👉🏾 Check off each completed feature below.
 
-- [ ] A subset of pages require the user to log in before accessing the content
+- [X] A subset of pages require the user to log in before accessing the content
   - [ ] Users can log in and log out via GitHub OAuth with Passport.js
 - [X] Restrict available user options dynamically, such as restricting available purchases based on a user's currency
 - [X] Show a spinner while a page or page element is loading
