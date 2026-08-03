@@ -14,6 +14,13 @@ export const getUsers = async (req, res) => {
 export const getUserById = async (req, res) => {
   try {
     const { userId } = req.params;
+
+    if (Number(req.user.id) !== Number(userId)) {
+      return res.status(403).json({
+        error: "You can only view your own profile",
+      });
+    }
+
     const result = await pool.query(`SELECT * FROM users WHERE id = $1`, [
       userId,
     ]);
@@ -66,6 +73,13 @@ export const createUser = async (req, res) => {
 export const updateUser = async (req, res) => {
   try {
     const { userId } = req.params;
+
+    if (Number(req.user.id) !== Number(req.params.userId)) {
+      return res.status(403).json({
+        error: "You can only update your own account",
+      });
+    }
+
     const {
       //name,
       email,
@@ -159,6 +173,13 @@ export const updateUser = async (req, res) => {
 export const deleteUser = async (req, res) => {
   try {
     const { userId } = req.params;
+
+    if (Number(req.user.id) !== Number(req.params.userId)) {
+      return res.status(403).json({
+        error: "You can only delete your own account",
+      });
+    }
+
     const result = await pool.query(
       `DELETE FROM users WHERE id = $1 RETURNING *`,
       [userId],
