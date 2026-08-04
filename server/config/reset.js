@@ -1,6 +1,7 @@
 import "dotenv/config";
 import pool from "./database.js";
 import { storyGraph } from "../data/storyData.js";
+import bcrypt from "bcryptjs";
 
 //Drop tables
 const dropAssignedTables = async () => {
@@ -235,7 +236,7 @@ const seedUsers = async () => {
     INSERT INTO users (first_name, last_name, email, password_hash)
     VALUES
       ('Hailey', 'Brooks','hailey@example.com', 'hashed_pw_1'),
-      ('Declan', 'Sinclair', declan@example.com', 'hashed_pw_2')
+      ('Declan', 'Sinclair', 'declan@example.com', 'hashed_pw_2')
     ON CONFLICT (email) DO NOTHING;
   `);
 

@@ -1,5 +1,5 @@
-const CLOUD_NAME = "a9s5uskh";
-const UPLOAD_PRESET = "QuestTwyst_uploads";
+const CLOUD_NAME = import.meta.env.VITE_CLOUDINARY_CLOUD_NAME;
+const UPLOAD_PRESET = import.meta.env.VITE_CLOUDINARY_UPLOAD_PRESET;
 
 /**
  * Uploads an image file directly from the browser to Cloudinary
