@@ -208,6 +208,7 @@
   justify-content: space-evenly;
   gap: 4rem;
   padding: 0 4.8rem;
+  overflow: hidden;
 }
 
 /* ---------- Story menu ---------- */
@@ -326,4 +327,40 @@
   color: #ffffff;
   font-size: 0.8rem;
   text-shadow: 0 1px 4px rgba(0, 0, 0, 0.4);
+}
+.cloudColumn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.75rem;
+  flex-shrink: 0;
+  margin-top: 3rem;
+}
+
+.slogan {
+  margin: 0;
+  font-size: 1.5rem;
+  font-weight: 500;
+  font-style: italic;
+  color: #16324f;
+  text-align: center;
+  text-shadow: 0 2px 8px rgba(255, 255, 255, 0.5);
+}
+
+.themeDark .slogan {
+  color: #f4f4f8;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+}
+
+.qrCode {
+  position: absolute;
+  bottom: 2.5rem;
+  left: 2.5rem;
+  width: 90px;
+  height: 90px;
+  border-radius: 12px;
+  background: #ffffff;
+  padding: 6px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
+  z-index: 10;
 }

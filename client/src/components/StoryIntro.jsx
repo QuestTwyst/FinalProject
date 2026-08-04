@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { parseSaveFile } from '../utils/saveFile';
 import { useBackgroundAudio } from '../utils/useBackgroundAudio';
@@ -14,6 +14,13 @@ function StoryIntro() {
     currentUser = null;
   }
   const isLoggedIn = Boolean(currentUser);
+
+  useEffect(() => {
+    document.body.style.overflow = 'hidden';
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, []);
 
   const navigate = useNavigate();
   const [isDark, setIsDark] = useState(false);
@@ -80,12 +87,15 @@ function StoryIntro() {
         </div>
 
         <div className={styles.contentRow}>
+          <div className={styles.cloudColumn}>
           <div className={styles.cloud}>
             <span className={`${styles.puff} ${styles.puffBody}`}></span>
             <span className={`${styles.puff} ${styles.puffLeft}`}></span>
             <span className={`${styles.puff} ${styles.puffMid}`}></span>
             <span className={`${styles.puff} ${styles.puffRight}`}></span>
             <img className={styles.cloudLogo} src="/qt-logo.png" alt="QT logo" />
+          </div>
+          <p className={styles.slogan}>Where every choice writes a new world.</p>
           </div>
 
           <div className={styles.storyMenu}>
@@ -111,6 +121,11 @@ function StoryIntro() {
             )}
           </div>
         </div>
+        <img
+          className={styles.qrCode}
+          src="https://api.qrserver.com/v1/create-qr-code/?size=120x120&data=https://questtwyst-frontend.onrender.com/"
+          alt="QR code linking to the live QuestTwyst site"
+        />
       </div>
     </div>
   );
