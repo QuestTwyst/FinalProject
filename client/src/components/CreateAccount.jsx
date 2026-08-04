@@ -149,7 +149,7 @@ function CreateAccount() {
   };
 
   return (
-    <main className="auth-page">
+    <main className="auth-page create-account-page">
       <div className="auth-stage">
         <article className="auth-card">
         <h2>Create Account</h2>

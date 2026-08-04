@@ -263,3 +263,70 @@
     display: none;
   }
 }
+
+/* Quick update to account page only line 152 createaccount.jsx*/
+
+.create-account-page {
+  box-sizing: border-box;
+  align-items: flex-start;
+  overflow-x: hidden;
+  overflow-y: auto;
+  padding: 1rem 1.25rem;
+}
+
+.create-account-page .auth-stage {
+  width: min(900px, 100%);
+  height: auto;
+  min-height: calc(100dvh - 2rem);
+  padding: 1.25rem;
+  margin: auto;
+  box-sizing: border-box;
+}
+
+.create-account-page .auth-card {
+  width: min(620px, 100%);
+  padding: 1.5rem 2rem;
+  box-sizing: border-box;
+}
+
+.create-account-page .auth-card h2 {
+  margin-bottom: 1rem;
+  font-size: 1.8rem;
+}
+
+.create-account-page .auth-card form {
+  gap: 0.15rem;
+}
+
+.create-account-page .auth-card label {
+  margin-top: 0.5rem;
+}
+
+.create-account-page .auth-card input,
+.create-account-page .auth-card select {
+  width: 100%;
+  margin-top: 0.25rem;
+  padding: 0.65rem 0.85rem;
+  box-sizing: border-box;
+}
+
+.create-account-page .grid-3 {
+  gap: 0.65rem;
+}
+
+.create-account-page .grid-3 > div {
+  min-width: 0;
+}
+
+.create-account-page .auth-actions {
+  gap: 0.55rem;
+  margin-top: 1rem;
+}
+
+.create-account-page .auth-actions button {
+  padding: 0.7rem 1.25rem;
+}
+
+.create-account-page .form-footer {
+  margin-top: 1rem;
+}
