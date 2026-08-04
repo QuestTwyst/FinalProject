@@ -237,37 +237,69 @@ function StoryLibrary() {
       });
 
       if (!patchResponse.ok) {
-        throw new Error(`Failed to update story (${patchResponse.status})`);
+        const data = await patchResponse.json().catch(() => ({}));
+
+        throw new Error(
+          data.error || `Failed to update story (${patchResponse.status})`
+        );
       }
 
       // Diff the old genre list against the new selection -- remove
       // whatever was dropped, add whatever is newly checked. Genre is
       // a many-to-many relationship (story_genres), not a single field.
-      const oldGenreIds = (editingStory.genres || []).map((g) => g.id);
+      const oldGenreIds = (editingStory.genres || []).map((genre) =>
+        Number(genre.id)
+      );
       const newGenreIds = (genreIds || []).map(Number);
 
       const toRemove = oldGenreIds.filter((id) => !newGenreIds.includes(id));
       const toAdd = newGenreIds.filter((id) => !oldGenreIds.includes(id));
 
       for (const genreId of toRemove) {
-        await fetch(`${API_BASE_URL}/api/stories/${editingStory.id}/genres/${genreId}`, {
-          method: 'DELETE',
-          headers: { Authorization: `Bearer ${authToken}` },
-        });
+        const response = await fetch(
+          `${API_BASE_URL}/api/stories/${editingStory.id}/genres/${genreId}`,
+          {
+            method: 'DELETE',
+            headers: {
+              Authorization: `Bearer ${authToken}`,
+            },
+          }
+        );
+
+        if (!response.ok) {
+          const data = await response.json().catch(() => ({}));
+
+          throw new Error(
+            data.error || `Failed to remove genre (${response.status})`
+          );
+        }
       }
 
       for (const genreId of toAdd) {
-        await fetch(`${API_BASE_URL}/api/stories/${editingStory.id}/genres`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${authToken}`,
-          },
-          body: JSON.stringify({ genre_id: genreId }),
-        });
+        const response = await fetch(
+          `${API_BASE_URL}/api/stories/${editingStory.id}/genres`,
+          {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: `Bearer ${authToken}`,
+            },
+            body: JSON.stringify({
+              genre_id: genreId,
+            }),
+          }
+        );
+
+        if (!response.ok) {
+          const data = await response.json().catch(() => ({}));
+
+          throw new Error(
+            data.error || `Failed to add genre (${response.status})`
+          );
+        }
       }
 
-      const updatedGenres = availableGenres.filter((g) => newGenreIds.includes(g.id));
+      const updatedGenres = availableGenres.filter((genre) => newGenreIds.includes(Number(genre.id)));
 
       setStories((prev) =>
         prev.map((story) =>
@@ -287,7 +319,11 @@ function StoryLibrary() {
       setEditingStory(null);
     } catch (error) {
       console.error('Error updating story:', error);
-      setEditError('Something went wrong saving your changes. Please try again.');
+
+      setEditError(
+        error.message ||
+        'Something went wrong saving your changes. Please try again.'
+      );
     } finally {
       setIsSavingEdit(false);
     }

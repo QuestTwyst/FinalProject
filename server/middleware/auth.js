@@ -73,7 +73,9 @@ export const requireStoryOwnerOrAdmin = async (req, res, next) => {
   try {
     let storyId = null;
 
-    if (req.params.id) {
+    if (req.params.storyId) {
+      storyId = req.params.storyId;
+    } else if (req.params.id) {
       storyId = req.params.id;
     } else if (req.params.passageId) {
       const passageResult = await pool.query(

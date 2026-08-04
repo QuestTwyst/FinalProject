@@ -846,7 +846,7 @@ function StoryCreator() {
                         const data = await response.json().catch(() => ({}));
                         throw new Error(
                           data.error ||
-                            `Failed to update passage (${response.status})`,
+                          `Failed to update passage (${response.status})`,
                         );
                       }
                       setWrittenPassages((prev) =>
@@ -861,7 +861,7 @@ function StoryCreator() {
                     } catch (error) {
                       setPassageActionError(
                         error.message ||
-                          "Something went wrong updating that passage.",
+                        "Something went wrong updating that passage.",
                       );
                     }
                   };
@@ -886,7 +886,7 @@ function StoryCreator() {
                         const data = await response.json().catch(() => ({}));
                         throw new Error(
                           data.error ||
-                            `Failed to delete passage (${response.status})`,
+                          `Failed to delete passage (${response.status})`,
                         );
                       }
                       setWrittenPassages((prev) =>
@@ -895,7 +895,7 @@ function StoryCreator() {
                     } catch (error) {
                       setPassageActionError(
                         error.message ||
-                          "Something went wrong deleting that passage.",
+                        "Something went wrong deleting that passage.",
                       );
                     }
                   };
@@ -1001,8 +1001,14 @@ function StoryCreator() {
                 <p className={styles.errorText}>{linkError}</p>
               )}
 
-              {nonEndingPassages.map((passage, index) => {
+              {nonEndingPassages.map((passage) => {
                 const draft = getDraft(passage.id);
+
+                const passageNumber =
+                  writtenPassages.findIndex(
+                    (writtenPassage) =>
+                      Number(writtenPassage.id) === Number(passage.id)
+                  ) + 1;
 
                 return (
                   <div
@@ -1010,7 +1016,7 @@ function StoryCreator() {
                     className={styles.linkingRow}
                   >
                     <p className={styles.previewLabel}>
-                      Passage #{index + 1}
+                      Passage #{passageNumber}
                       {draft.isSaved && " · CONNECTED"}
                     </p>
 
@@ -1049,28 +1055,16 @@ function StoryCreator() {
                             Choice A leads to...
                           </option>
 
-                          {writtenPassages
-                            .filter(
-                              (destinationPassage) =>
-                                destinationPassage.id !== passage.id,
-                            )
-                            .map((destinationPassage) => (
-                              <option
-                                key={destinationPassage.id}
-                                value={destinationPassage.id}
-                              >
-                                Passage #
-                                {writtenPassages.indexOf(
-                                  destinationPassage,
-                                ) + 1}{" "}
-                                (
-                                {destinationPassage.content.slice(
-                                  0,
-                                  30,
-                                )}
-                                ...)
-                              </option>
-                            ))}
+                          {writtenPassages.map((destinationPassage) => (
+                            <option
+                              key={destinationPassage.id}
+                              value={destinationPassage.id}
+                            >
+                              Passage #
+                              {writtenPassages.indexOf(destinationPassage) + 1}{" "}
+                              ({destinationPassage.content.slice(0, 30)}...)
+                            </option>
+                          ))}
                         </select>
 
                         <input
@@ -1102,28 +1096,16 @@ function StoryCreator() {
                             Choice B leads to...
                           </option>
 
-                          {writtenPassages
-                            .filter(
-                              (destinationPassage) =>
-                                destinationPassage.id !== passage.id,
-                            )
-                            .map((destinationPassage) => (
-                              <option
-                                key={destinationPassage.id}
-                                value={destinationPassage.id}
-                              >
-                                Passage #
-                                {writtenPassages.indexOf(
-                                  destinationPassage,
-                                ) + 1}{" "}
-                                (
-                                {destinationPassage.content.slice(
-                                  0,
-                                  30,
-                                )}
-                                ...)
-                              </option>
-                            ))}
+                          {writtenPassages.map((destinationPassage) => (
+                            <option
+                              key={destinationPassage.id}
+                              value={destinationPassage.id}
+                            >
+                              Passage #
+                              {writtenPassages.indexOf(destinationPassage) + 1}{" "}
+                              ({destinationPassage.content.slice(0, 30)}...)
+                            </option>
+                          ))}
                         </select>
 
                         <button

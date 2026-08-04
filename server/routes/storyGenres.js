@@ -4,7 +4,10 @@ import {
   addGenreToStory,
   removeGenreFromStory,
 } from "../controllers/storyGenres.js";
-import { requireAuth, requireAdmin } from "../middleware/auth.js";
+import {
+  requireAuth,
+  requireStoryOwnerOrAdmin,
+} from "../middleware/auth.js";
 
 const router = express.Router();
 
@@ -16,6 +19,7 @@ router.get("/:storyId/genres", getGenresForStory);
 router.post(
   "/:storyId/genres",
   requireAuth,
+  requireStoryOwnerOrAdmin,
   addGenreToStory,
 );
 
@@ -23,8 +27,7 @@ router.post(
 router.delete(
   "/:storyId/genres/:genreId",
   requireAuth,
-  requireAdmin,
+  requireStoryOwnerOrAdmin,
   removeGenreFromStory,
 );
-
 export default router;
