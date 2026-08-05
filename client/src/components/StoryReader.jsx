@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useNavigate, useParams, useLocation } from "react-router-dom";
 
 import {
@@ -54,7 +54,7 @@ function StoryReader() {
   const { isMuted, setIsMuted, volume, setVolume } = usePersistedAudioSettings();
   const [importMessage, setImportMessage] = useState("");
   const [isProcessing, setIsProcessing] = useState(false);
-  const [processingLabel, setProcessingLabel] = useState("");
+  const [comedySound, setComedySound] = useState("/sounds/Comdey.wav");
 
   useEffect(() => {
     document.body.classList.toggle("qtProcessingCursor", isProcessing);
@@ -66,41 +66,63 @@ function StoryReader() {
 
   console.log("StoryReader storyId param:", storyId);
 
-  // Load story from backend
+  // Values passed to StoryReader through React Router
+  const genreContext = location.state?.genreContext ?? null;
+  const resumePassageId = location.state?.resumePassageId ?? null;
+
+  // Load the story and determine which passage should display first
   useEffect(() => {
+    let isCancelled = false;
+
     async function loadStory() {
       try {
-        const s = await getStoryById(storyId, location.state?.genreContext);
-        setStory(s);
-      } catch (err) {
-        console.error("Failed to load story", err);
-        setStory(null);
+        const loadedStory = await getStoryById(
+          storyId,
+          genreContext,
+        );
+
+        if (isCancelled) return;
+
+        if (!loadedStory) {
+          setStory(null);
+          setCurrentPassageId(null);
+          return;
+        }
+
+        setStory(loadedStory);
+        setChoiceHistory([]);
+
+        if (resumePassageId != null) {
+          setCurrentPassageId(Number(resumePassageId));
+        } else {
+          setCurrentPassageId(
+            loadedStory.start_passage_id,
+          );
+        }
+
+        if (loadedStory.genre === "Comedy") {
+          setComedySound(
+            Math.random() < 0.5
+              ? "/sounds/Comdey.wav"
+              : "/sounds/Comdey2.wav",
+          );
+        }
+      } catch (error) {
+        console.error("Failed to load story", error);
+
+        if (!isCancelled) {
+          setStory(null);
+          setCurrentPassageId(null);
+        }
       }
     }
 
     loadStory();
-  }, [storyId]);
 
-  // Determine starting passage or resume from save file
-  useEffect(() => {
-    if (!story) return;
-
-    const resumePassageId = location.state?.resumePassageId;
-    setChoiceHistory([]);
-
-    if (resumePassageId != null) {
-      // Resume from saved passage
-      setCurrentPassageId(resumePassageId);
-
-      // Clear router state so it doesn't re-trigger
-      navigate(location.pathname, { replace: true, state: {} });
-    } else {
-      // Use backend start_passage_id when not resuming
-      setCurrentPassageId(story.start_passage_id);
-    }
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [storyId, story?.start_passage_id]);
+    return () => {
+      isCancelled = true;
+    };
+  }, [storyId, genreContext, resumePassageId]);
 
   // Auto-generate reading progress the first time a logged-in user
   // opens this story -- see issue #72 (auto-generated data on a user
@@ -162,15 +184,11 @@ function StoryReader() {
 
   // Pick the background sound for this genre. Comedy alternates randomly
   // between its two tracks each time you land on a Comedy story.
-  const soundSrc = useMemo(() => {
-    if (!story) return null;
-    if (story.genre === "Comedy") {
-      return Math.random() < 0.5 ? "/sounds/Comdey.wav" : "/sounds/Comdey2.wav";
-    }
-    return GENRE_SOUND_MAP[story.genre] ?? null;
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [story?.genre]);
-
+  // Select the background sound for the current story genre
+  const soundSrc =
+    story?.genre === "Comedy"
+      ? comedySound
+      : GENRE_SOUND_MAP[story?.genre] ?? null;
   useBackgroundAudio(audioRef, isMuted, volume);
 
   const handleThemeToggle = () => setIsDark((prev) => !prev);
@@ -219,7 +237,6 @@ function StoryReader() {
   const handleSaveProgress = () => {
     if (!story) return;
     setIsProcessing(true);
-    setProcessingLabel("Saving your progress...");
     const saveData = {
       app: "Questwyst",
       version: 1,
@@ -249,7 +266,6 @@ function StoryReader() {
   // Import progress from saved file
   const handleImportProgress = (file) => {
     setIsProcessing(true);
-    setProcessingLabel("Importing your progress...");
     parseSaveFile(
       file,
       (data) => {
